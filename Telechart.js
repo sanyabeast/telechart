@@ -127,30 +127,22 @@ class Tweener {
 	};
 
 	static tween ( params ) {
-
 		let fromValue = params.fromValue
 		let toValue = params.toValue
 		let duration = params.duration
 		let ease = params.ease || "easeInOutQuad"
-
 		let easingFunction = this.$easingFunctions[ease]
-
 		let onUpdate = params.onUpdate || function () {}
 		let startDate = +new Date()
 
 		let removeTask = MainLoop.addTask(( relDelta )=>{
 			let progress = ( (+new Date() ) - startDate) / duration
 			let value = this.$getValue( fromValue, toValue, progress, easingFunction )
-
-			if ( progress >= 1 ) {
-				removeTask()
-			}
-
+			if ( progress >= 1 ) removeTask()
 			onUpdate( value, progress >= 1 )
 		})
 
 		return removeTask
-
 	}
 
 	static $getValue ( fromValue, toValue, progress, easingFunction ) {
@@ -196,6 +188,11 @@ class EventBus {
  *
  */
 class Telechart {
+	static MainLoop = MainLoop;
+	static Utils = Utils;
+	static EventBus = EventBus;
+	static Tweener = Tweener;
+
 	get domElement () { return this.$dom.rootElement }
 
 	constructor () {
@@ -205,5 +202,41 @@ class Telechart {
 
 		Utils.injectCSS( "telechart-app", TELECHART_CSS )
 
+		Tweener.tween({
+			fromValue: 0,
+			toValue: 400,
+			duration: 500,
+			ease: "easeOutQuad",
+			onUpdate: (v, completed)=>{ 
+				this.$dom.rootElement.style.transform = `translateX(${v}px) translateY(${v}px)`
+
+				if (completed) {
+					Tweener.tween({
+						duration: 250,
+						fromValue: 100,
+						toValue: 500,
+						ease: "easeOutQuad",
+						onUpdate: (v, completed)=>{
+							this.$dom.rootElement.style.width = `${v}px`
+
+							if (completed) {
+								Tweener.tween({
+									duration: 500,
+									fromValue: 100,
+									toValue: 200,
+									ease: "easeOutQuad",
+									onUpdate: (v, completed)=>{
+										this.$dom.rootElement.style.height = `${v}px`
+									}
+								})
+							}
+						}
+					})
+				}
+			}
+		})
+
 	}
 }
+
+MainLoop.start()
