@@ -1,0 +1,17 @@
+.telechart {
+	border: 1px solid black;
+}
+
+.telechart .major-chart-wrapper {
+	height: 50%;
+	border-bottom: 1px solid black;
+}
+
+.telechart .panorama-chart-wrapper {
+	height: 20%;
+	border-bottom: 1px solid black;
+}
+
+canvas {
+	border: 1px solid black;
+}

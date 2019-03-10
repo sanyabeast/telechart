@@ -1,0 +1,10 @@
+.flex-row 			{ display: flex; flex-direction: row; }
+.flex-column 		{ display: flex; flex-direction: column; }
+.flex-j-center 		{ justify-content: center; }
+.flex-a-center 		{ align-items: : center; }
+.flex-grow			{ flex-grow: 1 }
+.flex-no-shrink     { flex-shrink: 0 }
+
+.fit-width			{ width: 100%; }
+.fit-height 		{ height: 100%; }
+.border-box 		{ box-sizing: border-box; }

@@ -1,64 +1,31 @@
 {
-    "name": "Plot3",
-    "version": "0.1.424-b",
+    "name": "Telechart",
+    "version": "0.0.1-b",
     "author": {
         "name": "sanyabeast",
         "email": "a.gvrnsk@gmail.com"
     },
     "scripts": {
-        "setup": "yarn install && node scripts/install_git_packages.js",
-        "start": "cross-env NODE_ENV=development node scripts/server.js",
+        "start": "cross-env NODE_ENV=development node scripts/dev_server.js",
         "build": "cross-env NODE_ENV=production webpack"
     },
     "devDependencies": {
         "raw-loader": "latest",
-        "text-loader": "latest",
-        "node-sass": "latest",
-        "sass-loader": "latest",
         "babel-loader": "8.0.4",
-        "css-loader": "latest",
-        "url-loader": "latest",
-        "file-loader": "latest",
-        "style-loader": "latest",
         "@babel/core": "latest",
         "@babel/plugin-syntax-dynamic-import": "latest",
         "@babel/preset-env": "latest",
         "@babel/register": "latest",
         "@babel/plugin-proposal-class-properties": "latest",
-        "@babel/plugin-proposal-decorators": "latest",
         "babel-plugin-transform-private-properties": "latest",
         "babel-preset-es2015": "latest",
-        "centrifuge": "<2.0.0",
-        "directory-tree": "^2.2.0",
-        "fs-extra": "latest",
-        "jsdoc-webpack4-plugin": "^0.0.2",
-        "jsonfile": "^5.0.0",
         "opn": "latest",
-        "rimraf": "latest",
-        "superagent": "latest",
-        "terser": "latest",
-        "terser-webpack-plugin": "latest",
         "webpack": "latest",
         "webpack-cli": "latest",
         "webpack-serve": "latest",
         "webpack-bundle-analyzer": "latest",
-        "hotkeys-js": "latest",
-        "resize-observer-polyfill": "latest",
         "cross-env": "latest",
         "html-webpack-plugin": "latest",
-        "copy-webpack-plugin": "latest",
-        "node-sass-magic-importer": "latest",
-        "stats.js": "latest",
-        "threads": "latest",
-        "js-beautify": "next",
-        "postman-jsdoc-theme": "latest",
-        "bookshelf-jsdoc-theme": "latest"
-    },
-    "gitDependencies": {
-        "clavis": "git://github.com/sanyabeast/clavis.git",
-        "postal": "git://github.com/sanyabeast/postal.git",
-        "sender": "git://github.com/sanyabeast/sender.git",
-        "tweener": "git://github.com/sanyabeast/tweener.git",
-        "unicycle": "git://github.com/sanyabeast/unicycle.git"
+        "copy-webpack-plugin": "latest"
     }
 }
