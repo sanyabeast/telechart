@@ -1,5 +1,9 @@
 import Utils from "Telechart/Utils"
 import ChartMath from "Telechart/ChartMath"
+import RenderingProgram from "Telechart/RenderingEngine/RenderingProgram"
+import TelechartModule from "Telechart/Utils/TelechartModule"
+
+import canvas_html from "txt!html/canvas.html"
 
 /**
  * @class
@@ -7,13 +11,8 @@ import ChartMath from "Telechart/ChartMath"
  *
  *
  */
-class RenderingEngine {
-
-	static RenderingTask = class {
-		constructor () {
-
-		}
-	}
+class RenderingEngine extends TelechartModule {
+	static RenderingProgram = RenderingProgram;
 
 	get domElement () { return this.$dom.canvasElement }
 	get position () { return this.$state.position }
@@ -21,9 +20,11 @@ class RenderingEngine {
 	get size () { return this.$state.size }
 
 	constructor () {
+		super()
+
 		this.$dom = {
-			canvasElement: Utils.parseHTML(`<canvas></canvas>`),
-			offscreenCanvasElement: Utils.parseHTML(`<canvas></canvas>`),
+			canvasElement: Utils.parseHTML( canvas_html ),
+			offscreenCanvasElement: Utils.parseHTML( canvas_html ),
 		}
 
 		this.$state = {
@@ -50,15 +51,24 @@ class RenderingEngine {
 		this.$state.position.y = y
 	}
 
-	setSizer ( w, h ) {
+	setSize ( w, h ) {
 		w *= this.$state.DPR
 		h *= this.$state.DPR
 
 		this.$dom.canvasElement.width = w
 		this.$dom.canvasElement.height = h
 
-		this.$static.size.x = w
-		this.$static.size.y = h
+		this.$state.size.x = w
+		this.$state.size.y = h
+
+		this.$state.context2d.fillRect(20, 20, 20, 20);
+	}
+
+	fitSize () {
+		if ( this.domElement.parentElement ) {
+			let rect = this.domElement.parentElement.getBoundingClientRect()
+			this.setSize( rect.width, rect.height )
+		}
 	}
 
 	prerender () {

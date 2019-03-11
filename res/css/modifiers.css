@@ -8,3 +8,6 @@
 .fit-width			{ width: 100%; }
 .fit-height 		{ height: 100%; }
 .border-box 		{ box-sizing: border-box; }
+
+.pos-absolute 		{ position: absolute; left: 0; top: 0; }
+.pos-relative 		{ position: relative; }
