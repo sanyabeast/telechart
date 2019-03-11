@@ -1,3 +1,5 @@
+import Utils from "Telechart/Utils"
+
 /**
  * @class
  * EventBus.

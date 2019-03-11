@@ -1,5 +1,6 @@
 import TelechartModule from "Telechart/Utils/TelechartModule"
 import Utils from "Telechart/Utils"
+import DOMElementEventHandler from "Telechart/DomDriver/DOMElementEventHandler"
 
 import modifiers_css from "txt!css/modifiers.css"
 import telechart_css from "txt!css/telechart.css"
@@ -25,8 +26,13 @@ class DomDriver extends TelechartModule {
 			rootElement: Utils.parseHTML( telechart_html )
 		}
 
+		this.$modules.majorPlotDOMEventHandler = new DOMElementEventHandler( {
+			domElement: majorPlot.domElement,
+			eventsList: ["click", "drag"]
+		} )
+
 		this.$dom.rootElement.querySelector( ".major-plot-wrapper" ).appendChild(majorPlot.domElement)
-		this.$dom.rootElement.querySelector(" .panorama-plot-wrapper" ).appendChild(panoramaPlot.domElement)
+		this.$dom.rootElement.querySelector( ".panorama-plot-wrapper" ).appendChild(panoramaPlot.domElement)
 
 		this.fitSize = this.fitSize.bind( this )
 
