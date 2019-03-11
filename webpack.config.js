@@ -42,9 +42,6 @@ let webpackConfig = {
         openAnalyzer: false
       })
     ],
-    optimization: {
-	    minimize: false
-	}
 };
 
 if (env == "production"){
