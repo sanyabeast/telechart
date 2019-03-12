@@ -29,18 +29,18 @@ class DOMElementEventHandler extends TelechartModule {
 				moveEventName = "mousemove"
 			}
 
-			domElement.addEventListener( captureEventName, (eventData)=>{
+			domElement.addEventListener( captureEventName, ( eventData )=>{
 				eventData = this.$normalizeEventData( "drag", eventData )
 				prevX = eventData.pageX
 				prevY = eventData.pageY
 				captured = true
 			} )
 
-			window.addEventListener( releaseEventName, (eventData)=>{
+			window.addEventListener( releaseEventName, ( eventData )=>{
 				captured = false
 			} )
 
-			window.addEventListener( moveEventName, (eventData)=>{
+			window.addEventListener( moveEventName, ( eventData )=>{
 				if ( captured ) {
 					eventData = this.$normalizeEventData( "drag", eventData )
 					dx = eventData.pageX - prevX
@@ -62,7 +62,15 @@ class DOMElementEventHandler extends TelechartModule {
 		},
 
 		zoom: function ( domElement, callback ) {
-
+			if ( !Config.isTouchDevice ) {
+				domElement.addEventListener( "mousewheel", ( eventData )=>{
+					eventData.preventDefault()
+					let zoomIn = eventData.wheelDeltaY > 0
+					eventData = this.$normalizeEventData( "zoom", eventData )
+					eventData.zoomIn = zoomIn
+					callback ( eventData )
+				} )
+			}
 		},
 	}
 
@@ -77,8 +85,7 @@ class DOMElementEventHandler extends TelechartModule {
 
 		Utils.loopCollection(params.eventsList, ( eventName, index )=>{
 			DOMElementEventHandler.eventDetectors[eventName].call(this,  this.$state.domElement, ( data )=>{
-				console.log( eventName, data.dragX )
-				this.emit( "click", data )
+				this.emit( data.type, data )
 			} )
 		})
 

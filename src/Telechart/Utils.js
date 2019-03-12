@@ -1,10 +1,12 @@
+import aggregation from "Telechart/Utils/aggregation"
+
 /**
  * @class
  * Utils.
  *
  */
 class Utils {
-
+	static aggregation = aggregation;
 	/* generic tools */
 	static loopCollection ( collection, iteratee ) {
 		if ( Array.isArray( collection ) ) {
@@ -41,6 +43,8 @@ class Utils {
 			document.querySelector( "head" ).appendChild( this.parseHTML( `<style id="telechart-css-${id}" type="text/css">${cssString}</style>` ) )
 		}
 	}
+
+	/* array tools */
 
 }
 

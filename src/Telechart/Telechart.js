@@ -20,6 +20,12 @@ class Telechart extends TelechartModule {
 	static Utils = Utils;
 	static EventBus = EventBus;
 	static Tweener = Tweener;
+	static ChartMath = ChartMath;
+
+	MainLoop = MainLoop;
+	Utils = Utils;
+	EventBus = EventBus;
+	ChartMath = ChartMath;
 
 	get domElement () { return this.$modules.domDriver.domElement }
 

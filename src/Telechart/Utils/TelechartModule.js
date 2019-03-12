@@ -11,7 +11,7 @@ class TelechartModule {
 	}
 
 	emit (eventName, payload) {
-		EventBus.on( `${this.UUID}/${eventName}`, payload )
+		EventBus.emit( `${this.UUID}/${eventName}`, payload )
 	}
 }
 

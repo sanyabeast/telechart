@@ -28,8 +28,11 @@ class DomDriver extends TelechartModule {
 
 		this.$modules.majorPlotDOMEventHandler = new DOMElementEventHandler( {
 			domElement: majorPlot.domElement,
-			eventsList: ["click", "drag"]
+			eventsList: ["click", "drag", "zoom"]
 		} )
+
+		this.$modules.majorPlotDOMEventHandler.on( "drag", this.$onMajorPlotDrag.bind( this ) )
+		this.$modules.majorPlotDOMEventHandler.on( "zoom", this.$onMajorPlotZoom.bind( this ) )
 
 		this.$dom.rootElement.querySelector( ".major-plot-wrapper" ).appendChild(majorPlot.domElement)
 		this.$dom.rootElement.querySelector( ".panorama-plot-wrapper" ).appendChild(panoramaPlot.domElement)
@@ -43,6 +46,20 @@ class DomDriver extends TelechartModule {
 	fitSize () {
 		this.$modules.majorPlot.fitSize()
 		this.$modules.panoramaPlot.fitSize()
+	}
+
+	$onMajorPlotDrag ( data ) {
+		let position = this.$modules.majorPlot.position
+		let dragDelta = this.$modules.majorPlot.toVirtualScale( data.dragX, data.dragY )
+		console.log(dragDelta, data)
+		this.$modules.majorPlot.setPosition( position.x - dragDelta.x, position.y )
+		console.log(data)
+	}
+
+	$onMajorPlotZoom ( data ) {
+		let scale = this.$modules.majorPlot.scale
+		let scaleX = scale.x * ( ( data.zoomIn ) ? (0.5) : (2.0) )
+		this.$modules.majorPlot.setScale( scaleX, scale.y )
 	}
 }
 
