@@ -2,6 +2,7 @@ import RenderingEngine from "Telechart/RenderingEngine"
 import Utils from "Telechart/Utils"
 import TelechartModule from "Telechart/Utils/TelechartModule"
 import MainLoop from "Telechart/MainLoop"
+import Tweener from "Telechart/Tweener"
 
 import plot_html from "txt!html/plot.html"
 
@@ -25,6 +26,24 @@ class Plot extends TelechartModule {
 		this.$createTestLines()
 
 		this.$dom.rootElement.querySelector( ".canvas-wrapper" ).appendChild( this.$modules.renderingEngine.domElement )
+
+		Tweener.tween({
+			fromValue: 20,
+			toValue: 0.2,
+			duration: 2000,
+			onUpdate: (value, completed)=>{
+				this.$modules.renderingEngine.setScale( this.$modules.renderingEngine.scale.x, value )
+			}
+		})
+
+		Tweener.tween({
+			fromValue: 20,
+			toValue: 0.2,
+			duration: 1000,
+			onUpdate: (value, completed)=>{
+				this.$modules.renderingEngine.setScale( value, this.$modules.renderingEngine.scale.y )
+			}
+		})
 
 		MainLoop.addTask( this.$modules.renderingEngine.render )
 	}
