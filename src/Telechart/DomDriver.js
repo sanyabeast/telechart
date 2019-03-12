@@ -1,30 +1,50 @@
 import TelechartModule from "Telechart/Utils/TelechartModule"
 import Utils from "Telechart/Utils"
 import DOMElementEventHandler from "Telechart/DomDriver/DOMElementEventHandler"
-
-import modifiers_css from "txt!css/modifiers.css"
-import telechart_css from "txt!css/telechart.css"
-import telechart_html from "txt!html/telechart.html"
-
+import Component from "Telechart/DomDriver/Component"
+import Config from "Telechart/Config"
 
 class DomDriver extends TelechartModule {
-	get domElement () { return this.$dom.rootElement }
+	static Component = Component;
+
+	static assets = {
+		html: {},
+		css: {}
+	};
+
+	static loadAssets () {
+		let htmlFilesContext = require.context("txt!html")
+
+		htmlFilesContext.keys().forEach( ( path )=>{
+			let htmlString = htmlFilesContext( path )
+			let name = path.replace( ".html", "" ).replace( "./", "" )
+			Config.assets.html[name] = htmlString
+		})
+
+		let cssFilesContext = require.context("txt!css")
+
+		cssFilesContext.keys().forEach( ( path )=>{
+			let cssString = cssFilesContext( path )
+			let name = path.replace( ".css", "" ).replace( "./", "" )
+			Config.assets.css[name] = cssString
+		})
+	}
 
 	constructor () {
 		super()
 	}
 
 	init ( { telechart, majorPlot, panoramaPlot } ) {
-		Utils.injectCSS( "telechart-modifiers", modifiers_css )
-		Utils.injectCSS( "telechart-app", telechart_css )
-
 		this.$modules = {
 			majorPlot,
-			panoramaPlot 
+			panoramaPlot,
+			domComponent: new Component( {
+				template: "telechart"
+			} )
 		}
 
 		this.$dom = {
-			rootElement: Utils.parseHTML( telechart_html )
+			rootElement: this.$modules.domComponent.domElement
 		}
 
 		this.$modules.majorPlotDOMEventHandler = new DOMElementEventHandler( {
@@ -32,11 +52,11 @@ class DomDriver extends TelechartModule {
 			eventsList: ["click", "drag", "zoom"]
 		} )
 
-		this.$modules.majorPlotDOMEventHandler.on( "drag", this.$onMajorPlotDrag.bind( this ) )
-		this.$modules.majorPlotDOMEventHandler.on( "zoom", this.$onMajorPlotZoom.bind( this ) )
+		// this.$modules.majorPlotDOMEventHandler.on( "drag", this.$onMajorPlotDrag.bind( this ) )
+		// this.$modules.majorPlotDOMEventHandler.on( "zoom", this.$onMajorPlotZoom.bind( this ) )
 
-		this.$dom.rootElement.querySelector( ".major-plot-wrapper" ).appendChild(majorPlot.domElement)
-		this.$dom.rootElement.querySelector( ".panorama-plot-wrapper" ).appendChild(panoramaPlot.domElement)
+		this.$modules.domComponent.addChild( "major-plot-wrapper", majorPlot.domElement )
+		this.$modules.domComponent.addChild( "panorama-plot-wrapper", panoramaPlot.domElement )
 
 		this.fitSize = this.fitSize.bind( this )
 
@@ -61,5 +81,7 @@ class DomDriver extends TelechartModule {
 		this.$modules.majorPlot.setScale( scaleX, scale.y )
 	}
 }
+
+DomDriver.loadAssets()
 
 export default DomDriver

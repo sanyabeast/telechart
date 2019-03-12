@@ -4,29 +4,27 @@ import TelechartModule from "Telechart/Utils/TelechartModule"
 import MainLoop from "Telechart/MainLoop"
 import Tweener from "Telechart/Tweener"
 import ChartMath from "Telechart/ChartMath"
+import DOMComponent from "Telechart/DomDriver/Component"
 
 import plot_html from "txt!html/plot.html"
 
 class Plot extends TelechartModule {
 	get position () { return this.$modules.renderingEngine.position }
 	get scale () { return this.$modules.renderingEngine.scale }
-	get domElement () { return this.$dom.rootElement }
 
 	constructor () {
 		super()
-
-		this.$dom = {
-			rootElement: Utils.parseHTML( plot_html )
-		}
-
+		
 		this.$modules = {
-			renderingEngine: new RenderingEngine()
+			renderingEngine: new RenderingEngine(),
+			domComponent: new DOMComponent( {
+				template: "plot"
+			} )
 		}
-
 
 		this.$createTestLines()
 
-		this.$dom.rootElement.querySelector( ".canvas-wrapper" ).appendChild( this.$modules.renderingEngine.domElement )
+		this.$modules.domComponent.addChild( "canvas-wrapper", this.$modules.renderingEngine.domElement )
 
 		Tweener.tween({
 			fromValue: 20,
@@ -88,7 +86,7 @@ class Plot extends TelechartModule {
 
 			line.setStyles( {
 				lineWidth: 4,
-				strokeColor: Utils.generateRandomCSSHexColor()
+				strokeStyle: Utils.generateRandomCSSHexColor()
 			} )
 
 			this.$modules.renderingEngine.addChild( line )

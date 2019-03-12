@@ -5,6 +5,11 @@
  *
  */
 class Config {
+	static assets = {
+		html: {},
+		css: {}
+	}
+	
 	static isTouchDevice = ( "ontouchstart" in window )
 }
 

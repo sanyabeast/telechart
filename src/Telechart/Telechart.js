@@ -10,6 +10,9 @@ import Plot from "Telechart/Plot"
 import DomDriver from "Telechart/DomDriver"
 
 
+window.clog = console.log.bind(console)
+
+
 /** 
  * @class
  * Telechart. Root class.

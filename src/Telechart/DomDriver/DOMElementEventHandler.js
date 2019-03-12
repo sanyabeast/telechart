@@ -5,6 +5,7 @@ import Config from "Telechart/Config"
 class DOMElementEventHandler extends TelechartModule {
 	static eventDetectors = {
 		click: function ( domElement, callback ) {
+			console.warn(new Error())
 			domElement.addEventListener( "click", ( eventData )=>{
 				callback( this.$normalizeEventData(  "click", eventData ) )
 			} )
@@ -86,6 +87,10 @@ class DOMElementEventHandler extends TelechartModule {
 		Utils.loopCollection(params.eventsList, ( eventName, index )=>{
 			DOMElementEventHandler.eventDetectors[eventName].call(this,  this.$state.domElement, ( data )=>{
 				this.emit( data.type, data )
+				this.emit( "$event", {
+					type: data.type,
+					payload: data
+				} )
 			} )
 		})
 
