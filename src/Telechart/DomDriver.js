@@ -51,9 +51,7 @@ class DomDriver extends TelechartModule {
 	$onMajorPlotDrag ( data ) {
 		let position = this.$modules.majorPlot.position
 		let dragDelta = this.$modules.majorPlot.toVirtualScale( data.dragX, data.dragY )
-		console.log(dragDelta, data)
 		this.$modules.majorPlot.setPosition( position.x - dragDelta.x, position.y )
-		console.log(data)
 	}
 
 	$onMajorPlotZoom ( data ) {
