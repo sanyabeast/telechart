@@ -15,6 +15,8 @@ class Plot extends TelechartModule {
 	constructor () {
 		super()
 		
+		this.$temp = {}
+
 		this.$modules = {
 			renderingEngine: new RenderingEngine(),
 			domComponent: new DOMComponent( {
@@ -28,54 +30,43 @@ class Plot extends TelechartModule {
 			"dom.click"
 		], "plot." )
 
-		this.$createTestLines()
+		this.$runDebugCode()
 
 		this.$modules.domComponent.addChild( "canvas-wrapper", this.$modules.renderingEngine.domElement )
 
-		Tweener.tween({
-			fromValue: 20,
-			toValue: 0.2,
-			duration: 2000,
-			onUpdate: (value, completed)=>{
-				this.$modules.renderingEngine.setScale( this.$modules.renderingEngine.scale.x, value )
-			}
-		})
-
-		Tweener.tween({
-			fromValue: 20,
-			toValue: 0.2,
-			duration: 1000,
-			onUpdate: (value, completed)=>{
-				this.$modules.renderingEngine.setScale( value, this.$modules.renderingEngine.scale.y )
-			}
-		})
-
 		this.$modules.renderingEngine.setScale( 1, 1 )
 
-		MainLoop.addTask( this.$modules.renderingEngine.render )
+		this.startRendering()		
 	}
 
+	startRendering () {
+		this.stopRendering()
+		this.stopRendering = MainLoop.addTask( this.$modules.renderingEngine.render )
+	}
+
+	stopRendering () {}
+
 	fitSize ( ...args ) {
-		return this.$modules.renderingEngine.fitSize(...args)
+		return this.$modules.renderingEngine.fitSize( ...args )
 	}
 
 	setPosition ( ...args ) {
-		return this.$modules.renderingEngine.setPosition(...args)
+		return this.$modules.renderingEngine.setPosition( ...args )
 	}
 
 	setScale ( ...args ) {
-		return this.$modules.renderingEngine.setScale(...args)
+		return this.$modules.renderingEngine.setScale( ...args )
 	}
 
 	toVirtual ( ...args ) {
-		return this.$modules.renderingEngine.toVirtual(...args)
+		return this.$modules.renderingEngine.toVirtual( ...args )
 	}
 
 	toVirtualScale ( ...args ) {
-		return this.$modules.renderingEngine.toVirtualScale(...args)
+		return this.$modules.renderingEngine.toVirtualScale( ...args )
 	}
 
-	$createTestLines () {
+	$runDebugCode () {
 
 		this.$modules.renderingEngine.setScale( this.$modules.renderingEngine.scale.x, 30 / this.$modules.renderingEngine.size.y )
 
@@ -97,6 +88,25 @@ class Plot extends TelechartModule {
 
 			this.$modules.renderingEngine.addChild( line )
 		} )
+
+		Tweener.tween({
+			fromValue: 20,
+			toValue: 0.2,
+			duration: 2000,
+			onUpdate: ( value, completed )=>{
+				this.$modules.renderingEngine.setScale( this.$modules.renderingEngine.scale.x, value )
+			}
+		})
+
+		Tweener.tween({
+			fromValue: 20,
+			toValue: 0.2,
+			duration: 1000,
+			onUpdate: ( value, completed )=>{
+				this.$modules.renderingEngine.setScale( value, this.$modules.renderingEngine.scale.y )
+			}
+		})
+
 	}
 }
 

@@ -49,16 +49,16 @@ class Component extends TelechartModule {
 	$processAttrs ( node, parentNode ) {
 		Utils.loopCollection( node.attributes, ( attr, index )=>{
 			switch ( true ) {
-				case (attr.name == "$ref"):
+				case ( attr.name == "$ref" ):
 					this.$refs[attr.value] = node
 					node.$ref = attr.value
 				break;
-				case (attr.name == "$css"):
+				case ( attr.name == "$css" ):
 					Utils.loopCollection( attr.value.split(" "), ( cssAssetName, index )=>{
 						Utils.injectCSS( cssAssetName, Config.assets.css[cssAssetName] )
 					} )
 				break;
-				case (attr.name == "$events"):
+				case ( attr.name == "$events" ):
 
 					let eventHandler = new DOMElementEventHandler( {
 						domElement: node,
@@ -68,7 +68,6 @@ class Component extends TelechartModule {
 
 					eventHandler.on( "$event", ( data )=>{
 						let ref = node.$ref || "";
-						console.log(node)
 						this.emit( `${ref}.${data.type}`, data.payload )
 					} )
 
