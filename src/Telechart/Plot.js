@@ -28,23 +28,23 @@ class Plot extends TelechartModule {
 
 		this.$dom.rootElement.querySelector( ".canvas-wrapper" ).appendChild( this.$modules.renderingEngine.domElement )
 
-		// Tweener.tween({
-		// 	fromValue: 20,
-		// 	toValue: 0.2,
-		// 	duration: 2000,
-		// 	onUpdate: (value, completed)=>{
-		// 		this.$modules.renderingEngine.setScale( this.$modules.renderingEngine.scale.x, value )
-		// 	}
-		// })
+		Tweener.tween({
+			fromValue: 20,
+			toValue: 0.2,
+			duration: 2000,
+			onUpdate: (value, completed)=>{
+				this.$modules.renderingEngine.setScale( this.$modules.renderingEngine.scale.x, value )
+			}
+		})
 
-		// Tweener.tween({
-		// 	fromValue: 20,
-		// 	toValue: 0.2,
-		// 	duration: 1000,
-		// 	onUpdate: (value, completed)=>{
-		// 		this.$modules.renderingEngine.setScale( value, this.$modules.renderingEngine.scale.y )
-		// 	}
-		// })
+		Tweener.tween({
+			fromValue: 20,
+			toValue: 0.2,
+			duration: 1000,
+			onUpdate: (value, completed)=>{
+				this.$modules.renderingEngine.setScale( value, this.$modules.renderingEngine.scale.y )
+			}
+		})
 
 		this.$modules.renderingEngine.setScale( 1, 1 )
 
@@ -63,8 +63,6 @@ class Plot extends TelechartModule {
 		return this.$modules.renderingEngine.setScale(...args)
 	}
 
-	setViewport
-
 	toVirtual ( ...args ) {
 		return this.$modules.renderingEngine.toVirtual(...args)
 	}
@@ -82,7 +80,7 @@ class Plot extends TelechartModule {
 
 			let points = []
 
-			for (var a = (i * 100); a < (i * 100) + 100; a++){
+			for (var a = (i * 100); a < (i * 100) + 101; a++){
 				points.push( ChartMath.point( a, Math.random() * 30 ) )
 			}
 

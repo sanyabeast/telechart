@@ -29,8 +29,8 @@ class Utils {
 	static generateRandomString (prefix, length) {
 		let string = "";
 
-		while(string.length < length) {
-			string = string + (Math.random().toString(32).substring(3, 12));
+		while ( string.length < length ) {
+			string = string + ( Math.random().toString( 32 ).substring( 3, 12 ) );
 		}
 
 		string = string.substring(0, length);
@@ -39,7 +39,7 @@ class Utils {
 
 	/* dom related tools */
 	static parseHTML ( htmlString ) {
-		let temp = document.createElement("div")
+		let temp = document.createElement( "div" )
 		temp.innerHTML = htmlString
 		return temp.children[0]
 	}
@@ -53,7 +53,7 @@ class Utils {
 	/* array tools */
 
 	/* misc */
-	static generateRandomCSSHexColor () { return `#${(Math.floor(Math.random() * 16777215)).toString("16")}` }
+	static generateRandomCSSHexColor () { return `#${( Math.floor( Math.random() * 16777215 ) ).toString("16")}` }
 }
 
 export default Utils

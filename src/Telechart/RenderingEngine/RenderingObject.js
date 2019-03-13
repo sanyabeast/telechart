@@ -14,7 +14,8 @@ class RenderingObject {
 			strokeColor: "#000000",
 			lineWidth: 1,
 			boundRect: ChartMath.rect(0, 0, 0, 0),
-			culled: true
+			culled: true,
+			lineJoin: "bevel"
 		}
 
 		this.$data = {}
@@ -28,12 +29,14 @@ class RenderingObject {
 		context2d.fillStyle = this.$state.fillColor
 		context2d.strokeStyle = this.$state.strokeColor
 		context2d.lineWidth = this.$state.lineWidth
+		context2d.lineJoin = this.$state.lineJoin
 	}
 
 	setStyles (params) {
 		this.$state.fillColor = params.fillColor || this.$state.fillColor
 		this.$state.strokeColor = params.strokeColor || this.$state.strokeColor
 		this.$state.lineWidth = params.lineWidth || this.$state.lineWidth
+		this.$state.lineJoin = params.lineJoin || this.$state.lineJoin
 	}
 
 	addChild ( child ) {

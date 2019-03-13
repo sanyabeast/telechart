@@ -2,7 +2,7 @@ import MainLoop from "Telechart/MainLoop"
 
 /**
  * @class
- * Tweener
+ * Tweener.
  *
  *
  */
