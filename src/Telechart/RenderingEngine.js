@@ -1,11 +1,13 @@
 import Utils 			from "Telechart/Utils"
 import ChartMath 		from "Telechart/ChartMath"
 import TelechartModule 	from "Telechart/Utils/TelechartModule"
+import DOMComponent from "Telechart/DomDriver/Component"
+
 import RenderingObject 	from "Telechart/RenderingEngine/RenderingObject"
 import Line 			from "Telechart/RenderingEngine/Line"
 import Group 			from "Telechart/RenderingEngine/Group"
+import DOMLayer 		from "Telechart/RenderingEngine/RenderingObject"
 
-import canvas_html 		from "txt!html/canvas.html"
 
 /**
  * @class
@@ -18,6 +20,7 @@ class RenderingEngine extends Utils.aggregation( TelechartModule, RenderingObjec
 	static RenderingObject = RenderingObject;
 	static Line = Line;
 	static Group = Group;
+	static DOMLayer = DOMLayer;
 
 	get domElement () { return this.$dom.canvasElement }
 	get position () { return this.$state.position }
@@ -27,9 +30,18 @@ class RenderingEngine extends Utils.aggregation( TelechartModule, RenderingObjec
 	constructor () {
 		super()
 
+		this.$modules = {
+			canvas: new DOMComponent( {
+				template: "canvas"
+			} ),
+			offscreenCanvas: new DOMComponent( {
+				template: "canvas"
+			} )
+		}
+
 		this.$dom = {
-			canvasElement: Utils.parseHTML( canvas_html ),
-			offscreenCanvasElement: Utils.parseHTML( canvas_html ),
+			canvasElement: this.$modules.canvas.domElement,
+			offscreenCanvasElement: this.$modules.offscreenCanvas.domElement,
 		}
 
 		this.$temp = {

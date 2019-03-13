@@ -3,6 +3,7 @@ import Utils from "Telechart/Utils"
 import DOMElementEventHandler from "Telechart/DomDriver/DOMElementEventHandler"
 import Component from "Telechart/DomDriver/Component"
 import Config from "Telechart/Config"
+import Tweener from "Telechart/Tweener"
 
 class DomDriver extends TelechartModule {
 	static Component = Component;
@@ -35,6 +36,8 @@ class DomDriver extends TelechartModule {
 	}
 
 	init ( { telechart, majorPlot, panoramaPlot } ) {
+		this.$temp = {}
+
 		this.$modules = {
 			majorPlot,
 			panoramaPlot,
@@ -77,8 +80,26 @@ class DomDriver extends TelechartModule {
 
 	$onMajorPlotZoom ( data ) {
 		let scale = this.$modules.majorPlot.scale
-		let scaleX = scale.x * ( ( data.zoomIn ) ? (0.5) : (2.0) )
-		this.$modules.majorPlot.setScale( scaleX, scale.y )
+		let scaleX = scale.x
+		let newScaleX = scaleX * ( ( data.zoomIn ) ? (0.5) : (2.0) )
+
+		this.$temp.killZoomTween && this.$temp.killZoomTween()
+
+		this.$temp.killZoomTween = Tweener.tween( {
+			duration: 200,
+			fromValue: scaleX,
+			toValue: newScaleX,
+			ease: "linear",
+			onUpdate: ( value, completed )=>{
+				this.$modules.majorPlot.setScale( value, scale.y )
+
+				if ( completed ) {
+					delete this.$temp.killZoomTween
+				}
+			}
+		} )
+
+		
 	}
 }
 
