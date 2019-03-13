@@ -60,8 +60,6 @@ class Component extends TelechartModule {
 				break;
 				case (attr.name == "$events"):
 
-					console.log(node, parentNode)
-
 					let eventHandler = new DOMElementEventHandler( {
 						domElement: node,
 						eventsList: attr.value.split(" ")
@@ -70,6 +68,7 @@ class Component extends TelechartModule {
 
 					eventHandler.on( "$event", ( data )=>{
 						let ref = node.$ref || "";
+						console.log(node)
 						this.emit( `${ref}.${data.type}`, data.payload )
 					} )
 

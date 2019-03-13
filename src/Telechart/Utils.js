@@ -1,4 +1,5 @@
 import aggregation from "Telechart/Utils/aggregation"
+import EventProxy from "Telechart/Utils/EventProxy"
 
 /**
  * @class
@@ -7,6 +8,8 @@ import aggregation from "Telechart/Utils/aggregation"
  */
 class Utils {
 	static aggregation = aggregation;
+	static EventProxy = EventProxy;
+	
 	/* generic tools */
 	static loopCollection ( collection, iteratee ) {
 		if ( Array.isArray( collection ) ) {

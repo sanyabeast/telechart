@@ -19,8 +19,14 @@ class Plot extends TelechartModule {
 			renderingEngine: new RenderingEngine(),
 			domComponent: new DOMComponent( {
 				template: "plot"
-			} )
+			} ),
 		}
+
+		this.$modules.domComponentEventProxy = new Utils.EventProxy( this.$modules.domComponent, this, [
+			"dom.drag",
+			"dom.zoom",
+			"dom.click"
+		], "plot." )
 
 		this.$createTestLines()
 

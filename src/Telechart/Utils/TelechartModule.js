@@ -10,7 +10,7 @@ class TelechartModule {
 
 	get domElement () {
 		if ( this.domComponent ) {
-			return this.domComponent.domElements
+			return this.domComponent.domElement
 		}
 	}
 
