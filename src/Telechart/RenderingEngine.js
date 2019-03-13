@@ -5,6 +5,7 @@ import DOMComponent from "Telechart/DomDriver/Component"
 
 import RenderingObject 	from "Telechart/RenderingEngine/RenderingObject"
 import Line 			from "Telechart/RenderingEngine/Line"
+import Circle 			from "Telechart/RenderingEngine/Circle"
 import Group 			from "Telechart/RenderingEngine/Group"
 import DOMLayer 		from "Telechart/RenderingEngine/RenderingObject"
 
@@ -19,6 +20,7 @@ class RenderingEngine extends Utils.aggregation( TelechartModule, RenderingObjec
 
 	static RenderingObject = RenderingObject;
 	static Line = Line;
+	static Circle = Circle;
 	static Group = Group;
 	static DOMLayer = DOMLayer;
 
@@ -157,9 +159,15 @@ class RenderingEngine extends Utils.aggregation( TelechartModule, RenderingObjec
 		return position
 	}
 
-	isCulled ( boundRect, px, py ) {
-		let translatedRect = ChartMath.translateRect( this.$temp.boundRect, boundRect, px, py )
-		return !ChartMath.rectIntersectsRect( translatedRect, this.$state.viewportRect )
+	isCulled ( child, px, py ) {
+		if (!child.culled || ( !child.projectionCulled && !this.$state.projectionModified )) {
+			return false
+		} else {
+			let boundRect = child.getBoundRect()
+			let translatedRect = ChartMath.translateRect( this.$temp.boundRect, boundRect, px, py )
+			child.projectionCulled = !ChartMath.rectIntersectsRect( translatedRect, this.$state.viewportRect )
+			return child.projectionCulled
+		}
 	}
 
 	$updateProjectionState () {

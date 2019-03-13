@@ -72,6 +72,23 @@ class DOMElementEventHandler extends TelechartModule {
 				} )
 			}
 		},
+
+		doubletap: function ( domElement, callback ) {
+			let prevClickTime = 0
+
+			domElement.addEventListener( "click", ( eventData )=>{
+				eventData.preventDefault()
+
+				let now = +new Date()
+
+				if ( ( now - prevClickTime ) < Config.domDoubletapTimeout ) {
+					callback( eventData )
+				} 
+
+				prevClickTime = now
+
+			} )
+		}
 	}
 
 	constructor (params) {

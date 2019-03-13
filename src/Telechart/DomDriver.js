@@ -81,7 +81,7 @@ class DomDriver extends TelechartModule {
 	$onMajorPlotZoom ( data ) {
 		let scale = this.$modules.majorPlot.scale
 		let scaleX = scale.x
-		let newScaleX = scaleX * ( ( data.zoomIn ) ? ( 1/4 ) : ( 4 ) )
+		let newScaleX = scaleX * ( ( data.zoomIn ) ? ( 1/2 ) : ( 2 ) )
 
 		this.$temp.killZoomTween && this.$temp.killZoomTween()
 

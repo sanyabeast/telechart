@@ -3,10 +3,15 @@ import ChartMath from "Telechart/ChartMath"
 
 class RenderingObject {
 	get culled () { return this.$state.culled }
+	get projectionCulled () { return this.$state.projectionCulled }
+	set projectionCulled (v) { this.$state.projectionCulled = v }
+	get position () { return this.$state.position }
 
-	constructor () {
+	constructor ( params ) {
 		this.children = []
 		this.UUID = Utils.generateRandomString( `rendering-object-${this.constructor.name}`, 16 )
+
+		this.$params = {}
 
 		this.$styles = {
 			fillStyle: "#000000",
@@ -19,6 +24,11 @@ class RenderingObject {
 			position: ChartMath.vec2( 0, 0 ),
 			boundRect: ChartMath.rect(0, 0, 0, 0),
 			culled: true,
+			projectionCulled: true
+		}
+
+		if ( params ) {
+			this.setParams( params )
 		}
 
 		this.$data = {}
@@ -31,6 +41,16 @@ class RenderingObject {
 	$applyStyles ( context2d ) {
 		Utils.loopCollection( this.$styles, ( value, name )=>{
 			context2d[name] = value
+		} )
+	}
+
+	setParams ( params ) {
+		Utils.loopCollection( params, ( value, name )=>{
+			if ( name == "styles" ) {
+				this.setStyles( value )
+			} else {
+				this.$params[name] = ( typeof value != "undefined" ) ? value : this.$params.name
+			}
 		} )
 	}
 
@@ -57,7 +77,7 @@ class RenderingObject {
 		py += this.$state.position.y
 
 		Utils.loopCollection( this.children, (child, index)=>{
-			if (  child.culled === false || !engine.isCulled( child.getBoundRect(), px, py )) {
+			if ( !engine.isCulled( child, px, py )) {
 				child.render( engine, context2d, px, py )
 			} else {
 				engine.incrementCulledObjectsCount()

@@ -78,23 +78,48 @@ class Plot extends TelechartModule {
 
 		this.$modules.renderingEngine.setScale( this.$modules.renderingEngine.scale.x, 30 / this.$modules.renderingEngine.size.y )
 
-		Utils.loop( 0, 100, 1, ( i )=>{
+		let chunkSize = 10
+		let chunksCount = 100
+		let circleRareness = 4
+
+		Utils.loop( 0, chunksCount, 1, ( i )=>{
+
 			let line = new RenderingEngine.Line()
 
 			let points = []
 
-			for (var a = ( i * 100); a < (i * 100) + 101; a++ ){
-				points.push( ChartMath.point( a, Math.random() * 30 ) )
+			for (var a = ( i * chunkSize ); a < ( i * chunkSize ) + chunkSize; a++ ){
+				
+				let value = Math.random() * 30
+
+				if ( a % circleRareness == 0 ) {
+					let circle = new RenderingEngine.Circle( {
+						radius: Math.random() * 20,
+						lineWidth: 1,
+						styles: {
+							strokeStyle: Utils.generateRandomCSSHexColor(),
+							fillStyle: "#ffffff",
+						}
+					} )
+
+					circle.position.x = a
+					circle.position.y = value
+
+					this.$modules.renderingEngine.addChild( circle )
+				}
+
+				points.push( ChartMath.point( a, value ) )
 			}
 
 			line.setPoints( points )
 
 			line.setStyles( {
-				lineWidth: 4,
+				lineWidth: 3,
 				strokeStyle: Utils.generateRandomCSSHexColor()
 			} )
 
 			this.$modules.renderingEngine.addChild( line )
+
 		} )
 
 		Tweener.tween({

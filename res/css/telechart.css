@@ -1,6 +1,7 @@
 .telechart {
 	border: 1px solid black;
 	user-select: none;
+	background-color: #fff;
 }
 
 .telechart .major-plot-wrapper {
