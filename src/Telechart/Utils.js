@@ -20,6 +20,12 @@ class Utils {
 		}
 	}
 
+	static loop ( from, to, increment, callback ) {
+		for ( var a = from; a < to; a++ ) {
+			if ( callback( a ) ) break
+		}
+	}
+
 	static generateRandomString (prefix, length) {
 		let string = "";
 
@@ -46,6 +52,8 @@ class Utils {
 
 	/* array tools */
 
+	/* misc */
+	static generateRandomCSSHexColor () { return `#${(Math.floor(Math.random() * 16777215)).toString("16")}` }
 }
 
 export default Utils

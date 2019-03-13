@@ -37,6 +37,10 @@ class RenderingEngine extends Utils.aggregation( TelechartModule, RenderingObjec
 			boundRect: ChartMath.rect(0, 0, 0, 0)
 		}
 
+		this.$stats = {
+			culledObjectsCount: 0
+		}
+
 		this.$state = {
 			DPR: window.devicePixelRatio,
 			context2d: this.$dom.canvasElement.getContext( "2d" ),
@@ -91,7 +95,8 @@ class RenderingEngine extends Utils.aggregation( TelechartModule, RenderingObjec
 	}
 
 	prerender () {
-		super.render( this, this.$state.offscreenContext2d, 0, 0 )
+		this.$stats.culledObjectsCount = 0
+		super.render( this, this.$state.offscreenContext2d, -this.$state.position.x, -this.$state.position.y )
 	}
 
 	render () {
@@ -132,14 +137,7 @@ class RenderingEngine extends Utils.aggregation( TelechartModule, RenderingObjec
 
 	isCulled ( boundRect, px, py ) {
 		let translatedRect = ChartMath.translateRect( this.$temp.boundRect, boundRect, px, py )
-		let result = !ChartMath.rectBelongsToRect( translatedRect, this.$state.viewportRect )
-
-		if (window.kek){
-			console.log( px, py, translatedRect, this.$state.viewportRect )
-			debugger;
-		}
-
-		return result
+		return !ChartMath.rectIntersectsRect( translatedRect, this.$state.viewportRect )
 	}
 
 	$updateViewportRect () {
@@ -147,9 +145,11 @@ class RenderingEngine extends Utils.aggregation( TelechartModule, RenderingObjec
 
 		viewportRect.x = this.$state.position.x
 		viewportRect.y = this.$state.position.y
-		viewportRect.w = this.$state.size.x / this.$state.scale.x
-		viewportRect.h = this.$state.size.y / this.$state.scale.y
+		viewportRect.w = this.$state.size.x * this.$state.scale.x
+		viewportRect.h = this.$state.size.y * this.$state.scale.y
 	}
+
+	incrementCulledObjectsCount () { this.$stats.culledObjectsCount++ }
 
 }
 

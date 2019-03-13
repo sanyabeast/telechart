@@ -14,6 +14,20 @@ class ChartMath {
 		return { x, y }
 	}
 
+	/* I have overriden the `valueOf` method so that I can efficiently find the minima and maxima of sequence 
+	 * using `Math.max.apply(Math, ...) and Math.min.apply(Math, ...)` constructions.
+	 */
+	static point ( x, y ) {
+		x = x || 0
+		y = y || 0
+
+		return {
+			x, 
+			y,
+			valueOf () { return this.y }
+		}
+	}
+
 	static rect (x, y, w, h) {
 		x = x || 0
 		y = y || 0
@@ -39,14 +53,21 @@ class ChartMath {
 		return ( rectA.x >= rectB.x ) && ( rectA.y >= rectB.y ) && ( rectA.x + rectA.w <= rectB.x + rectB.w ) && ( rectA.y + rectA.h <= rectB.y + rectB.h )
 	}
 
+	static rectIntersectsRect ( rectA, rectB ) {
+		return !(( rectB.x > ( rectA.x + rectA.w ) ) || ( ( rectB.x + rectB.w ) < rectA.x ) || ( rectB.y > ( rectA.y + rectB.h ) ) || ( ( rectB.y + rectB.h ) < rectA.y ))
+	}
+
 	static getMinMax ( points ) {
 		let min = null;
 		let max = null;
 
-		Utils.loopCollection( points, (point, index)=>{
+		/*Utils.loopCollection( points, (point, index)=>{
 			if (min === null || point.y < min) min = point.y
 			if (max === null || point.y > max) max = point.y
-		} )
+		} )*/
+
+		min = Math.min.apply(Math, points)
+		max = Math.max.apply(Math, points)
 
 		return { min, max }
 

@@ -55,6 +55,8 @@ class RenderingObject {
 		Utils.loopCollection( this.children, (child, index)=>{
 			if (child.culled === false || !engine.isCulled( child.getBoundRect(), px, py )) {
 				child.render( engine, context2d, px, py )
+			} else {
+				engine.incrementCulledObjectsCount()
 			}
 		} )
 	}
