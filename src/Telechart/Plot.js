@@ -46,7 +46,7 @@ class Plot extends TelechartModule {
 
 	stopRendering () {}
 
-	setExtremum () {
+	setExtremum (extremum) {
 
 	}
 
@@ -60,6 +60,10 @@ class Plot extends TelechartModule {
 
 	setScale ( ...args ) {
 		return this.$modules.renderingEngine.setScale( ...args )
+	}
+
+	setScalePriority ( ...args ) {
+		return this.$modules.renderingEngine.setScalePriority( ...args )
 	}
 
 	toVirtual ( ...args ) {
@@ -79,7 +83,7 @@ class Plot extends TelechartModule {
 
 			let points = []
 
-			for (var a = (i * 100); a < (i * 100) + 101; a++){
+			for (var a = ( i * 100); a < (i * 100) + 101; a++ ){
 				points.push( ChartMath.point( a, Math.random() * 30 ) )
 			}
 
@@ -100,7 +104,7 @@ class Plot extends TelechartModule {
 			onUpdate: ( value, completed )=>{
 				this.$modules.renderingEngine.setScale( this.$modules.renderingEngine.scale.x, value )
 			}
-		})
+		} )
 
 		Tweener.tween({
 			fromValue: 20,
@@ -109,7 +113,7 @@ class Plot extends TelechartModule {
 			onUpdate: ( value, completed )=>{
 				this.$modules.renderingEngine.setScale( value, this.$modules.renderingEngine.scale.y )
 			}
-		})
+		} )
 
 	}
 }

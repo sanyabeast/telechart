@@ -1,7 +1,7 @@
 import Telechart from "Telechart/Telechart"
 import chartData from "chart_data.json"
 
-let chartsCount = 10
+let chartsCount = 2
 
 console.log( chartData )
 

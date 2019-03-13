@@ -52,7 +52,7 @@ class DomDriver extends TelechartModule {
 
 		this.$modules.majorPlotDOMEventHandler = new DOMElementEventHandler( {
 			domElement: majorPlot.domElement,
-			eventsList: ["click", "drag", "zoom"]
+			eventsList: [ "click", "drag", "zoom" ]
 		} )
 
 		majorPlot.on( "plot.dom.drag", this.$onMajorPlotDrag.bind( this ) )
@@ -81,12 +81,12 @@ class DomDriver extends TelechartModule {
 	$onMajorPlotZoom ( data ) {
 		let scale = this.$modules.majorPlot.scale
 		let scaleX = scale.x
-		let newScaleX = scaleX * ( ( data.zoomIn ) ? (0.5) : (2.0) )
+		let newScaleX = scaleX * ( ( data.zoomIn ) ? ( 1/4 ) : ( 4 ) )
 
 		this.$temp.killZoomTween && this.$temp.killZoomTween()
 
 		this.$temp.killZoomTween = Tweener.tween( {
-			duration: 200,
+			duration: 100,
 			fromValue: scaleX,
 			toValue: newScaleX,
 			ease: "linear",

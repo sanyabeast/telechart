@@ -32,7 +32,7 @@ class MainLoop {
 	}
 
 	static stop () {
-		window.cancelAnimationFrame(this.$rafId)
+		window.cancelAnimationFrame( this.$rafId )
 	}
 
 	static tick () {
@@ -40,7 +40,7 @@ class MainLoop {
 
 		let now = +new Date()
 		let absFrameDelta = now - this.$state.prevFrameTime
-		let relFrameDelta = absFrameDelta / (1000 / 60)
+		let relFrameDelta = absFrameDelta / ( 1000 / 60 )
 		this.$state.prevFrameTime = now
 
 		Utils.loopCollection(this.$tasks, ( task, taskId )=>{

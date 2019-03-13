@@ -14,7 +14,7 @@ class ChartMath {
 		return { x, y }
 	}
 
-	/* I have overriden the `valueOf` method so that I can efficiently find the minima and maxima of sequence 
+	/* I have overriden the `valueOf` method so that I can easely find the minima and maxima of sequence 
 	 * using `Math.max.apply(Math, ...) and Math.min.apply(Math, ...)` constructions.
 	 */
 	static point ( x, y ) {
@@ -54,7 +54,7 @@ class ChartMath {
 	}
 
 	static rectIntersectsRect ( rectA, rectB ) {
-		return !(( rectB.x > ( rectA.x + rectA.w ) ) || ( ( rectB.x + rectB.w ) < rectA.x ) || ( rectB.y > ( rectA.y + rectB.h ) ) || ( ( rectB.y + rectB.h ) < rectA.y ))
+		return !( ( rectB.x > ( rectA.x + rectA.w ) ) || ( ( rectB.x + rectB.w ) < rectA.x ) || ( rectB.y > ( rectA.y + rectB.h ) ) || ( ( rectB.y + rectB.h ) < rectA.y ) )
 	}
 
 	static getExtremum ( points ) {
@@ -66,8 +66,8 @@ class ChartMath {
 			if (max === null || point.y > max) max = point.y
 		} )*/
 
-		min = Math.min.apply(Math, points)
-		max = Math.max.apply(Math, points)
+		min = Math.min.apply( Math, points )
+		max = Math.max.apply( Math, points )
 
 		return { min, max }
 

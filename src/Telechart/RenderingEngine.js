@@ -46,11 +46,7 @@ class RenderingEngine extends Utils.aggregation( TelechartModule, RenderingObjec
 
 		this.$temp = {
 			position: ChartMath.vec2(0, 0),
-			boundRect: ChartMath.rect(0, 0, 0, 0)
-		}
-
-		this.$stats = {
-			culledObjectsCount: 0
+			boundRect: ChartMath.rect(0, 0, 0, 0),
 		}
 
 		this.$state = {
@@ -60,29 +56,42 @@ class RenderingEngine extends Utils.aggregation( TelechartModule, RenderingObjec
 			size: ChartMath.vec2( 100, 100 ),
 			position: ChartMath.vec2( 0, 0 ),
 			scale: ChartMath.vec2( 1, 1 ),
-			viewportRect: ChartMath.rect( 0, 0, 0, 0 )
+			viewportRect: ChartMath.rect( 0, 0, 0, 0 ),
+			culledObjectsCount: 0,
+			projectionModified: true
 		}
 
 		this.$tasks = {}
 
 		this.render = this.render.bind(this)
 
-		this.$updateViewportRect()
+		this.$updateProjectionState()
 	}
 
 	setScale ( x, y ) {
-		this.$state.scale.x = x
-		this.$state.scale.y = y
+		this.$state.viewportRect.w = this.$state.size.x * x
+		this.$state.viewportRect.h = this.$state.size.y * y
 
-		this.$updateViewportRect()
+		this.$updateProjectionState()
 	}
 
 	setPosition (x, y ) {
 		this.$state.position.x = x
 		this.$state.position.y = y
 
-		this.$updateViewportRect()
+		this.$updateProjectionState()
 	}
+
+	setViewport ( x, y, w, h ) {
+		let vr = this.$state.viewportRect
+
+		vr.x = x
+		vr.y = y
+		vr.w = w
+		vr.h = h
+
+		this.$updateProjectionState()
+	} 
 
 	setSize ( w, h ) {
 		w *= this.$state.DPR
@@ -96,7 +105,7 @@ class RenderingEngine extends Utils.aggregation( TelechartModule, RenderingObjec
 		this.$state.size.x = w
 		this.$state.size.y = h
 
-		this.$updateViewportRect()
+		this.$updateProjectionState()
 	}
 
 	fitSize () {
@@ -107,7 +116,8 @@ class RenderingEngine extends Utils.aggregation( TelechartModule, RenderingObjec
 	}
 
 	prerender () {
-		this.$stats.culledObjectsCount = 0
+		this.$state.projectionModified = false;
+		this.$state.culledObjectsCount = 0
 		super.render( this, this.$state.offscreenContext2d, -this.$state.position.x, -this.$state.position.y )
 	}
 
@@ -152,16 +162,18 @@ class RenderingEngine extends Utils.aggregation( TelechartModule, RenderingObjec
 		return !ChartMath.rectIntersectsRect( translatedRect, this.$state.viewportRect )
 	}
 
-	$updateViewportRect () {
-		let viewportRect = this.$state.viewportRect
+	$updateProjectionState () {
+		let vr = this.$state.viewportRect
 
-		viewportRect.x = this.$state.position.x
-		viewportRect.y = this.$state.position.y
-		viewportRect.w = this.$state.size.x * this.$state.scale.x
-		viewportRect.h = this.$state.size.y * this.$state.scale.y
+		this.$state.scale.x = vr.w / this.$state.size.x
+		this.$state.scale.y = vr.h / this.$state.size.y
+		vr.x = this.$state.position.x
+		vr.y = this.$state.position.y
+
+		this.$state.projectionModified = true
 	}
 
-	incrementCulledObjectsCount () { this.$stats.culledObjectsCount++ }
+	incrementCulledObjectsCount () { this.$state.culledObjectsCount++ }
 
 }
 
