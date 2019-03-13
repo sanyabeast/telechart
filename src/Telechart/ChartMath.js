@@ -57,7 +57,7 @@ class ChartMath {
 		return !(( rectB.x > ( rectA.x + rectA.w ) ) || ( ( rectB.x + rectB.w ) < rectA.x ) || ( rectB.y > ( rectA.y + rectB.h ) ) || ( ( rectB.y + rectB.h ) < rectA.y ))
 	}
 
-	static getMinMax ( points ) {
+	static getExtremum ( points ) {
 		let min = null;
 		let max = null;
 

@@ -10,12 +10,12 @@ class Line extends RenderingObject {
 	setPoints ( points ) {
 		this.$data.points = points
 
-		let minMax = ChartMath.getMinMax( points )
+		let extremum = ChartMath.getExtremum( points )
 
 		this.$state.boundRect.x = points[0].x
 		this.$state.boundRect.w = (points[points.length - 1].x) - this.$state.boundRect.x
-		this.$state.boundRect.y = minMax.min
-		this.$state.boundRect.h = minMax.max - minMax.min
+		this.$state.boundRect.y = extremum.min
+		this.$state.boundRect.h = extremum.max - extremum.min
 		
 	}
 

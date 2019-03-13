@@ -46,6 +46,10 @@ class Plot extends TelechartModule {
 
 	stopRendering () {}
 
+	setExtremum () {
+
+	}
+
 	fitSize ( ...args ) {
 		return this.$modules.renderingEngine.fitSize( ...args )
 	}
