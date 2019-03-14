@@ -115,7 +115,7 @@ class DOMElementEventHandler extends TelechartModule {
 	$normalizeEventData ( eventName, eventData ) {
 		this.$state.normalizedEventData.type = eventName
 		this.$state.normalizedEventData.x = eventData.offsetX
-		this.$state.normalizedEventData.Y = eventData.offsetY
+		this.$state.normalizedEventData.y = eventData.offsetY
 		this.$state.normalizedEventData.pageX = eventData.pageX
 		this.$state.normalizedEventData.pageY = eventData.pageY
 

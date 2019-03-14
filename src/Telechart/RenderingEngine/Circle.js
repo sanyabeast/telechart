@@ -1,15 +1,18 @@
 import RenderingObject from "Telechart/RenderingEngine/RenderingObject"
 
 class Circle extends RenderingObject {
+	get radius () { return this.$params.radius }
+	set radius (v) { 
+		this.$params.radius = v
+		this.$updateBoundRect()
+	}
+
 	constructor ( params ) {
 		super( params )
 	}
 
 	setParams ( params ) {
 		super.setParams( params )
-
-		this.$state.boundRect.w = (this.$params.radius * 2)
-		this.$state.boundRect.h = (this.$params.radius * 2)
 	}
 
 	render ( engine, context2d, px, py ) {	
@@ -26,7 +29,11 @@ class Circle extends RenderingObject {
 		context2d.closePath()
 		context2d.fill()
 		context2d.stroke()
+	}
 
+	$updateBoundRect () {
+		this.$state.boundRect.w = (this.$params.radius * 2)
+		this.$state.boundRect.h = (this.$params.radius * 2)
 	}
 }
 

@@ -144,8 +144,8 @@ class RenderingEngine extends Utils.aggregation( TelechartModule, RenderingObjec
 	toVirtual ( x, y ) {
 		let position = this.$temp.position
 
-		position.x = (x + this.position.x) * this.scale.x
-		position.y = (y + this.position.y) * this.scale.y
+		position.x = ( ( x * this.scale.x ) + this.position.x )
+		position.y = ( ( this.size.y - y ) + this.position.y ) * this.scale.y
 
 		return position
 	} 
@@ -160,12 +160,17 @@ class RenderingEngine extends Utils.aggregation( TelechartModule, RenderingObjec
 	}
 
 	isCulled ( child, px, py ) {
-		if (!child.culled || ( !child.projectionCulled && !this.$state.projectionModified )) {
+		if ( !child.culled ) {
 			return false
 		} else {
 			let boundRect = child.getBoundRect()
 			let translatedRect = ChartMath.translateRect( this.$temp.boundRect, boundRect, px, py )
 			child.projectionCulled = !ChartMath.rectIntersectsRect( translatedRect, this.$state.viewportRect )
+
+			if (child.projectionCulled) {
+				// console.log( child, translatedRect, this.$state.viewportRect )
+			}
+
 			return child.projectionCulled
 		}
 	}

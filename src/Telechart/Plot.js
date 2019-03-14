@@ -30,11 +30,11 @@ class Plot extends TelechartModule {
 			"dom.click"
 		], "plot." )
 
-		this.$runDebugCode()
+		this.__runDebugCode()
 
 		this.$modules.domComponent.addChild( "canvas-wrapper", this.$modules.renderingEngine.domElement )
 
-		this.$modules.renderingEngine.setScale( 1, 1 )
+		// this.$modules.renderingEngine.setScale( 1, 1 )
 
 		this.startRendering()		
 	}
@@ -74,9 +74,11 @@ class Plot extends TelechartModule {
 		return this.$modules.renderingEngine.toVirtualScale( ...args )
 	}
 
-	$runDebugCode () {
+	/* debug code */
 
-		this.$modules.renderingEngine.setScale( this.$modules.renderingEngine.scale.x, 30 / this.$modules.renderingEngine.size.y )
+	__runDebugCode () {
+
+		this.$modules.renderingEngine.setViewport( 0, 0, 100, 30 )
 
 		let chunkSize = 10
 		let chunksCount = 100
@@ -122,25 +124,34 @@ class Plot extends TelechartModule {
 
 		} )
 
-		Tweener.tween({
-			fromValue: 20,
-			toValue: 0.2,
-			duration: 2000,
-			onUpdate: ( value, completed )=>{
-				this.$modules.renderingEngine.setScale( this.$modules.renderingEngine.scale.x, value )
-			}
-		} )
-
-		Tweener.tween({
-			fromValue: 20,
-			toValue: 0.2,
-			duration: 1000,
-			onUpdate: ( value, completed )=>{
-				this.$modules.renderingEngine.setScale( value, this.$modules.renderingEngine.scale.y )
-			}
-		} )
-
 	}
+
+	__addCircle ( x, y ) {
+		let circle = new RenderingEngine.Circle( {
+			radius: 1,
+			lineWidth: 1,
+			styles: {
+				strokeStyle: Utils.generateRandomCSSHexColor(),
+				fillStyle: "#ffffff",
+			}
+		} )
+
+		circle.position.x = x
+		circle.position.y = y
+
+		Tweener.tween( {
+			fromValue: 1,
+			toValue: 20,
+			duration: 250,
+			onUpdate: ( value, completed )=>{
+				circle.radius = value
+			}
+		} ) 
+
+		this.$modules.renderingEngine.addChild( circle )
+	}
+
+
 }
 
 export default Plot

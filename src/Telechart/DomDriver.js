@@ -57,6 +57,7 @@ class DomDriver extends TelechartModule {
 
 		majorPlot.on( "plot.dom.drag", this.$onMajorPlotDrag.bind( this ) )
 		majorPlot.on( "plot.dom.zoom", this.$onMajorPlotZoom.bind( this ) )
+		majorPlot.on( "plot.dom.click", this.$onMajorPlotClick.bind( this ) )
 
 		this.$modules.domComponent.addChild( "major-plot-wrapper", majorPlot.domElement )
 		this.$modules.domComponent.addChild( "panorama-plot-wrapper", panoramaPlot.domElement )
@@ -76,6 +77,11 @@ class DomDriver extends TelechartModule {
 		let position = this.$modules.majorPlot.position
 		let dragDelta = this.$modules.majorPlot.toVirtualScale( data.dragX, data.dragY )
 		this.$modules.majorPlot.setPosition( position.x - dragDelta.x, position.y )
+	}
+
+	$onMajorPlotClick ( data ) {
+		let virtualPosition = this.$modules.majorPlot.toVirtual( data.x, data.y )
+		this.$modules.majorPlot.__addCircle( virtualPosition.x, virtualPosition.y )
 	}
 
 	$onMajorPlotZoom ( data ) {
