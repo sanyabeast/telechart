@@ -16,7 +16,7 @@ window.clog = console.log.bind(console)
 /** 
  * @class
  * Telechart. Root class.
- *
+ * @property {window.Node} domElement - root DOM element
  */
 class Telechart extends TelechartModule {
 	static MainLoop = MainLoop;
@@ -32,6 +32,9 @@ class Telechart extends TelechartModule {
 
 	get domElement () { return this.$modules.domDriver.domElement }
 
+	/** 
+	 * @constructor
+	 */
 	constructor () {
 		super()
 
@@ -48,6 +51,10 @@ class Telechart extends TelechartModule {
 		})
 	}
 
+	/**
+	 * @param {Object} chartData - input data
+	 *
+	 */
 	update ( chartData ) {
 		console.log(chartData)
 	}

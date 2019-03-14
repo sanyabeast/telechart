@@ -26,6 +26,10 @@
         "webpack-bundle-analyzer": "latest",
         "cross-env": "latest",
         "html-webpack-plugin": "latest",
-        "copy-webpack-plugin": "latest"
+        "copy-webpack-plugin": "latest",
+        "jsdoc-webpack4-plugin": "latest",
+        "minami": "latest",
+        "terser": "latest",
+        "terser-webpack-plugin": "latest"
     }
 }
