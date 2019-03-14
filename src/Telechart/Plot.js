@@ -85,7 +85,6 @@ class Plot extends TelechartModule {
 		let circleRareness = 4
 
 		Utils.loop( 0, chunksCount, 1, ( i )=>{
-
 			let line = new RenderingEngine.Line()
 
 			let points = []

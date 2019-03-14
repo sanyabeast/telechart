@@ -167,10 +167,6 @@ class RenderingEngine extends Utils.aggregation( TelechartModule, RenderingObjec
 			let translatedRect = ChartMath.translateRect( this.$temp.boundRect, boundRect, px, py )
 			child.projectionCulled = !ChartMath.rectIntersectsRect( translatedRect, this.$state.viewportRect )
 
-			if (child.projectionCulled) {
-				// console.log( child, translatedRect, this.$state.viewportRect )
-			}
-
 			return child.projectionCulled
 		}
 	}

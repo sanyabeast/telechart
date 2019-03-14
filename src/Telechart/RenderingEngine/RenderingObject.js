@@ -77,7 +77,7 @@ class RenderingObject {
 		py += this.$state.position.y
 
 		Utils.loopCollection( this.children, (child, index)=>{
-			if ( !engine.isCulled( child, px, py )) {
+			if ( !engine.isCulled( child, px + child.position.x, py + child.position.y )) {
 				child.render( engine, context2d, px, py )
 			} else {
 				engine.incrementCulledObjectsCount()

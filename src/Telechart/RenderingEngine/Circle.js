@@ -13,6 +13,7 @@ class Circle extends RenderingObject {
 
 	setParams ( params ) {
 		super.setParams( params )
+		this.$updateBoundRect()
 	}
 
 	render ( engine, context2d, px, py ) {	
@@ -32,8 +33,10 @@ class Circle extends RenderingObject {
 	}
 
 	$updateBoundRect () {
-		this.$state.boundRect.w = (this.$params.radius * 2)
-		this.$state.boundRect.h = (this.$params.radius * 2)
+		this.$state.boundRect.x = (-this.$params.radius)
+		this.$state.boundRect.y = (-this.$params.radius)
+		this.$state.boundRect.w = (this.$params.radius)
+		this.$state.boundRect.h = (this.$params.radius)
 	}
 }
 
