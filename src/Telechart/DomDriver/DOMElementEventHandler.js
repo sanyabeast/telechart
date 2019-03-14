@@ -1,6 +1,7 @@
 import TelechartModule from "Telechart/Utils/TelechartModule"
 import Utils from "Telechart/Utils"
 import Config from "Telechart/Config"
+import ChartMath from "Telechart/Utils/ChartMath"
 
 class DOMElementEventHandler extends TelechartModule {
 	static eventDetectors = {
@@ -59,7 +60,32 @@ class DOMElementEventHandler extends TelechartModule {
 		},
 
 		pan: function ( domElement, callback ) {
+			if ( Config.isTouchDevice ) {
 
+				let captured = false
+				let prevPanDistance = 0
+
+				domElement.addEventListener( "touchstart", ( eventData )=>{
+					captured = true
+				} )
+
+				window.addEventListener( "touchend", ( eventData )=>{
+					captured = false
+					prevPanDistance = 0
+				} )
+
+				window.addEventListener( "touchmove", ( eventData )=>{
+					let normalizedEventData = this.$normalizeEventData( "pan", eventData )
+
+					if ( captured && normalizedEventData.isGesture && normalizedEventData.touchesCount == 2 ) {
+						let panDelta = prevPanDistance / normalizedEventData.panDistance
+						prevPanDistance = normalizedEventData.panDistance
+						normalizedEventData.panDelta = panDelta
+
+						callback ( normalizedEventData )					
+					}
+				}, { cancelable: true } )
+			}
 		},
 
 		zoom: function ( domElement, callback ) {
@@ -96,7 +122,9 @@ class DOMElementEventHandler extends TelechartModule {
 		super()
 
 		this.$state = {
-			normalizedEventData: {},
+			normalizedEventData: {
+				prevPanDistance: null
+			},
 			domElement: params.domElement,
 			eventsList: params.eventsList,
 		}
@@ -114,6 +142,8 @@ class DOMElementEventHandler extends TelechartModule {
 	}
 
 	$normalizeEventData ( eventName, eventData ) {
+		eventData.isGesture = false
+
 		if ( eventData instanceof window.TouchEvent ) {
 			this.$state.normalizedEventData = this.$normalizeTouchEventData( eventName, eventData )
 		} else {
@@ -140,7 +170,19 @@ class DOMElementEventHandler extends TelechartModule {
 	}
 
 	$normalizeTouchGestureEventData ( eventName, eventData ) {
+		this.$state.normalizedEventData.isGesture = true
+		this.$state.normalizedEventData.touchesCount =  eventData.touches.length
 
+		if ( eventData.touches.length == 2 ) {
+			let panDistance = ChartMath.getDistance(
+				ChartMath.point( eventData.touches[0].pageX, eventData.touches[0].pageY ),
+				ChartMath.point( eventData.touches[1].pageX, eventData.touches[1].pageY ),
+			)
+
+			this.$state.normalizedEventData.panDistance = panDistance
+		}
+
+		return this.$state.normalizedEventData
 	}
 }
 

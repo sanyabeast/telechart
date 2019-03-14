@@ -52,9 +52,10 @@ class DomDriver extends TelechartModule {
 
 		this.$modules.majorPlotDOMEventHandler = new DOMElementEventHandler( {
 			domElement: majorPlot.domElement,
-			eventsList: [ "click", "drag", "zoom", "doubletap" ]
+			eventsList: [ "click", "drag", "zoom", "doubletap", "pan" ]
 		} )
 
+		majorPlot.on( "plot.dom.pan", this.$onMajorPlotPan.bind( this ) )
 		majorPlot.on( "plot.dom.drag", this.$onMajorPlotDrag.bind( this ) )
 		majorPlot.on( "plot.dom.zoom", this.$onMajorPlotZoom.bind( this ) )
 		majorPlot.on( "plot.dom.doubletap", this.$onMajorPlotClick.bind( this ) )
@@ -108,6 +109,14 @@ class DomDriver extends TelechartModule {
 
 		
 	}
+
+	$onMajorPlotPan ( data ) {
+		let scale = this.$modules.majorPlot.scale
+		let scaleX = scale.x
+		let newScaleX = scaleX * (data.panDelta || 1)
+
+		this.$modules.majorPlot.setScale( newScaleX, scale.y )
+	} 
 }
 
 DomDriver.loadAssets()

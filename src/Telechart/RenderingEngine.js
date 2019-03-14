@@ -113,7 +113,7 @@ class RenderingEngine extends Utils.aggregation( TelechartModule, RenderingObjec
 	}
 
 	fitSize () {
-		if ( this.$state.sizeNeedsUpdate && this.domElement.parentElement ) {
+		if ( this.domElement.parentElement ) {
 			let rect = this.domElement.parentElement.getBoundingClientRect()
 			this.setSize( rect.width, rect.height )
 			this.$state.sizeNeedsUpdate = false

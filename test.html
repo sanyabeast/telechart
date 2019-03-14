@@ -26,11 +26,29 @@
 		}
 
 	</style>
-	<script type="text/javascript" src="dist/telechart.js"></script>
-	<script type="text/javascript">
-		console.log(Telechart)
-	</script>
+	
 </head>
 <body>
+
+	<script type="text/javascript" src="dist/telechart.js"></script>
+	<script type="text/javascript">
+		// import chartData from "chart_data.json"
+
+		let isMobile = ( "ontouchstart" in window ) 
+		let chartsCount = isMobile ? 1 : 3
+
+		// console.log( chartData )
+
+		for ( var a = 0; a < chartsCount; a++ ){
+			let telechart = window[`telechart${a}`] = new Telechart.default();
+			telechart.setParentElement( document.body )
+			// telechart.update( chartData )
+		}
+
+
+		if ( isMobile ) {
+			 document.body.classList.add("mobile")
+		}
+	</script>
 </body>
 </html>

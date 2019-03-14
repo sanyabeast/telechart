@@ -31,7 +31,8 @@ class Plot extends TelechartModule {
 			"dom.drag",
 			"dom.zoom",
 			"dom.click",
-			"dom.doubletap"
+			"dom.doubletap",
+			"dom.pan"
 		], "plot." )
 
 		this.__runDebugCode()
@@ -88,10 +89,10 @@ class Plot extends TelechartModule {
 	/* debug code */
 	__runDebugCode () {
 
-		this.$modules.renderingEngine.setViewport( 0, 0, 45, 30 )
+		this.$modules.renderingEngine.setViewport( 0, 10, 45, 30 )
 
-		let chunkSize = 30
-		let chunksCount = 10
+		let chunkSize = 10
+		let chunksCount = 2000
 		let circleRareness = 8
 
 		let points = []
@@ -109,21 +110,21 @@ class Plot extends TelechartModule {
 				
 				let value = points[ a ]
 
-				if ( a % circleRareness == 0 ) {
-					let circle = new RenderingEngine.Circle( {
-						radius: Math.random() * 20,
-						lineWidth: 1,
-						styles: {
-							strokeStyle: Utils.generateRandomCSSHexColor(),
-							fillStyle: "#ffffff",
-						}
-					} )
+				// if ( a % circleRareness == 0 ) {
+				// 	let circle = new RenderingEngine.Circle( {
+				// 		radius: Math.random() * 20,
+				// 		lineWidth: 1,
+				// 		styles: {
+				// 			strokeStyle: Utils.generateRandomCSSHexColor(),
+				// 			fillStyle: "#ffffff",
+				// 		}
+				// 	} )
 
-					circle.position.x = a
-					circle.position.y = value
+				// 	circle.position.x = a
+				// 	circle.position.y = value
 
-					this.$modules.renderingEngine.addChild( circle )
-				}
+				// 	this.$modules.renderingEngine.addChild( circle )
+				// }
 
 				pointsChunk.push( ChartMath.point( a, value ) )
 			}

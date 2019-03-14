@@ -3,6 +3,16 @@ import ChartMath from "Telechart/Utils/ChartMath"
 import Config from "Telechart/Config"
 
 class RenderingObject {
+
+	static defaultStyles = {
+		fillStyle: "#000000",
+		strokeStyle: "#000000",
+		lineWidth: 1 * Config.DPR,
+		lineJoin: "bevel",
+		font: "16px sans-serif",
+		globalAlpha: 1
+	}
+
 	get culled () { return this.$state.culled }
 	set culled (v) { this.$state.culled = v }
 	get projectionCulled () { return this.$state.projectionCulled }
@@ -16,10 +26,7 @@ class RenderingObject {
 		this.$params = {}
 
 		this.$styles = {
-			fillStyle: "#000000",
-			strokestyle: "#000000",
-			linewidth: 1 * Config.DPR,
-			lineJoin: "bevel"			
+			...RenderingObject.defaultStyles	
 		}
 
 		this.$state = {
@@ -41,6 +48,10 @@ class RenderingObject {
 	}
 
 	$applyStyles ( context2d ) {
+		Utils.loopCollection( RenderingObject.defaultStyles, ( value, name )=>{
+			context2d[name] = value
+		} )
+
 		Utils.loopCollection( this.$styles, ( value, name )=>{
 			context2d[name] = value
 		} )

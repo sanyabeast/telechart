@@ -12,9 +12,11 @@ let webpackConfig = {
     entry: {
         "main": "main",
     },
+    target: "web",
   	output: {
   	  filename: "[name].js",
   	  path: path.resolve(__dirname, "dist"),
+      library: "Telechart",
   	  libraryTarget: "umd",
   	},
   	module : {
@@ -75,6 +77,8 @@ if (env == "production"){
           }
         })]
     }
+
+    // webpackConfig.output.libraryTarget = "web"
 
     webpackConfig.plugins.push(new JsDocPlugin({
         conf: path.join(__dirname, 'jsdoc.conf'),

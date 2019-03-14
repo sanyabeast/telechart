@@ -70,7 +70,10 @@ class ChartMath {
 		max = Math.max.apply( Math, points )
 
 		return { min, max }
+	}
 
+	static getDistance ( pointA, pointB ) {
+		return Math.sqrt( Math.pow( Math.abs( pointA.x - pointB.x ), 2 ) + Math.pow( Math.abs( pointA.y - pointB.y ), 2 ) )
 	}
 }
 
