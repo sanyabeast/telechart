@@ -1,6 +1,7 @@
 import RenderingObject from "Telechart/RenderingEngine/RenderingObject"
 import Utils from "Telechart/Utils"
-import ChartMath from "Telechart/ChartMath"
+import ChartMath from "Telechart/Utils/ChartMath"
+
 
 class Line extends RenderingObject {
 	constructor (params) {

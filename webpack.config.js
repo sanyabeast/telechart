@@ -40,7 +40,7 @@ let webpackConfig = {
       new HtmlWebpackPlugin({
         filename: path.join(__dirname, "dist", "index.html"),
         template: path.join(__dirname, "static", "index.html"),
-        inject: env == "development",
+        inject: true,
       }),
       new BundleAnalyzerPlugin({
         reportFilename: "../misc/bundle-stats.html",

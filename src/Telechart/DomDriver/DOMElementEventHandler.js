@@ -42,6 +42,7 @@ class DOMElementEventHandler extends TelechartModule {
 
 			window.addEventListener( moveEventName, ( eventData )=>{
 				if ( captured ) {
+					eventData.preventDefault()
 					eventData = this.$normalizeEventData( "drag", eventData )
 					dx = eventData.pageX - prevX
 					dy = eventData.pageY - prevY
@@ -54,7 +55,7 @@ class DOMElementEventHandler extends TelechartModule {
 
 					callback ( eventData )
 				}
-			} )
+			}, { passive: false })
 		},
 
 		pan: function ( domElement, callback ) {
@@ -69,7 +70,7 @@ class DOMElementEventHandler extends TelechartModule {
 					eventData = this.$normalizeEventData( "zoom", eventData )
 					eventData.zoomIn = zoomIn
 					callback ( eventData )
-				} )
+				}, { passive: false } )
 			}
 		},
 
@@ -113,13 +114,33 @@ class DOMElementEventHandler extends TelechartModule {
 	}
 
 	$normalizeEventData ( eventName, eventData ) {
+		if ( eventData instanceof window.TouchEvent ) {
+			this.$state.normalizedEventData = this.$normalizeTouchEventData( eventName, eventData )
+		} else {
+			this.$state.normalizedEventData.x = eventData.offsetX * window.devicePixelRatio	
+			this.$state.normalizedEventData.y = eventData.offsetY * window.devicePixelRatio	
+			this.$state.normalizedEventData.pageX = eventData.pageX * window.devicePixelRatio
+			this.$state.normalizedEventData.pageY = eventData.pageY * window.devicePixelRatio		
+		}
+
 		this.$state.normalizedEventData.type = eventName
-		this.$state.normalizedEventData.x = eventData.offsetX
-		this.$state.normalizedEventData.y = eventData.offsetY
-		this.$state.normalizedEventData.pageX = eventData.pageX
-		this.$state.normalizedEventData.pageY = eventData.pageY
+		return this.$state.normalizedEventData
+	}
+
+	$normalizeTouchEventData ( eventName, eventData ) {
+		if ( eventData.touches.length > 1 ) {
+			this.$state.normalizedEventData = this.$normalizeTouchGestureEventData( eventName, eventData )
+		} else if ( eventData.touches.length === 1 ) {
+			this.$state.normalizedEventData = this.$normalizeEventData( eventName, eventData.touches[ 0 ] )
+		} else {
+			console.log( 1 )
+		}
 
 		return this.$state.normalizedEventData
+	}
+
+	$normalizeTouchGestureEventData ( eventName, eventData ) {
+
 	}
 }
 

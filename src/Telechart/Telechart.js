@@ -1,5 +1,5 @@
 /* All code written by @sanyabeast from scratch. */
-import ChartMath from "Telechart/ChartMath"
+import ChartMath from "Telechart/Utils/ChartMath"
 import Utils from "Telechart/Utils"
 import MainLoop from "Telechart/MainLoop"
 import EventBus from "Telechart/EventBus"
@@ -8,10 +8,6 @@ import Tweener from "Telechart/Tweener"
 import TelechartModule from "Telechart/Utils/TelechartModule"
 import Plot from "Telechart/Plot"
 import DomDriver from "Telechart/DomDriver"
-
-
-window.clog = console.log.bind(console)
-
 
 /** 
  * @class
@@ -56,7 +52,16 @@ class Telechart extends TelechartModule {
 	 *
 	 */
 	update ( chartData ) {
-		console.log(chartData)
+		let datasets = []
+
+		Utils.loopCollection( chartData, ( data, index )=>{
+			let datasetData = Utils.normalizeChartData( data )
+			datasets.push( datasetData )
+		} )
+
+		console.log( datasets )
+		this.$modules.majorPlot.setDataset ( datasets[0] )
+		this.$modules.panoramaPlot.setDataset ( datasets[0] )
 	}
 
 	addLine ( lineData ) {
@@ -73,7 +78,6 @@ class Telechart extends TelechartModule {
 
 	setParentElement( parentElement ) {
 		parentElement.appendChild( this.domElement )
-		this.$modules.domDriver.fitSize()
 	}
 }
 

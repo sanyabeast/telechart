@@ -3,12 +3,15 @@ import Utils from "Telechart/Utils"
 import TelechartModule from "Telechart/Utils/TelechartModule"
 import MainLoop from "Telechart/MainLoop"
 import Tweener from "Telechart/Tweener"
-import ChartMath from "Telechart/ChartMath"
+import ChartMath from "Telechart/Utils/ChartMath"
 import DOMComponent from "Telechart/DomDriver/Component"
 
-import plot_html from "txt!html/plot.html"
+/* plot */
+import Dataset from "Telechart/Plot/Dataset"
 
 class Plot extends TelechartModule {
+	static Dataset = Dataset;
+
 	get position () { return this.$modules.renderingEngine.position }
 	get scale () { return this.$modules.renderingEngine.scale }
 
@@ -39,6 +42,13 @@ class Plot extends TelechartModule {
 
 		this.startRendering()		
 	}
+
+	/* CHARTING */
+	setDataset ( data ) {
+		console.log( data )
+	}
+
+	/* !CHARTING */
 
 	startRendering () {
 		this.stopRendering()
@@ -76,23 +86,28 @@ class Plot extends TelechartModule {
 	}
 
 	/* debug code */
-
 	__runDebugCode () {
 
-		this.$modules.renderingEngine.setViewport( 0, 0, 100, 30 )
+		this.$modules.renderingEngine.setViewport( 0, 0, 45, 30 )
 
-		let chunkSize = 10
-		let chunksCount = 100
-		let circleRareness = 4
+		let chunkSize = 30
+		let chunksCount = 10
+		let circleRareness = 8
+
+		let points = []
+
+		Utils.loop( 0, chunksCount * chunkSize, 1, ( i )=> {
+			points.push(Math.random() * 30)
+		} )
 
 		Utils.loop( 0, chunksCount, 1, ( i )=>{
 			let line = new RenderingEngine.Line()
 
-			let points = []
+			let pointsChunk = []
 
-			for (var a = ( i * chunkSize ); a < ( i * chunkSize ) + chunkSize; a++ ){
+			for (var a = ( i * chunkSize ); a <= ( i * chunkSize ) + chunkSize; a++ ){
 				
-				let value = Math.random() * 30
+				let value = points[ a ]
 
 				if ( a % circleRareness == 0 ) {
 					let circle = new RenderingEngine.Circle( {
@@ -110,10 +125,10 @@ class Plot extends TelechartModule {
 					this.$modules.renderingEngine.addChild( circle )
 				}
 
-				points.push( ChartMath.point( a, value ) )
+				pointsChunk.push( ChartMath.point( a, value ) )
 			}
 
-			line.setPoints( points )
+			line.setPoints( pointsChunk )
 
 			line.setStyles( {
 				lineWidth: 3,
@@ -140,8 +155,8 @@ class Plot extends TelechartModule {
 		circle.position.y = y
 
 		Tweener.tween( {
-			fromValue: 1,
-			toValue: 20,
+			fromValue: 10,
+			toValue: 30,
 			duration: 250,
 			onUpdate: ( value, completed )=>{
 				circle.radius = value

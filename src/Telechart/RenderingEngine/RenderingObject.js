@@ -1,5 +1,6 @@
 import Utils from "Telechart/Utils"
-import ChartMath from "Telechart/ChartMath"
+import ChartMath from "Telechart/Utils/ChartMath"
+import Config from "Telechart/Config"
 
 class RenderingObject {
 	get culled () { return this.$state.culled }
@@ -17,7 +18,7 @@ class RenderingObject {
 		this.$styles = {
 			fillStyle: "#000000",
 			strokestyle: "#000000",
-			linewidth: 1,
+			linewidth: 1 * Config.DPR,
 			lineJoin: "bevel"			
 		}
 
@@ -57,6 +58,7 @@ class RenderingObject {
 
 	setStyles (params) {
 		Utils.loopCollection( params, ( value, name )=>{
+			if ( name == "lineWidth" ) value *= Config.DPR
 			this.$styles[name] = value
 		} )
 	}

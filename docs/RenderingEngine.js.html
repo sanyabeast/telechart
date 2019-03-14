@@ -24,7 +24,7 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav>
-    <li class="nav-link nav-home-link"><a href="index.html">Home</a></li><li class="nav-heading">Classes</li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="ChartMath.html">ChartMath</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="Config.html">Config</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="EventBus..html">EventBus.</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="EventProxy.html">EventProxy</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="MainLoop.html">MainLoop</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="RenderingEngine.html">RenderingEngine</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="Telechart.html">Telechart</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="Tweener..html">Tweener.</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="Utils..html">Utils.</a></span></li>
+    <li class="nav-link nav-home-link"><a href="index.html">Home</a></li><li class="nav-heading">Classes</li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="ChartMath.html">ChartMath</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="Config.html">Config</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="EventBus..html">EventBus.</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="EventProxy.html">EventProxy</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="MainLoop.html">MainLoop</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="RenderingEngine.html">RenderingEngine</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="Telechart.html">Telechart</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Telechart.html#update">update</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="TelechartModule.html">TelechartModule</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="Tweener..html">Tweener.</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="Utils..html">Utils.</a></span></li><li class="nav-heading"><a href="global.html">Globals</a></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#aggregation">aggregation</a></span></li>
 </nav>
 
 <div id="main">
@@ -40,7 +40,7 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>import Utils 			from "Telechart/Utils"
-import ChartMath 		from "Telechart/ChartMath"
+import ChartMath 		from "Telechart/Utils/ChartMath"
 import TelechartModule 	from "Telechart/Utils/TelechartModule"
 import DOMComponent from "Telechart/DomDriver/Component"
 
@@ -51,7 +51,7 @@ import Circle 			from "Telechart/RenderingEngine/Circle"
 import Group 			from "Telechart/RenderingEngine/Group"
 import DOMLayer 		from "Telechart/RenderingEngine/RenderingObject"
 
-
+const DPR = window.devicePixelRatio
 /**
  * @class
  * Canvas2D Rendering Engine
@@ -95,7 +95,6 @@ class RenderingEngine extends Utils.aggregation( TelechartModule, RenderingObjec
 		}
 
 		this.$state = {
-			DPR: window.devicePixelRatio,
 			context2d: this.$dom.canvasElement.getContext( "2d" ),
 			offscreenContext2d: this.$dom.offscreenCanvasElement.getContext( "2d" ),
 			size: ChartMath.vec2( 100, 100 ),
@@ -103,7 +102,8 @@ class RenderingEngine extends Utils.aggregation( TelechartModule, RenderingObjec
 			scale: ChartMath.vec2( 1, 1 ),
 			viewportRect: ChartMath.rect( 0, 0, 0, 0 ),
 			culledObjectsCount: 0,
-			projectionModified: true
+			projectionModified: true,
+			sizeNeedsUpdate: true
 		}
 
 		this.$tasks = {}
@@ -139,8 +139,8 @@ class RenderingEngine extends Utils.aggregation( TelechartModule, RenderingObjec
 	} 
 
 	setSize ( w, h ) {
-		w *= this.$state.DPR
-		h *= this.$state.DPR
+		w *= DPR
+		h *= DPR
 
 		this.$dom.canvasElement.width = w
 		this.$dom.canvasElement.height = h
@@ -154,13 +154,15 @@ class RenderingEngine extends Utils.aggregation( TelechartModule, RenderingObjec
 	}
 
 	fitSize () {
-		if ( this.domElement.parentElement ) {
+		if ( this.$state.sizeNeedsUpdate &amp;&amp; this.domElement.parentElement ) {
 			let rect = this.domElement.parentElement.getBoundingClientRect()
 			this.setSize( rect.width, rect.height )
+			this.$state.sizeNeedsUpdate = false
 		}
 	}
 
 	prerender () {
+		this.fitSize()
 		this.$state.projectionModified = false;
 		this.$state.culledObjectsCount = 0
 		super.render( this, this.$state.offscreenContext2d, -this.$state.position.x, -this.$state.position.y )
@@ -242,7 +244,7 @@ export default RenderingEngine</code></pre>
 <br class="clear">
 
 <footer>
-    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Thu Mar 14 2019 12:32:31 GMT+0200 (GMT+02:00) using the Minami theme.
+    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Thu Mar 14 2019 19:53:01 GMT+0200 (GMT+02:00) using the Minami theme.
 </footer>
 
 <script>prettyPrint();</script>

@@ -1,7 +1,8 @@
 import Telechart from "Telechart/Telechart"
 import chartData from "chart_data.json"
 
-let chartsCount = 2
+let isMobile = ( "ontouchstart" in window ) 
+let chartsCount = isMobile ? 1 : 3
 
 console.log( chartData )
 
@@ -12,3 +13,6 @@ for ( var a = 0; a < chartsCount; a++ ){
 }
 
 
+if ( isMobile ) {
+	 document.body.classList.add("mobile")
+}

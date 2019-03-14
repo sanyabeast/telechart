@@ -5,6 +5,7 @@
  *
  */
 class Config {
+	static DPR = window.devicePixelRatio
 	static assets = {
 		html: {},
 		css: {}

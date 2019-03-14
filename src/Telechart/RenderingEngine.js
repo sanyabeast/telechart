@@ -1,5 +1,5 @@
 import Utils 			from "Telechart/Utils"
-import ChartMath 		from "Telechart/ChartMath"
+import ChartMath 		from "Telechart/Utils/ChartMath"
 import TelechartModule 	from "Telechart/Utils/TelechartModule"
 import DOMComponent from "Telechart/DomDriver/Component"
 
@@ -10,7 +10,7 @@ import Circle 			from "Telechart/RenderingEngine/Circle"
 import Group 			from "Telechart/RenderingEngine/Group"
 import DOMLayer 		from "Telechart/RenderingEngine/RenderingObject"
 
-
+const DPR = window.devicePixelRatio
 /**
  * @class
  * Canvas2D Rendering Engine
@@ -54,7 +54,6 @@ class RenderingEngine extends Utils.aggregation( TelechartModule, RenderingObjec
 		}
 
 		this.$state = {
-			DPR: window.devicePixelRatio,
 			context2d: this.$dom.canvasElement.getContext( "2d" ),
 			offscreenContext2d: this.$dom.offscreenCanvasElement.getContext( "2d" ),
 			size: ChartMath.vec2( 100, 100 ),
@@ -62,7 +61,8 @@ class RenderingEngine extends Utils.aggregation( TelechartModule, RenderingObjec
 			scale: ChartMath.vec2( 1, 1 ),
 			viewportRect: ChartMath.rect( 0, 0, 0, 0 ),
 			culledObjectsCount: 0,
-			projectionModified: true
+			projectionModified: true,
+			sizeNeedsUpdate: true
 		}
 
 		this.$tasks = {}
@@ -98,8 +98,8 @@ class RenderingEngine extends Utils.aggregation( TelechartModule, RenderingObjec
 	} 
 
 	setSize ( w, h ) {
-		w *= this.$state.DPR
-		h *= this.$state.DPR
+		w *= DPR
+		h *= DPR
 
 		this.$dom.canvasElement.width = w
 		this.$dom.canvasElement.height = h
@@ -113,13 +113,15 @@ class RenderingEngine extends Utils.aggregation( TelechartModule, RenderingObjec
 	}
 
 	fitSize () {
-		if ( this.domElement.parentElement ) {
+		if ( this.$state.sizeNeedsUpdate && this.domElement.parentElement ) {
 			let rect = this.domElement.parentElement.getBoundingClientRect()
 			this.setSize( rect.width, rect.height )
+			this.$state.sizeNeedsUpdate = false
 		}
 	}
 
 	prerender () {
+		this.fitSize()
 		this.$state.projectionModified = false;
 		this.$state.culledObjectsCount = 0
 		super.render( this, this.$state.offscreenContext2d, -this.$state.position.x, -this.$state.position.y )
