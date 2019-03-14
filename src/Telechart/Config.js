@@ -12,7 +12,7 @@ class Config {
 	
 	static isTouchDevice = ( "ontouchstart" in window )
 	static values = {
-		domDoubletapTimeout: 200
+		domDoubletapTimeout: 250
 	}
 }
 

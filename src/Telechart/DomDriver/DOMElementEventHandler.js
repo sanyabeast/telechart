@@ -6,7 +6,7 @@ class DOMElementEventHandler extends TelechartModule {
 	static eventDetectors = {
 		click: function ( domElement, callback ) {
 			domElement.addEventListener( "click", ( eventData )=>{
-				callback( this.$normalizeEventData(  "click", eventData ) )
+				callback( this.$normalizeEventData( "click", eventData ) )
 			} )
 		},
 
@@ -81,8 +81,8 @@ class DOMElementEventHandler extends TelechartModule {
 
 				let now = +new Date()
 
-				if ( ( now - prevClickTime ) < Config.domDoubletapTimeout ) {
-					callback( eventData )
+				if ( ( now - prevClickTime ) < Config.values.domDoubletapTimeout ) {
+					callback( this.$normalizeEventData( "doubletap", eventData ) )
 				} 
 
 				prevClickTime = now

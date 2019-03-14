@@ -52,12 +52,12 @@ class DomDriver extends TelechartModule {
 
 		this.$modules.majorPlotDOMEventHandler = new DOMElementEventHandler( {
 			domElement: majorPlot.domElement,
-			eventsList: [ "click", "drag", "zoom" ]
+			eventsList: [ "click", "drag", "zoom", "doubletap" ]
 		} )
 
 		majorPlot.on( "plot.dom.drag", this.$onMajorPlotDrag.bind( this ) )
 		majorPlot.on( "plot.dom.zoom", this.$onMajorPlotZoom.bind( this ) )
-		majorPlot.on( "plot.dom.click", this.$onMajorPlotClick.bind( this ) )
+		majorPlot.on( "plot.dom.doubletap", this.$onMajorPlotClick.bind( this ) )
 
 		this.$modules.domComponent.addChild( "major-plot-wrapper", majorPlot.domElement )
 		this.$modules.domComponent.addChild( "panorama-plot-wrapper", panoramaPlot.domElement )

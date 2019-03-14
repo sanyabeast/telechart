@@ -27,7 +27,8 @@ class Plot extends TelechartModule {
 		this.$modules.domComponentEventProxy = new Utils.EventProxy( this.$modules.domComponent, this, [
 			"dom.drag",
 			"dom.zoom",
-			"dom.click"
+			"dom.click",
+			"dom.doubletap"
 		], "plot." )
 
 		this.__runDebugCode()
