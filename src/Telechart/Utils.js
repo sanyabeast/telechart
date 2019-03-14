@@ -1,11 +1,14 @@
 import aggregation from "Telechart/Utils/aggregation"
 import EventProxy from "Telechart/Utils/EventProxy"
+import ChartMath from "Telechart/ChartMath"
 
 /**
  * @class
  * Utils.
  *
  */
+let testContext2D = document.createElement( "canvas" ).getContext( "2d" )
+
 class Utils {
 	static aggregation = aggregation;
 	static EventProxy = EventProxy;
@@ -57,6 +60,13 @@ class Utils {
 
 	/* misc */
 	static generateRandomCSSHexColor () { return `#${( Math.floor( Math.random() * 16777215 ) ).toString("16")}` }
+	static measureText ( textContent, font ) {
+		testContext2D.font = font || testContext2D.font
+		let height = Number( testContext2D.font.match( /\d+/ )[0] )
+		let width = testContext2D.measureText( textContent ).width
+
+		return ChartMath.vec2( width, height )
+	}
 }
 
 export default Utils

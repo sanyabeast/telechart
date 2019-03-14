@@ -3,6 +3,7 @@ import ChartMath from "Telechart/ChartMath"
 
 class RenderingObject {
 	get culled () { return this.$state.culled }
+	set culled (v) { this.$state.culled = v }
 	get projectionCulled () { return this.$state.projectionCulled }
 	set projectionCulled (v) { this.$state.projectionCulled = v }
 	get position () { return this.$state.position }

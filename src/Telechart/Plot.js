@@ -150,6 +150,21 @@ class Plot extends TelechartModule {
 		this.$modules.renderingEngine.addChild( circle )
 	}
 
+	__addText ( x, y, textContent ) {
+		let text = new RenderingEngine.Text( {
+			textContent: textContent,
+			styles: {
+				fillStyle: "#000000",
+				font: "30px Monospace",
+			}
+		} )
+
+		text.position.x = x
+		text.position.y = y
+
+		this.$modules.renderingEngine.addChild( text )
+	}
+
 
 }
 

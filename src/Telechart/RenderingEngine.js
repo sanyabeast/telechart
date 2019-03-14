@@ -5,6 +5,7 @@ import DOMComponent from "Telechart/DomDriver/Component"
 
 import RenderingObject 	from "Telechart/RenderingEngine/RenderingObject"
 import Line 			from "Telechart/RenderingEngine/Line"
+import Text 			from "Telechart/RenderingEngine/Text"
 import Circle 			from "Telechart/RenderingEngine/Circle"
 import Group 			from "Telechart/RenderingEngine/Group"
 import DOMLayer 		from "Telechart/RenderingEngine/RenderingObject"
@@ -20,6 +21,7 @@ class RenderingEngine extends Utils.aggregation( TelechartModule, RenderingObjec
 
 	static RenderingObject = RenderingObject;
 	static Line = Line;
+	static Text = Text;
 	static Circle = Circle;
 	static Group = Group;
 	static DOMLayer = DOMLayer;
