@@ -1,3 +1,6 @@
+/**
+ * Tool that allows to perform multi-extending/mixin-in-ing
+ */
 let aggregation = (baseClass, ...mixins) => {
     class base extends baseClass {
         constructor (...args) {
@@ -8,7 +11,7 @@ let aggregation = (baseClass, ...mixins) => {
         }
     }
 
-    let copyProps = (target, source) => {  // this function copies all properties and symbols, filtering out some special ones
+    let copyProps = (target, source) => {
         Object.getOwnPropertyNames(source)
               .concat(Object.getOwnPropertySymbols(source))
               .forEach((prop) => {
@@ -21,7 +24,7 @@ let aggregation = (baseClass, ...mixins) => {
                })
     }
 
-    mixins.forEach((mixin) => { // outside contructor() to allow aggregation(A,B,C).staticFunction() to be called etc.
+    mixins.forEach((mixin) => {
         copyProps(base.prototype, mixin.prototype);
         copyProps(base, mixin);
     });

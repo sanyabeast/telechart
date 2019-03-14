@@ -2,6 +2,7 @@ import Utils from "Telechart/Utils";
 
 /**
  * @class
+ * Proxy events from source emitter to target emitter
  */
 class EventProxy {
 	constructor ( source, target, events, eventPrefix ) {

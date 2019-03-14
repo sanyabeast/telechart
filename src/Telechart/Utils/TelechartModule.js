@@ -1,6 +1,11 @@
 import EventBus from "Telechart/EventBus"
 import Utils from "Telechart/Utils"
 
+/**
+ * @class
+ * Basic module
+ *
+ */
 class TelechartModule {
 	get domComponent () {
 		if ( this.$modules ) {

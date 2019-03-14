@@ -2,7 +2,7 @@ import Utils from "Telechart/Utils"
 
 /**
  * @class
- * Main Loop.
+ * Main Loop
  *
  */
 class MainLoop {
@@ -14,7 +14,7 @@ class MainLoop {
 	}
 
 	static removeTask (taskId) {
-		delete this.$tasks[taskId]
+		delete this.$tasks[ taskId ]
 	}
 
 	static init () {
@@ -22,7 +22,7 @@ class MainLoop {
 			prevFrameTime: +new Date()
 		}
 
-		this.tick = this.tick.bind(this)
+		this.tick = this.tick.bind( this )
 	}
 
 	static start () {
@@ -43,8 +43,8 @@ class MainLoop {
 		let relFrameDelta = absFrameDelta / ( 1000 / 60 )
 		this.$state.prevFrameTime = now
 
-		Utils.loopCollection(this.$tasks, ( task, taskId )=>{
-			task(relFrameDelta, absFrameDelta)
+		Utils.loopCollection( this.$tasks, ( task, taskId )=>{
+			task( relFrameDelta, absFrameDelta )
 		} )
 	}
 }
