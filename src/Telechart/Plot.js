@@ -172,6 +172,15 @@ class Plot extends TelechartModule {
 			}
 		} ) 
 
+		Tweener.tween( {
+			fromValue: this.$modules.renderingEngine.viewport.h,
+			toValue: Math.random() * 30 + 30,
+			duration: 250,
+			onUpdate: ( value )=>{
+				this.$modules.renderingEngine.viewport.h = value
+			}
+		} )
+
 		this.$modules.renderingEngine.addChild( circle )
 	}
 

@@ -29,6 +29,7 @@ class RenderingEngine extends Utils.aggregation( TelechartModule, RenderingObjec
 	get domElement () { return this.$dom.canvasElement }
 	get position () { return this.$state.position }
 	get scale () { return this.$state.scale }
+	get viewport () { return this.$state.viewportRect }
 	get size () { return this.$state.size }
 
 	constructor () {
