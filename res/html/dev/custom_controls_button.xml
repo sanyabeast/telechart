@@ -1,0 +1,9 @@
+<div
+	class="button custom-button"
+	style="display:flex;  width:24px;flex-shrink:1; align-items:center;  cursor:pointer;  justify-content:center"
+>
+	<p
+		class="material-icons"
+		style="margin:0;  display:flex;  color:#000"
+	><p>
+</div>

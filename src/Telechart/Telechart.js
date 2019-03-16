@@ -83,6 +83,16 @@ class Telechart extends TelechartModule {
 	setParentElement( parentElement ) {
 		parentElement.appendChild( this.domElement )
 	}
+
+	startRendering () {
+		this.$modules.majorPlot.majorPlot.startRendering()
+		this.$modules.majorPlot.panoramaPlot.startRendering()
+	}
+
+	stopRendering () {
+		this.$modules.majorPlot.majorPlot.stopRendering()
+		this.$modules.majorPlot.panoramaPlot.stopRendering()
+	}
 }
 
 MainLoop.start()

@@ -89,12 +89,12 @@ class Plot extends TelechartModule {
 
 		this.$modules.renderingEngine.setViewport( 0, 10, 45, 30 )
 
-		Tweener.tween( { fromValue: 0, toValue: 3000, duration: 120000, onUpdate: ( v )=>{ 
+		Tweener.tween( { fromValue: 0, toValue: 3000, duration: 12000, onUpdate: ( v )=>{ 
 			this.$modules.renderingEngine.position.x = v 
 			this.$modules.renderingEngine.updateProjection()
 		} } )
 
-		Tweener.tween( { fromValue: 5, toValue: 60, duration: 120000, onUpdate: ( v )=>{ 
+		Tweener.tween( { fromValue: 5, toValue: 60, duration: 12000, onUpdate: ( v )=>{ 
 			this.$modules.renderingEngine.viewport.w = v
 			this.$modules.renderingEngine.updateProjection() 
 		} } )
