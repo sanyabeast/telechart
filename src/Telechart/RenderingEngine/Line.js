@@ -5,7 +5,11 @@ import ChartMath from "Telechart/Utils/ChartMath"
 
 class Line extends RenderingObject {
 	constructor (params) {
-		super()
+		super( params )
+
+		if ( params.points ) {
+			this.setPoints( params.points )
+		}
 	}
 
 	setPoints ( points ) {

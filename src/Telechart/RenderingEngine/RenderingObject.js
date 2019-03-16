@@ -13,8 +13,12 @@ class RenderingObject {
 		globalAlpha: 1
 	}
 
+	parentNode = null;
+
 	get culled () { return this.$state.culled }
 	set culled (v) { this.$state.culled = v }
+	get visible () { return this.$state.visible }
+	set visible (v) { this.$state.visible = v }
 	get projectionCulled () { return this.$state.projectionCulled }
 	set projectionCulled (v) { this.$state.projectionCulled = v }
 	get position () { return this.$state.position }
@@ -23,6 +27,7 @@ class RenderingObject {
 		this.children = []
 		this.UUID = Utils.generateRandomString( `rendering-object-${this.constructor.name}`, 16 )
 
+		this.$data = {}
 		this.$params = {}
 
 		this.$styles = {
@@ -33,14 +38,16 @@ class RenderingObject {
 			position: ChartMath.vec2( 0, 0 ),
 			boundRect: ChartMath.rect(0, 0, 0, 0),
 			culled: true,
-			projectionCulled: true
+			projectionCulled: true,
+			visible: true
 		}
+
+		this.$setupHiddenDOM()
 
 		if ( params ) {
 			this.setParams( params )
 		}
-
-		this.$data = {}
+	
 	}
 
 	getBoundRect () {
@@ -48,19 +55,22 @@ class RenderingObject {
 	}
 
 	$applyStyles ( context2d ) {
-		Utils.loopCollection( RenderingObject.defaultStyles, ( value, name )=>{
-			context2d[name] = value
-		} )
-
-		Utils.loopCollection( this.$styles, ( value, name )=>{
-			context2d[name] = value
-		} )
+		Utils.assignValues( context2d, RenderingObject.defaultStyles )
+		Utils.assignValues( context2d, this.$styles )
 	}
+
+	setAttributes ( attrs ) {
+		Utils.loopCollection( attrs, ( value, name )=>{
+			this.$hiddenDOM.setAttribute( name, value )
+		} )
+	} 
 
 	setParams ( params ) {
 		Utils.loopCollection( params, ( value, name )=>{
 			if ( name == "styles" ) {
 				this.setStyles( value )
+			} else if ( name == "attributes" ) {
+				this.setAttributes( value )
 			} else {
 				this.$params[name] = ( typeof value != "undefined" ) ? value : this.$params.name
 			}
@@ -68,22 +78,28 @@ class RenderingObject {
 	}
 
 	setStyles (params) {
-		Utils.loopCollection( params, ( value, name )=>{
-			if ( name == "lineWidth" ) value *= Config.DPR
-			this.$styles[name] = value
-		} )
+		Utils.assignValues( this.$styles, params )
 	}
 
 	addChild ( child ) {
 		this.children.push(child)
+		child.parentNode = this
+		this.$hiddenDOM.appendChild( child.$hiddenDOM )
 	}
 
 	removeChild ( child ) {
 		Utils.loopCollection( this.children, ($child, index)=>{
 			if ( child.UUID == $child.UUID ) {
+				this.$hiddenDOM.removeChild( child.$hiddenDOM )
+				child.parentNode = null;
 				this.children.splice(index, 1)
+				return true
 			}
 		} )
+	}
+
+	cutOff () {
+		this.parentNode && this.parentNode.removeChild( this )
 	}
 
 	render ( engine, context2d, px, py ) {
@@ -97,6 +113,23 @@ class RenderingObject {
 				engine.incrementCulledObjectsCount()
 			}
 		} )
+	}
+
+	select ( attributes, iteratee ) {
+		let hiddenDOMs = [...this.$hiddenDOM.querySelectorAll( Utils.generateAttributesSelector( attributes ) )]
+
+		Utils.loopCollection( hiddenDOMs, ( hiddenDOM, index )=>{
+			iteratee && iteratee ( hiddenDOM.$renderingObject, index )
+			hiddenDOMs[ index ] = hiddenDOM.$renderingObject
+		} )
+ 
+		return hiddenDOMs
+	}
+
+	$setupHiddenDOM () {
+		this.$hiddenDOM = document.createElement( this.constructor.name )
+		this.$hiddenDOM.$renderingObject = this
+		this.$hiddenDOM.setAttribute( "type", this.constructor.name )
 	}
 }
 

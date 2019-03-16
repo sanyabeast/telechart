@@ -164,6 +164,8 @@ class RenderingEngine extends Utils.aggregation( TelechartModule, RenderingObjec
 	}
 
 	isCulled ( child, px, py ) {
+		if ( !child.visible ) return true
+
 		if ( !child.culled ) {
 			return false
 		} else {

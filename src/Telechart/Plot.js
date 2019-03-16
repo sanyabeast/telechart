@@ -92,6 +92,12 @@ class Plot extends TelechartModule {
 		let chunksCount = 2000
 		let circleRareness = 8
 
+		let seriesGroup = new RenderingEngine.Group( {
+			attributes: {
+				content: "series"
+			}
+		} )
+
 		let points = []
 
 		Utils.loop( 0, chunksCount * chunkSize, 1, true, ( i )=> {
@@ -99,8 +105,7 @@ class Plot extends TelechartModule {
 		} )
 
 		Utils.loop( 0, chunksCount, 1, true, ( i )=>{
-			let line = new RenderingEngine.Line()
-
+			
 			let pointsChunk = []
 
 			for (var a = ( i * chunkSize ); a <= ( i * chunkSize ) + chunkSize; a++ ){
@@ -126,16 +131,22 @@ class Plot extends TelechartModule {
 				pointsChunk.push( ChartMath.point( a, value ) )
 			}
 
-			line.setPoints( pointsChunk )
+			let line = new RenderingEngine.Line({
+				styles: {
+					lineWidth: 3,
+					strokeStyle: Utils.generateRandomCSSHexColor()
+				},
+				attributes: {
+					index: i
+				},
+				points: pointsChunk
+			})
 
-			line.setStyles( {
-				lineWidth: 3,
-				strokeStyle: Utils.generateRandomCSSHexColor()
-			} )
-
-			this.$modules.renderingEngine.addChild( line )
+			seriesGroup.addChild( line )
 
 		} )
+
+		this.$modules.renderingEngine.addChild( seriesGroup )
 
 	}
 
@@ -170,6 +181,9 @@ class Plot extends TelechartModule {
 			styles: {
 				fillStyle: "#000000",
 				font: "30px Monospace",
+			},
+			attributes: {
+				bar: (Math.random() > 0.5) ? "1" : ""
 			}
 		} )
 

@@ -1,8 +1,9 @@
 import RenderingObject from "Telechart/RenderingEngine/RenderingObject"
 
 class Group extends RenderingObject {
-	constructor () {
-		super ()
+	constructor ( params ) {
+		super ( params )
+		this.culled = false
 	}
 }
 

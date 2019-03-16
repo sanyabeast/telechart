@@ -54,6 +54,12 @@ class Utils {
 		return `${prefix}-${string}`
 	}
 
+	static assignValues ( target, source ) {
+		this.loopCollection( source, ( value, key )=>{
+			target[ key ] = value
+		} )
+	}
+
 	/* dom related tools */
 	static parseHTML ( htmlString ) {
 		let temp = document.createElement( "div" )
@@ -65,6 +71,16 @@ class Utils {
 		if ( !document.querySelector( `#telechart-css-${id}` ) ) {
 			document.querySelector( "head" ).appendChild( this.parseHTML( `<style id="telechart-css-${id}" type="text/css">${cssString}</style>` ) )
 		}
+	}
+
+	static generateAttributesSelector ( attrs ) {
+		let result = ""
+
+		this.loopCollection( attrs, ( value, name )=>{
+			result += `[${name}="${value}"]`
+		} )
+
+		return result
 	}
 
 	/* array tools */
