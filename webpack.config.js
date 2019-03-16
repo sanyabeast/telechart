@@ -7,7 +7,7 @@ const JsDocPlugin = require('jsdoc-webpack4-plugin');
 const env = process.env.NODE_ENV;
 
 let webpackConfig = {
-    devtool: "cheap-module-eval-source-map",
+    devtool: env == "production" ? "" : "cheap-module-eval-source-map",
     mode: env,
     entry: {
         "main": "main",
@@ -26,6 +26,9 @@ let webpackConfig = {
               // exclude: /(node_modules)/,
 	            use: [{
 	                loader: "babel-loader",
+                  options: {
+                      presets: ["@babel/env"]
+                  }
 	            }]
 	        },
   		]
@@ -46,8 +49,8 @@ let webpackConfig = {
       }),
       new BundleAnalyzerPlugin({
         reportFilename: "../misc/bundle-stats.html",
-        analyzerMode: "static",
-        openAnalyzer: false
+        analyzerMode: "server",
+        openAnalyzer: true
       })
     ],
 };
@@ -58,24 +61,29 @@ if (env == "production"){
     }
 
     webpackConfig.optimization = {
-        minimizer: [new TerserPlugin({
-          test: /\.js(\?.*)?$/i,
-          terserOptions: {
-            ecma: 5,
-            warnings: false,
-            parse: {},
-            compress: {},
-            mangle: true, // Note `mangle.properties` is `false` by default.
-            module: false,
-            output: null,
-            toplevel: false,
-            nameCache: null,
-            ie8: false,
-            keep_classnames: undefined,
-            keep_fnames: false,
-            safari10: true
+      minimize: true,
+      minimizer: [new TerserPlugin({
+        test: /\.js(\?.*)?$/i,
+        terserOptions: {
+          ecma: 5,
+          warnings: false,
+          beautify: true,
+          parse: {},
+          mangle: true, // Note `mangle.properties` is `false` by default.
+          module: true,
+          output: null,
+          toplevel: false,
+          nameCache: null,
+          ie8: false,
+          keep_classnames: undefined,
+          keep_fnames: false,
+          safari10: false,
+          output: {
+            preamble: "/* @sanyabeast */",
+            // beautify: true
           }
-        })]
+        }
+      })]
     }
 
     // webpackConfig.output.libraryTarget = "web"
