@@ -5,6 +5,7 @@ import MainLoop from "Telechart/MainLoop"
 import Tweener from "Telechart/Tweener"
 import ChartMath from "Telechart/Utils/ChartMath"
 import DOMComponent from "Telechart/DomDriver/Component"
+import Config from "Telechart/Config"
 
 /* plot */
 
@@ -88,6 +89,16 @@ class Plot extends TelechartModule {
 
 		this.$modules.renderingEngine.setViewport( 0, 10, 45, 30 )
 
+		Tweener.tween( { fromValue: 0, toValue: 1600, duration: 10000, onUpdate: ( v )=>{ 
+			this.$modules.renderingEngine.position.x = v 
+			this.$modules.renderingEngine.updateProjection()
+		} } )
+
+		Tweener.tween( { fromValue: 45, toValue: 200, duration: 10000, onUpdate: ( v )=>{ 
+			this.$modules.renderingEngine.viewport.w = v
+			this.$modules.renderingEngine.updateProjection() 
+		} } )
+
 		let chunkSize = 10
 		let chunksCount = 2000
 		let circleRareness = 8
@@ -133,7 +144,7 @@ class Plot extends TelechartModule {
 
 			let line = new RenderingEngine.Line({
 				styles: {
-					lineWidth: 3,
+					lineWidth: 3 * Config.DPR,
 					strokeStyle: Utils.generateRandomCSSHexColor()
 				},
 				attributes: {
@@ -153,7 +164,7 @@ class Plot extends TelechartModule {
 	__addCircle ( x, y ) {
 		let circle = new RenderingEngine.Circle( {
 			radius: 1,
-			lineWidth: 1,
+			lineWidth: 1 * Config.DPR,
 			styles: {
 				strokeStyle: Utils.generateRandomCSSHexColor(),
 				fillStyle: "#ffffff",

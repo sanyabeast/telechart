@@ -70,21 +70,21 @@ class RenderingEngine extends Utils.aggregation( TelechartModule, RenderingObjec
 
 		this.render = this.render.bind(this)
 
-		this.$updateProjectionState()
+		this.updateProjection()
 	}
 
 	setScale ( x, y ) {
 		this.$state.viewportRect.w = this.$state.size.x * x
 		this.$state.viewportRect.h = this.$state.size.y * y
 
-		this.$updateProjectionState()
+		this.updateProjection()
 	}
 
 	setPosition (x, y ) {
 		this.$state.position.x = x
 		this.$state.position.y = y
 
-		this.$updateProjectionState()
+		this.updateProjection()
 	}
 
 	setViewport ( x, y, w, h ) {
@@ -95,7 +95,7 @@ class RenderingEngine extends Utils.aggregation( TelechartModule, RenderingObjec
 		vr.w = w
 		vr.h = h
 
-		this.$updateProjectionState()
+		this.updateProjection()
 	} 
 
 	setSize ( w, h ) {
@@ -110,7 +110,7 @@ class RenderingEngine extends Utils.aggregation( TelechartModule, RenderingObjec
 		this.$state.size.x = w
 		this.$state.size.y = h
 
-		this.$updateProjectionState()
+		this.updateProjection()
 	}
 
 	fitSize () {
@@ -178,7 +178,7 @@ class RenderingEngine extends Utils.aggregation( TelechartModule, RenderingObjec
 		}
 	}
 
-	$updateProjectionState () {
+	updateProjection () {
 		let vr = this.$state.viewportRect
 
 		this.$state.scale.x = vr.w / this.$state.size.x
