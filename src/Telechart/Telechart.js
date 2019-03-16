@@ -8,6 +8,7 @@ import Tweener from "Telechart/Tweener"
 import TelechartModule from "Telechart/Utils/TelechartModule"
 import Plot from "Telechart/Plot"
 import DomDriver from "Telechart/DomDriver"
+import Storage from "Telechart/Storage"
 
 /** 
  * @class
@@ -35,6 +36,7 @@ class Telechart extends TelechartModule {
 		super()
 
 		this.$modules = {
+			storage: new Storage(),
 			majorPlot: new Plot(),
 			panoramaPlot: new Plot(),
 			domDriver: new DomDriver()
@@ -60,6 +62,8 @@ class Telechart extends TelechartModule {
 		} )
 
 		console.log( datasets )
+
+		this.$modules.storage.importDataset( datasets[0] )
 		this.$modules.majorPlot.setDataset ( datasets[0] )
 		this.$modules.panoramaPlot.setDataset ( datasets[0] )
 	}

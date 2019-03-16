@@ -7,11 +7,8 @@ import ChartMath from "Telechart/Utils/ChartMath"
 import DOMComponent from "Telechart/DomDriver/Component"
 
 /* plot */
-import Dataset from "Telechart/Plot/Dataset"
 
 class Plot extends TelechartModule {
-	static Dataset = Dataset;
-
 	get position () { return this.$modules.renderingEngine.position }
 	get scale () { return this.$modules.renderingEngine.scale }
 
@@ -97,11 +94,11 @@ class Plot extends TelechartModule {
 
 		let points = []
 
-		Utils.loop( 0, chunksCount * chunkSize, 1, ( i )=> {
+		Utils.loop( 0, chunksCount * chunkSize, 1, true, ( i )=> {
 			points.push(Math.random() * 30)
 		} )
 
-		Utils.loop( 0, chunksCount, 1, ( i )=>{
+		Utils.loop( 0, chunksCount, 1, true, ( i )=>{
 			let line = new RenderingEngine.Line()
 
 			let pointsChunk = []

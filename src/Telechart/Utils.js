@@ -1,6 +1,7 @@
 import aggregation from "Telechart/Utils/aggregation"
 import EventProxy from "Telechart/Utils/EventProxy"
 import ChartMath from "Telechart/Utils/ChartMath"
+import DataKeeper from "Telechart/Utils/DataKeeper"
 
 /**
  * @class
@@ -12,6 +13,7 @@ let testContext2D = document.createElement( "canvas" ).getContext( "2d" )
 class Utils {
 	static aggregation = aggregation;
 	static EventProxy = EventProxy;
+	static DataKeeper = DataKeeper;
 	
 	/* generic tools */
 	static loopCollection ( collection, iteratee ) {
@@ -26,10 +28,19 @@ class Utils {
 		}
 	}
 
-	static loop ( from, to, increment, callback ) {
-		for ( var a = from; a < to; a++ ) {
-			if ( callback( a ) ) break
+	static loop ( from, to, increment, looseEquation, callback ) {
+		if ( looseEquation ) {
+			for ( var a = from, iteration = 0; a < to; a+=increment ) {
+				if ( callback( a, iteration ) ) break
+					iteration++
+			}
+		} else {
+			for ( var a = from, iteration = 0; a <= to; a+=increment ) {
+				if ( callback( a, iteration ) ) break
+					iteration++
+			}
 		}
+		
 	}
 
 	static generateRandomString (prefix, length) {
