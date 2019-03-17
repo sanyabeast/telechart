@@ -125,7 +125,7 @@
 		       width:8px;
 		       height:8px;
 		       border-radius:50%;
-		       background:rgba(0, 0, 0, 0);
+		       background:rgba(0, 0, 0, 1);
 		       position:absolute;
 		       right:6px;
 		       bottom:6px;

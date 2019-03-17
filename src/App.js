@@ -1,6 +1,7 @@
 import XFrames from "XFrames"
 import Utils from "Telechart/Utils"
 import Telechart from "Telechart/Telechart"
+import Tweener from "Telechart/Tweener"
 
 let isMobile = !!('ontouchstart' in window || navigator.msMaxTouchPoints);
 let chartsCount = isMobile ? 1 : 9
@@ -92,6 +93,18 @@ class App {
         });
     }
 
+    stopRendering () {
+        Utils.loopCollection( this.telecharts, ( telechart, index )=>{
+            telechart.stopRendering()
+        } )
+    }
+
+    startRendering () {
+        Utils.loopCollection( this.telecharts, ( telechart, index )=>{
+            telechart.startRendering()
+        } )
+    }
+
     removeTelechart (uuid) {
         Utils.loopCollection(this.telecharts, (telechart, index)=>{
             if (telechart.UUID == uuid) {
@@ -105,21 +118,40 @@ class App {
     }
 
     removeAll () {
-        while (this.telecharts.length) {
-            delete window[`telechart${this.telecharts.length - 1}`]
+        while ( this.telecharts.length ) {
+            delete window[ `telechart${this.telecharts.length - 1}` ]
             let telechart = this.telecharts.pop()
-            this.xframes.remove(telechart.UUID);
+            this.xframes.remove( telechart.UUID );
             // telechart.die();
         }
     }
 
     setupCustomControls (xframe, telechart) {
-        /*centrizing*/
-        xframe.addCustomButton("skip_next", {
+        xframe.addCustomButton( "pause_circle_filled", {
             onClick: function () {
-                telechart.centrize();
+                if ( telechart.$state.renderingPaused ) {
+                    telechart.startRendering()
+                } else {
+                    telechart.stopRendering()
+                }
             }
-        }, "Move to last point");
+        }, "start/stop rendering");
+
+
+        xframe.addCustomButton( "skip_next", {
+            onClick: function () {
+                Tweener.tween( {
+                    fromValue: telechart.$modules.majorPlot.$modules.renderingEngine.position.x,
+                    toValue: prompt("Enter position (Number)"),
+                    duration: 2000,
+                    ease: "easeInQuad",
+                    onUpdate: ( value, completed )=>{
+                        telechart.$modules.majorPlot.$modules.renderingEngine.position.x = value
+                        telechart.$modules.majorPlot.$modules.renderingEngine.updateProjection()
+                    }
+                } ) 
+            }
+        }, "move to position");
     }
 }
 

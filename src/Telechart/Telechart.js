@@ -35,18 +35,24 @@ class Telechart extends TelechartModule {
 	constructor () {
 		super()
 
-		this.$modules = {
+		this.$state = new Utils.DataKeeper( {
+			renderingPaused: true
+		} )
+
+		this.$modules = new Utils.DataKeeper( {
 			storage: new Storage(),
 			majorPlot: new Plot(),
 			panoramaPlot: new Plot(),
 			domDriver: new DomDriver()
-		}
+		} )
 
 		this.$modules.domDriver.init({
 			telechart: this,
 			panoramaPlot: this.$modules.panoramaPlot,
 			majorPlot: this.$modules.majorPlot
 		})
+
+		this.startRendering()
 	}
 
 	/**
@@ -85,11 +91,17 @@ class Telechart extends TelechartModule {
 	}
 
 	startRendering () {
-		this.$modules.majorPlot.majorPlot.startRendering()
-		this.$modules.majorPlot.panoramaPlot.startRendering()
+		if ( !this.$state.renderingPaused ) return
+		this.$state.set( "renderingPaused", false )
+
+		this.$modules.majorPlot.startRendering()
+		this.$modules.panoramaPlot.startRendering()
 	}
 
 	stopRendering () {
+		if ( this.$state.renderingPaused ) return
+		this.$state.set( "renderingPaused", true )
+
 		this.$modules.majorPlot.stopRendering()
 		this.$modules.panoramaPlot.stopRendering()
 	}

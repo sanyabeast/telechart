@@ -85,6 +85,11 @@ class Utils {
 
 	/* array tools */
 
+	/* object tools */
+	static defineProperty ( target, name, descriptor ) {
+		Object.defineProperty( target, name, descriptor )
+	}
+
 	/* misc */
 	static generateRandomCSSHexColor () { return `#${( Math.floor( Math.random() * 16777215 ) ).toString("16")}` }
 	static measureText ( textContent, font ) {

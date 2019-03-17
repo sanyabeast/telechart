@@ -12,6 +12,8 @@ class Tweener {
 		easeInQuad: function (t) { return t*t },
 		easeOutQuad: function (t) { return t*(2-t) },
 		easeInOutQuad: function (t) { return t<.5 ? 2*t*t : -1+(4-2*t)*t },
+		easeInBack : function(t){ return t * t * ((2.5 + 1) * t - 2.5) },
+	  	easeOutBack : function(t){ return --t * t * ((2.5 + 1) * t + 2.5) + 1 },
 	};
 
 	static tween ( params ) {

@@ -11,6 +11,14 @@ class DataKeeper {
 		} )
 	}
 
+	set ( key, value, isGetter ) {
+		if ( typeof value == "function" && isGetter ) {
+			Utils.defineProperty( this, key, { get: value } )
+		} else {
+			this[ key ] = value
+		}
+	}
+
 }
 
 export default DataKeeper
