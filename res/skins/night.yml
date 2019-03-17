@@ -1,0 +1,6 @@
+name: night
+values: 
+  telechartBackgroundColor: "#242f3e"
+  borderColor: "#ffffff"
+  majorTextColor: "#ffffff"
+  panormaPlotBackground: "#1f2a38"

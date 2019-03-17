@@ -17,7 +17,9 @@ class Utils {
 	
 	/* generic tools */
 	static loopCollection ( collection, iteratee ) {
-		if ( Array.isArray( collection ) ) {
+		if (!collection) return
+			
+		if ( Array.isArray( collection ) || typeof collection.length == "number" ) {
 			for ( let a = 0, l = collection.length; a < l; a++ ) {
 				if ( iteratee( collection[a], a, collection ) ) break
 			}
@@ -70,7 +72,21 @@ class Utils {
 	static injectCSS ( id, cssString ) {
 		if ( !document.querySelector( `#telechart-css-${id}` ) ) {
 			document.querySelector( "head" ).appendChild( this.parseHTML( `<style id="telechart-css-${id}" type="text/css">${cssString}</style>` ) )
+		} else {
+			document.querySelector( `#telechart-css-${id}` ).textContent = cssString
 		}
+	}
+
+	static generateVarsCSS ( colors ) {
+		let cssText = "";
+
+		this.loopCollection( colors, ( value, name )=>{
+			cssText += `--${name}:${value};\n`
+		})
+
+		cssText = `.telechart {${cssText}}`
+		
+		return cssText
 	}
 
 	static generateAttributesSelector ( attrs ) {

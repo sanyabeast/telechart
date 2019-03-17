@@ -11,6 +11,7 @@
     },
     "devDependencies": {
         "raw-loader": "latest",
+        "yml-loader": "latest",
         "babel-loader": "8.0.4",
         "@babel/core": "latest",
         "@babel/plugin-syntax-dynamic-import": "latest",

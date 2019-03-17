@@ -18,7 +18,6 @@ const DPR = window.devicePixelRatio
  *
  */
 class RenderingEngine extends Utils.aggregation( TelechartModule, RenderingObject ) {
-
 	static RenderingObject = RenderingObject;
 	static Line = Line;
 	static Text = Text;

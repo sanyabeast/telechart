@@ -5,6 +5,8 @@ import Component from "Telechart/DomDriver/Component"
 import Config from "Telechart/Config"
 import Tweener from "Telechart/Tweener"
 
+import Skin from "Telechart/DomDriver/Skin"
+
 class DomDriver extends TelechartModule {
 	static Component = Component;
 
@@ -28,6 +30,18 @@ class DomDriver extends TelechartModule {
 			let cssString = cssFilesContext( path )
 			let name = path.replace( ".css", "" ).replace( "./", "" )
 			Config.assets.css[name] = cssString
+		})
+
+		let skinsFilesContext = require.context("skins")
+
+		skinsFilesContext.keys().forEach( ( path )=>{
+			let skinData = skinsFilesContext( path )
+			let name = path.replace( ".yml", "" ).replace( "./", "" )
+			Config.assets.skins[name] = new Skin( skinData )
+
+			if ( skinData.default === true ) {
+				Config.defaultSkin = skinData.name
+			}
 		})
 	}
 
@@ -65,6 +79,8 @@ class DomDriver extends TelechartModule {
 
 		this.fitSize = this.fitSize.bind( this )
 
+		this.applySkin()
+
 		window.addEventListener( "resize", this.fitSize )
 
 	}
@@ -73,6 +89,11 @@ class DomDriver extends TelechartModule {
 		this.$modules.majorPlot.fitSize()
 		this.$modules.panoramaPlot.fitSize()
 	}
+
+	applySkin ( skinName ) {
+		skinName = skinName || Config.defaultSkin
+		Config.assets.skins[ skinName ] && Config.assets.skins[ skinName ].apply()
+	} 
 
 	$onMajorPlotDrag ( data ) {
 		let position = this.$modules.majorPlot.position

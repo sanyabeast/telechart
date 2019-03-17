@@ -9,6 +9,7 @@ import TelechartModule from "Telechart/Utils/TelechartModule"
 import Plot from "Telechart/Plot"
 import DomDriver from "Telechart/DomDriver"
 import Storage from "Telechart/Storage"
+import Config from "Telechart/Config"
 
 /** 
  * @class
@@ -16,6 +17,7 @@ import Storage from "Telechart/Storage"
  * @property {window.Node} domElement - root DOM element
  */
 class Telechart extends TelechartModule {
+	static Config = Config;
 	static MainLoop = MainLoop;
 	static Utils = Utils;
 	static EventBus = EventBus;
@@ -26,6 +28,7 @@ class Telechart extends TelechartModule {
 	Utils = Utils;
 	EventBus = EventBus;
 	ChartMath = ChartMath;
+	Config = Config
 
 	get domElement () { return this.$modules.domDriver.domElement }
 
@@ -41,8 +44,12 @@ class Telechart extends TelechartModule {
 
 		this.$modules = new Utils.DataKeeper( {
 			storage: new Storage(),
-			majorPlot: new Plot(),
-			panoramaPlot: new Plot(),
+			majorPlot: new Plot( {
+				plotType: "major"
+			} ),
+			panoramaPlot: new Plot( {
+				plotType: "panorama"
+			} ),
 			domDriver: new DomDriver()
 		} )
 
@@ -53,6 +60,8 @@ class Telechart extends TelechartModule {
 		})
 
 		this.startRendering()
+
+		// debug
 	}
 
 	/**
@@ -84,6 +93,10 @@ class Telechart extends TelechartModule {
 
 	dispose () {
 
+	}
+
+	setSkin ( name ) {
+		this.$modules.domDriver.applySkin( name )
 	}
 
 	setParentElement( parentElement ) {

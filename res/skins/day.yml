@@ -1,0 +1,7 @@
+name: day
+default: true
+values: 
+  telechartBackgroundColor: "#ffffff"
+  borderColor: "#000000"
+  majorTextColor: "#000000"
+  panormaPlotBackground: "#f5f9fb"

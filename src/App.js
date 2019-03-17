@@ -4,7 +4,7 @@ import Telechart from "Telechart/Telechart"
 import Tweener from "Telechart/Tweener"
 
 let isMobile = !!('ontouchstart' in window || navigator.msMaxTouchPoints);
-let chartsCount = isMobile ? 1 : 9
+let chartsCount = isMobile ? 1 : 4
 let padding = 16;
 let rowSize = Math.ceil(Math.sqrt(chartsCount));
 let windowWidth = window.innerWidth - ((rowSize + 1) * padding);
@@ -127,6 +127,12 @@ class App {
     }
 
     setupCustomControls (xframe, telechart) {
+        xframe.addCustomButton( "palette", {
+            onClick: function () {
+                telechart.setSkin( prompt( "Enter skin name (day, night...)" ) )
+            }
+        }, "setting skin");
+
         xframe.addCustomButton( "pause_circle_filled", {
             onClick: function () {
                 if ( telechart.$state.renderingPaused ) {

@@ -13,77 +13,80 @@ let webpackConfig = {
         "main": "main",
     },
     target: "web",
-  	output: {
-  	  filename: "[name].js",
-  	  path: path.resolve(__dirname, "dist"),
-      library: "Telechart",
-  	  libraryTarget: "umd",
-  	},
-  	module : {
-  		rules : [
-  			  {
-	            test: /\.(js$)/,
-              // exclude: /(node_modules)/,
-	            use: [{
-	                loader: "babel-loader",
-                  options: {
-                      presets: ["@babel/env"]
-                  }
-	            }]
-	        },
-  		]
-  	},
-  	resolve : {
-  		modules: ["src", "node_modules", "data", "res"],
-  	},
-  	resolveLoader : {
+    output: {
+        filename: "[name].js",
+        path: path.resolve(__dirname, "dist"),
+        library: "Telechart",
+        libraryTarget: "umd",
+    },
+    module: {
+        rules: [{
+                test: /\.(js$)/,
+                // exclude: /(node_modules)/,
+                use: [{
+                    loader: "babel-loader",
+                    options: {
+                        presets: ["@babel/env"]
+                    }
+                }]
+            },
+            {
+                test: /\.yml$/,
+                loader: "yml-loader"
+            }
+        ]
+    },
+    resolve: {
+        modules: ["src", "node_modules", "data", "res"],
+    },
+    resolveLoader: {
         alias: {
-            "txt" : "raw-loader"
+            "txt": "raw-loader"
         }
     },
     plugins: [
-      new HtmlWebpackPlugin({
-        filename: path.join(__dirname, "dist", "index.html"),
-        template: path.join(__dirname, "static", "index.html"),
-        inject: true,
-      }),
-      new BundleAnalyzerPlugin({
-        reportFilename: "../misc/bundle-stats.html",
-        analyzerMode: "server",
-        openAnalyzer: true
-      })
+        new HtmlWebpackPlugin({
+            filename: path.join(__dirname, "dist", "index.html"),
+            template: path.join(__dirname, "static", "index.html"),
+            inject: true,
+        }),
+        new BundleAnalyzerPlugin({
+            reportFilename: "../misc/bundle-stats.html",
+            analyzerMode: "server",
+            openAnalyzer: true
+        })
     ],
 };
 
-if (env == "production"){
+if (env == "production") {
     webpackConfig.entry = {
-        "telechart" : "Telechart/Telechart",
+        "telechart": "Telechart/Telechart",
     }
 
     webpackConfig.optimization = {
-      minimize: true,
-      minimizer: [new TerserPlugin({
-        test: /\.js(\?.*)?$/i,
-        terserOptions: {
-          ecma: 5,
-          warnings: false,
-          beautify: true,
-          parse: {},
-          mangle: true, // Note `mangle.properties` is `false` by default.
-          module: true,
-          output: null,
-          toplevel: false,
-          nameCache: null,
-          ie8: false,
-          keep_classnames: undefined,
-          keep_fnames: false,
-          safari10: false,
-          output: {
-            preamble: "/* @sanyabeast */",
-            // beautify: true
-          }
-        }
-      })]
+        minimize: true,
+        minimizer: [new TerserPlugin({
+            test: /\.js(\?.*)?$/i,
+            terserOptions: {
+                ecma: 5,
+                warnings: false,
+                beautify: true,
+                parse: {},
+                mangle: true, // Note `mangle.properties` is `false` by default.
+                module: true,
+                output: null,
+                toplevel: false,
+                nameCache: null,
+                ie8: false,
+                keep_classnames: undefined,
+                keep_fnames: false,
+                safari10: false,
+                output: {
+                    preamble: "/* @sanyabeast */",
+                    // beautify: true
+                }
+            }
+        })]
     }
 
     // webpackConfig.output.libraryTarget = "web"
@@ -91,6 +94,6 @@ if (env == "production"){
     webpackConfig.plugins.push(new JsDocPlugin({
         conf: path.join(__dirname, 'jsdoc.conf'),
     }));
-} 
+}
 
 module.exports = webpackConfig

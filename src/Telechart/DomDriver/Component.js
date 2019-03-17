@@ -20,7 +20,7 @@ class Component extends TelechartModule {
 		
 		let htmlString = Config.assets.html[params.template]	
 
-		this.$dom.element = this.$buildTemplate ( htmlString )	
+		this.$dom.element = this.$buildTemplate ( htmlString, params )	
 	}
 
 	ref ( name ) { return this.$refs[name] }
@@ -28,11 +28,11 @@ class Component extends TelechartModule {
 		this.$refs[ref].appendChild( domElement )
 	}
 
-	$buildTemplate ( htmlString ) {
-		let dom = Utils.parseHTML( htmlString )
+	$buildTemplate ( htmlString, params ) {
+		let dom = Utils.parseHTML( htmlString, params )
 
 		this.$traverseDOM( dom, ( node, parentNode )=>{
-			this.$processAttrs( node, parentNode )
+			this.$processAttrs( node, parentNode, params )
 		}, null )
 
 		return dom;
@@ -46,8 +46,21 @@ class Component extends TelechartModule {
 		} )
 	}
 
-	$processAttrs ( node, parentNode ) {
+	$processAttrs ( node, parentNode, params ) {
 		Utils.loopCollection( node.attributes, ( attr, index )=>{
+
+			let computableProp = attr.value && attr.value.match(/{{(.*?)}}/)
+
+			if ( computableProp ) {
+				computableProp = computableProp[1]
+
+				try {
+					attr.value = eval( computableProp )
+				} catch ( err ) {
+					console.warn( `failed to compute prop: ${computableProp}`, err )
+				}
+			}
+
 			switch ( true ) {
 				case ( attr.name == "$ref" ):
 					this.$refs[attr.value] = node
