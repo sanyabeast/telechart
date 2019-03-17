@@ -3,7 +3,7 @@ import Utils from "Telechart/Utils"
 import Telechart from "Telechart/Telechart"
 
 let isMobile = !!('ontouchstart' in window || navigator.msMaxTouchPoints);
-let chartsCount = isMobile ? 1 : 1
+let chartsCount = isMobile ? 1 : 9
 let padding = 16;
 let rowSize = Math.ceil(Math.sqrt(chartsCount));
 let windowWidth = window.innerWidth - ((rowSize + 1) * padding);
@@ -45,7 +45,7 @@ class App {
     }
 
     createCharts (chartsCount) {
-        Utils.loop(0, chartsCount, 1, false, (a)=>{
+        Utils.loop(0, chartsCount, 1, true, (a)=>{
 
             setTimeout(()=>{
                 this.addTelechart(
@@ -54,7 +54,7 @@ class App {
                     (windowWidth / rowSize) - padding,
                     (windowHeight / rowSize) - padding
                 );
-            }, a * 350)
+            }, a * 0)
             
 
         }, this);
@@ -65,7 +65,7 @@ class App {
         let telechart = new Telechart();
 
         this.telecharts.push(telechart);
-        window[`telechart${(this.telecharts.length - 1)}`] = telechart.$;
+        window[`telechart${(this.telecharts.length - 1)}`] = telechart;
 
         this.xframes.create({
             id: telechart.UUID,
@@ -95,8 +95,8 @@ class App {
     removeTelechart (uuid) {
         Utils.loopCollection(this.telecharts, (telechart, index)=>{
             if (telechart.UUID == uuid) {
-                this.telecharts.splice(index, 1);
                 this.telecharts[index].stopRendering()
+                this.telecharts.splice(index, 1);
                 // this.telecharts = Helpers.trimList(this.telecharts)
                 delete window[`telechart${index}`]
                 return true;

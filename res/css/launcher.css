@@ -43,6 +43,20 @@ html, body {
   overflow: hidden;  
 }
 
+body.mobile {
+    display: flex!important;
+}
+
+body.mobile .plot3-window {
+    position: static!important;
+    transform: none!important;
+    width: 100%!important;
+    height: 100%!important;
+}
+
+body.mobile .button.add-window {
+    display: none!important;
+}
 
 .button.add-window {
     position: fixed;

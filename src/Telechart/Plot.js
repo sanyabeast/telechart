@@ -16,14 +16,18 @@ class Plot extends TelechartModule {
 	constructor () {
 		super()
 		
-		this.$temp = {}
+		this.$temp =new Utils.DataKeeper()
 
-		this.$modules = {
+		this.$state = new Utils.DataKeeper( {
+
+		} )
+
+		this.$modules = new Utils.DataKeeper( {
 			renderingEngine: new RenderingEngine(),
 			domComponent: new DOMComponent( {
 				template: "plot"
 			} ),
-		}
+		} )
 
 		this.$modules.domComponentEventProxy = new Utils.EventProxy( this.$modules.domComponent, this, [
 			"dom.drag",

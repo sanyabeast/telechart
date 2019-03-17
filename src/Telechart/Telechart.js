@@ -90,8 +90,8 @@ class Telechart extends TelechartModule {
 	}
 
 	stopRendering () {
-		this.$modules.majorPlot.majorPlot.stopRendering()
-		this.$modules.majorPlot.panoramaPlot.stopRendering()
+		this.$modules.majorPlot.stopRendering()
+		this.$modules.panoramaPlot.stopRendering()
 	}
 }
 
