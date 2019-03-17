@@ -103,6 +103,7 @@ class DomDriver extends TelechartModule {
 
 	$onMajorPlotClick ( data ) {
 		let virtualPosition = this.$modules.majorPlot.toVirtual( data.x, data.y )
+
 		this.$modules.majorPlot.__addCircle( virtualPosition.x, virtualPosition.y )
 		// this.$modules.majorPlot.__addText( virtualPosition.x, virtualPosition.y, Utils.generateRandomString("test", 8) )
 	}

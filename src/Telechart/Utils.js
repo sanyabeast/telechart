@@ -100,6 +100,17 @@ class Utils {
 	}
 
 	/* array tools */
+	static splitToChunks ( array, chunkSize ) {
+		let result = []
+
+		this.loop( 0, ( Math.floor( array.length / chunkSize ) ), 1, false, ( index, iteration )=>{
+			let chunk = array.slice( index * chunkSize, ( index * chunkSize ) + chunkSize + 1 )
+			result.push( chunk )
+		} )
+
+		return result
+
+	} 
 
 	/* object tools */
 	static defineProperty ( target, name, descriptor ) {

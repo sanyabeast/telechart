@@ -20,7 +20,8 @@
 }
 
 .telechart .panorama-plot-wrapper {
-	height: 10%;
+	height: 72px;
+	min-height: 48px;
 	background-color: var(--panormaPlotBackground)
 }
 

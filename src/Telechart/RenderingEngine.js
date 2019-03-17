@@ -80,6 +80,7 @@ class RenderingEngine extends Utils.aggregation( TelechartModule, RenderingObjec
 	}
 
 	setPosition (x, y ) {
+		y = ( typeof y == "number" ) ? y : this.$state.position.y
 		this.$state.position.x = x
 		this.$state.position.y = y
 
@@ -94,12 +95,19 @@ class RenderingEngine extends Utils.aggregation( TelechartModule, RenderingObjec
 		vr.w = w
 		vr.h = h
 
+		this.$state.position.x = vr.x
+		this.$state.position.y = vr.y
+
 		this.updateProjection()
 	} 
 
 	setSize ( w, h ) {
 		w *= DPR
 		h *= DPR
+
+		if ( this.$state.size.x === w  && this.$state.size.y === h ) {
+			return
+		}
 
 		this.$dom.canvasElement.width = w
 		this.$dom.canvasElement.height = h
@@ -121,19 +129,23 @@ class RenderingEngine extends Utils.aggregation( TelechartModule, RenderingObjec
 	}
 
 	prerender () {
-		this.fitSize()
-		this.$state.projectionModified = false;
 		this.$state.culledObjectsCount = 0
 		super.render( this, this.$state.offscreenContext2d, -this.$state.position.x, -this.$state.position.y )
 	}
 
 	render () {
-		this.$state.context2d.clearRect( 0, 0, this.$state.size.x, this.$state.size.y )
-		this.$state.offscreenContext2d.clearRect( 0, 0, this.$state.size.x, this.$state.size.y )
+		this.fitSize()
 
-		this.prerender()
+		if ( this.$state.projectionModified ) {
+			this.$state.projectionModified = false;
 
-		this.$state.context2d.drawImage( this.$dom.offscreenCanvasElement, 0, 0 )
+			this.$state.context2d.clearRect( 0, 0, this.$state.size.x, this.$state.size.y )
+			this.$state.offscreenContext2d.clearRect( 0, 0, this.$state.size.x, this.$state.size.y )
+
+			this.prerender()
+
+			this.$state.context2d.drawImage( this.$dom.offscreenCanvasElement, 0, 0 )
+		}
 	}
 
 	toReal ( x, y ) {
@@ -149,7 +161,7 @@ class RenderingEngine extends Utils.aggregation( TelechartModule, RenderingObjec
 		let position = this.$temp.position
 
 		position.x = ( ( x * this.scale.x ) + this.position.x )
-		position.y = ( ( this.size.y - y ) + this.position.y ) * this.scale.y
+		position.y = ( ( ( this.size.y - y )   * this.scale.y ) + this.position.y )
 
 		return position
 	} 

@@ -5,6 +5,7 @@
  *
  */
 class Config {
+	static plotChunkSize = 15;
 	static DPR = window.devicePixelRatio
 	static assets = {
 		html: {},

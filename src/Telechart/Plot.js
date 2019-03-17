@@ -38,13 +38,7 @@ class Plot extends TelechartModule {
 			"dom.pan"
 		], "plot." )
 
-		this.__runDebugCode()
-
 		this.$modules.domComponent.addChild( "canvas-wrapper", this.$modules.renderingEngine.domElement )
-
-		// this.$modules.renderingEngine.setScale( 1, 1 )
-
-		// this.startRendering()		
 	}
 
 	fitSize ( ...args ) { return this.$modules.renderingEngine.fitSize( ...args ) }
@@ -57,10 +51,43 @@ class Plot extends TelechartModule {
 	toVirtualScale ( ...args ) { return this.$modules.renderingEngine.toVirtualScale( ...args ) }
 
 	/* CHARTING */
-	setDataset ( data ) {
-		console.log( data )
-	}
+	addSeries ( seriesData ) {
 
+		let pointsChunks = Utils.splitToChunks( seriesData.points, Config.plotChunkSize )
+		let seriesGroup = new RenderingEngine.Group( {
+			attributes: {
+				"content-type": "series",
+				"series-type": seriesData.series.type,
+				"series-name": seriesData.series.name,
+				"series-id": seriesData.series.id,
+				"accuracy": seriesData.series.accuracy
+			}
+		} )
+
+		Utils.loopCollection( pointsChunks, ( chunk, chunkIndex )=>{
+			let line = new RenderingEngine.Line({
+				styles: {
+					lineWidth: 3 * Config.DPR,
+					strokeStyle: seriesData.series.color
+				},
+				points: chunk
+			})
+
+
+			seriesGroup.addChild( line )
+		} )
+
+		this.setViewport( 
+			seriesData.series.beginTime, 
+			seriesData.extremum.min, 
+			seriesData.series.finishTime - seriesData.series.beginTime,
+			seriesData.extremum.max - seriesData.extremum.min 
+		)
+
+		this.setPosition( seriesData.series.beginTime )
+		this.$modules.renderingEngine.addChild( seriesGroup )
+
+	}
 	/* !CHARTING */
 
 	startRendering () {
@@ -68,138 +95,20 @@ class Plot extends TelechartModule {
 		this.stopRendering = MainLoop.addTask( this.$modules.renderingEngine.render )
 	}
 
+	render () {
+		this.$modules.renderingEngine.render()
+	}
+
 	stopRendering () {}
 
-	setExtremum (extremum) {
+	setExtremum ( extremum ) {
 
 	}
 
 	/* debug code */
-	__runDebugCode () {
-
-		this.$modules.renderingEngine.setViewport( 0, -10, 45, 50 )
-
-		Tweener.tween( { fromValue: 0, toValue: 200, duration: 500, onUpdate: ( v )=>{ 
-			this.$modules.renderingEngine.position.x = v 
-			this.$modules.renderingEngine.updateProjection()
-		} } )
-
-		Tweener.tween( { fromValue: 5, toValue: 200, duration: 500, onUpdate: ( v )=>{ 
-			this.$modules.renderingEngine.viewport.w = v
-			this.$modules.renderingEngine.updateProjection() 
-		} } )
-
-		let chunkSize = 10
-		let chunksCount = 200
-		let circleRareness = 8
-
-		let seriesGroup = new RenderingEngine.Group( {
-			attributes: {
-				content: "series"
-			}
-		} )
-
-		let points = []
-		let smoothPeriod = 4
-		let maxValue = 30
-
-		Utils.loop( 0, chunksCount * chunkSize, 1, true, ( i )=> {
-			points.push( ( Math.random() * Math.random() * Math.random() ) * maxValue )
-		} )
-
-		Utils.loopCollection( points, ( value, index )=> {
-			if ( index > 0 ) {
-				let sum = value
-				let iterations = 0
-
-				Utils.loop( Math.max( index - smoothPeriod, 0 ), index, 1, false, ( $index )=>{
-					sum += points[$index]
-					iterations++
-				} )
-
-				points[ index ] = (sum / iterations)
-			}
-		} )
-
-		Utils.loop( 0, chunksCount, 1, true, ( i )=>{
-			
-			let pointsChunk = []
-
-			for (var a = ( i * chunkSize ); a <= ( i * chunkSize ) + chunkSize; a++ ){
-				
-				let value = points[ a ]
-
-				pointsChunk.push( ChartMath.point( a, value ) )
-			}
-
-			let line = new RenderingEngine.Line({
-				styles: {
-					lineWidth: 3 * Config.DPR,
-					strokeStyle: "#3cc23f"
-				},
-				attributes: {
-					index: i
-				},
-				points: pointsChunk
-			})
-
-			seriesGroup.addChild( line )
-
-		} )
-
-		points = []
-
-		Utils.loop( 0, chunksCount * chunkSize, 1, true, ( i )=> {
-			points.push(Math.random() * 30)
-		} )
-
-		Utils.loopCollection( points, ( value, index )=> {
-			if ( index > 0 ) {
-				let sum = value
-				let iterations = 0
-
-				Utils.loop( Math.max( index - smoothPeriod, 0 ), index, 1, false, ( $index )=>{
-					sum += points[$index]
-					iterations++
-				} )
-
-				points[ index ] = (sum / iterations)
-			}
-		} )
-
-		Utils.loop( 0, chunksCount, 1, true, ( i )=>{
-			
-			let pointsChunk = []
-
-			for (var a = ( i * chunkSize ); a <= ( i * chunkSize ) + chunkSize; a++ ){
-				
-				let value = points[ a ]
-
-				pointsChunk.push( ChartMath.point( a, value ) )
-			}
-
-			let line = new RenderingEngine.Line({
-				styles: {
-					lineWidth: 2 * Config.DPR,
-					strokeStyle: "#ed685f"
-				},
-				attributes: {
-					index: i
-				},
-				points: pointsChunk
-			})
-
-			seriesGroup.addChild( line )
-
-		} )
-
-		this.$modules.renderingEngine.addChild( seriesGroup )
-
-	}
-
 	__addCircle ( x, y ) {
 		let circle = new RenderingEngine.Circle( {
-			radius: 1,
+			radius: 10,
 			lineWidth: 1 * Config.DPR,
 			styles: {
 				strokeStyle: Utils.generateRandomCSSHexColor(),
@@ -210,16 +119,19 @@ class Plot extends TelechartModule {
 		circle.position.x = x
 		circle.position.y = y
 
-		Tweener.tween( {
-			fromValue: 1,
-			toValue: 10,
-			duration: 250,
-			onUpdate: ( value, completed )=>{
-				circle.radius = value
-			}
-		} ) 
+		// Tweener.tween( {
+		// 	fromValue: 1,
+		// 	toValue: 10,
+		// 	duration: 250,
+		// 	onUpdate: ( value, completed )=>{
+		// 		circle.radius = value
+		// 	}
+		// } ) 
+
+		console.log( circle )
 
 		this.$modules.renderingEngine.addChild( circle )
+		this.$modules.renderingEngine.updateProjection()
 	}
 
 	__addText ( x, y, textContent ) {

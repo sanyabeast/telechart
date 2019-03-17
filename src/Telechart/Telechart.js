@@ -76,11 +76,24 @@ class Telechart extends TelechartModule {
 			datasets.push( datasetData )
 		} )
 
-		console.log( datasets )
+		this.$modules.storage.importDataset( datasets[ 4 ] )
 
-		this.$modules.storage.importDataset( datasets[0] )
-		this.$modules.majorPlot.setDataset ( datasets[0] )
-		this.$modules.panoramaPlot.setDataset ( datasets[0] )
+		Utils.loopCollection( this.$modules.storage.series, ( series, seriesName )=>{
+			let points = this.$modules.storage.getSeriesPoints( seriesName )
+
+			this.$modules.majorPlot.addSeries( {
+				points: points,
+				series: series,
+				extremum: this.$modules.storage.getExtremum( series.beginTime, series.finishTime, series.accuracy )
+			} )
+
+			this.$modules.panoramaPlot.addSeries( {
+				points: points,
+				series: series,
+				extremum: this.$modules.storage.getExtremum( series.beginTime, series.finishTime, series.accuracy )
+			} )
+
+		} )
 	}
 
 	addLine ( lineData ) {

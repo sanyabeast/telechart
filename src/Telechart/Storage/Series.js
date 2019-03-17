@@ -2,13 +2,23 @@ import Utils from "Telechart/Utils"
 import ChartMath from "Telechart/Utils/ChartMath"
 
 class Series {
+	get originalAccuracy () { return this.$state.originalAccuracy }
+	get beginTime () { return this.$state.beginTime }
+	get finishTime () { return this.$state.finishTime }
+	get id () { return this.$state.id }
+	get color () { return this.$state.color }
+	get type () { return this.$state.type }
+
 	constructor ( seriesName, seriesData, timeData ) {
 		this.name = seriesName
 		this.$state = new Utils.DataKeeper( {
 			beginTime: 0,
 			finishTime: 0,
 			accuracy: 1,
-			originalAccuracy: 1
+			originalAccuracy: 1,
+			id: seriesData.id,
+			color: seriesData.color,
+			type: seriesData.type
 		} )
 
 		this.$content = new Utils.DataKeeper()
@@ -38,7 +48,6 @@ class Series {
 
 	slice ( from, to, accuracy ) {
 		accuracy = accuracy || this.$state.originalAccuracy
-
 		from =  (from - this.$state.beginTime) / accuracy
 		to =  (to - this.$state.beginTime) / accuracy
 
