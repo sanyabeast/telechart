@@ -73,8 +73,8 @@ class PanoramaPlot extends Plot {
 		this.$state.finishTime = seriesData.series.finishTime
 		this.$state.accuracy = seriesData.series.accuracy
 
-		this.setFrameSize( seriesData.series.accuracy * 120 )
-		this.setFramePosition ( seriesData.series.beginTime )
+		this.setFrameSize( ( seriesData.series.finishTime - seriesData.series.beginTime ) / 5 )
+		this.setFramePosition ( seriesData.series.finishTime )
 	}
 }
 
