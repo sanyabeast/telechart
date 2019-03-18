@@ -75,6 +75,10 @@ class DomDriver extends TelechartModule {
 		majorPlot.on( "plot.dom.doubletap", this.$onMajorPlotClick.bind( this ) )
 
 		this.$modules.domComponent.on( "theme-switcher.click", this.$onThemeSwitcherClick.bind(this) )
+		
+		this.$modules.domComponent.on( "frame-control.left-plane.drag", this.$onFrameControlLeftPlaneDrag.bind(this) )
+		this.$modules.domComponent.on( "frame-control.right-plane.drag", this.$onFrameControlRightPlaneDrag.bind(this) )
+		this.$modules.domComponent.on( "frame-control.frame.drag", this.$onFrameControlFrameDrag.bind(this) )
 
 		this.$modules.domComponent.addChild( "major-plot-wrapper", majorPlot.domElement )
 		this.$modules.domComponent.addChild( "panorama-plot-wrapper", panoramaPlot.domElement )
@@ -151,6 +155,18 @@ class DomDriver extends TelechartModule {
 			this.$modules.domComponent.ref("theme-switcher-caption").textContent = "Switch to Night Mode"
 			this.applySkin( "day" )
 		}
+	}
+
+	$onFrameControlLeftPlaneDrag ( data ) {
+		console.log(data)
+	}
+
+	$onFrameControlRightPlaneDrag ( data ) {
+		console.log(data)
+	}
+
+	$onFrameControlFrameDrag ( data ) {
+		console.log(data)
 	}
 }
 

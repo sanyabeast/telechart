@@ -32,6 +32,13 @@ class Component extends TelechartModule {
 		let dom = Utils.parseHTML( htmlString, params )
 
 		this.$traverseDOM( dom, ( node, parentNode )=>{
+			let tagName = node.tagName.toLowerCase()
+
+			if ( Config.assets.html[ tagName ] ) {
+				let nodeDOM = Utils.parseHTML( Config.assets.html[ tagName ], params )
+				node = parentNode.replaceChild( node, nodeDOM )
+			}
+
 			this.$processAttrs( node, parentNode, params )
 		}, null )
 
@@ -42,18 +49,7 @@ class Component extends TelechartModule {
 		callback ( dom, parentNode )
 
 		Utils.loopCollection( dom.children, ( child, index )=>{
-			let tagName = child.tagName.toLowerCase()
-
-			if ( Config.assets.html[ tagName ] ) {
-
-				let childComponent = new Component( {
-					template: tagName
-				} )
-
-				child = dom.replaceChild( childComponent.domElement, child )
-			}
-
-			this.$traverseDOM( child, callback, parentNode )
+			this.$traverseDOM( child, callback, child.parentNode )
 		} )
 	}
 

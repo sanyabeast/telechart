@@ -36,10 +36,10 @@ class RenderingEngine extends Utils.aggregation( TelechartModule, RenderingObjec
 
 		this.$modules = {
 			canvas: new DOMComponent( {
-				template: "canvas"
+				template: "canvas-element"
 			} ),
 			offscreenCanvas: new DOMComponent( {
-				template: "canvas"
+				template: "canvas-element"
 			} )
 		}
 
