@@ -4,3 +4,6 @@ values:
   borderColor: "#ffffff"
   majorTextColor: "#ffffff"
   panormaPlotBackground: "#1f2a38"
+  themeSwitherCaptionColor: "#36a8f1"
+  frameControlBackgroundColor: "#1f2a3896"
+  frameControlPlaneBackgroundColor: "#ffffff21"

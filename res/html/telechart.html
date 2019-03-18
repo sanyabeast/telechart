@@ -7,12 +7,24 @@
 		<p class="font-w-bold">Folowers</p>
 	</div>
 	<div 
-		class="major-plot-wrapper fit-width"
+		class="major-plot-wrapper fit-width pos-relative"
 		$ref="major-plot-wrapper"
 	></div>
 	<div 
-		class="panorama-plot-wrapper fit-width "
+		class="panorama-plot-wrapper fit-width pos-relative"
 		$ref="panorama-plot-wrapper"
-	></div>
+	>
+		<frame-control></frame-control>
+	</div>
 	<div class="added-lines flex-row fit-width flex-grow"></div>
+	<div 
+		class="theme-switcher button fit-width flex-row flex-j-center"
+		$ref="theme-switcher"
+		$events="click"
+	>
+		<p 
+			class="font-w-bold"
+			$ref="theme-switcher-caption"
+		>Switch to Day Mode</p>
+	</div>
 </div>

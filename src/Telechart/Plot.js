@@ -67,7 +67,7 @@ class Plot extends TelechartModule {
 		Utils.loopCollection( pointsChunks, ( chunk, chunkIndex )=>{
 			let line = new RenderingEngine.Line({
 				styles: {
-					lineWidth: 3 * Config.DPR,
+					lineWidth: ( Config.values.plotLineDefaultLineWidth * Config.DPR ),
 					strokeStyle: seriesData.series.color
 				},
 				points: chunk

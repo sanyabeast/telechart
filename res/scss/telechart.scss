@@ -1,0 +1,66 @@
+.telechart {
+	user-select: none;
+	background-color: var(--telechartBackgroundColor);
+	padding: 16px;
+
+	p {
+		margin: 0;
+		font-family: sans-serif;
+		color: var(--majorTextColor);
+	}
+
+	.header.caption {
+		height: 40px;
+	}
+
+	.major-plot-wrapper {
+		height: 60%;
+	}
+
+	.panorama-plot-wrapper {
+		height: 72px;
+		min-height: 48px;
+		background-color: var(--panormaPlotBackground);
+		margin: 16px 0;
+	}
+
+	.button {
+		cursor: pointer;
+	}
+
+	.theme-switcher p {
+		color: var(--themeSwitherCaptionColor);
+	}
+
+	.frame-control {
+		z-index: 1;
+		cursor: move;
+		flex-wrap: 0;
+
+		.filler {
+			background-color: var(--frameControlBackgroundColor);
+		}
+
+		.frame {
+			width: 100px;
+			border-top: 1px solid var(--frameControlPlaneBackgroundColor);
+			border-bottom: 1px solid var(--frameControlPlaneBackgroundColor);
+		}
+
+
+		.plane {
+			width: 6px;
+			cursor: col-resize;
+			background-color: var(--frameControlPlaneBackgroundColor);
+
+			&.left-plane {
+				left: 0;
+			}
+
+			&.right-plane {
+				right: 0;
+				left: auto;
+			}
+		}
+	}
+}

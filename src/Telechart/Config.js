@@ -5,6 +5,7 @@
  *
  */
 class Config {
+	static activeSkin = null;
 	static plotChunkSize = 15;
 	static DPR = window.devicePixelRatio
 	static assets = {
@@ -16,7 +17,8 @@ class Config {
 	static isTouchDevice = ( "ontouchstart" in window )
 	static values = {
 		domDoubletapTimeout: 250,
-		plotLineChunkSize: 10
+		plotLineChunkSize: 10,
+		plotLineDefaultLineWidth: 2
 	}
 
 	static skinValues = {

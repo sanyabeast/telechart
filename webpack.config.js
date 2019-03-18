@@ -33,6 +33,13 @@ let webpackConfig = {
             {
                 test: /\.yml$/,
                 loader: "yml-loader"
+            },
+            {
+                test: /\.scss$/,
+                use: [
+                    "raw-loader",
+                    "sass-loader"
+                ]
             }
         ]
     },

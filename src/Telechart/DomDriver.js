@@ -24,11 +24,11 @@ class DomDriver extends TelechartModule {
 			Config.assets.html[name] = htmlString
 		})
 
-		let cssFilesContext = require.context("txt!css")
+		let scssFilesContext = require.context("scss")
 
-		cssFilesContext.keys().forEach( ( path )=>{
-			let cssString = cssFilesContext( path )
-			let name = path.replace( ".css", "" ).replace( "./", "" )
+		scssFilesContext.keys().forEach( ( path )=>{
+			let cssString = scssFilesContext( path )
+			let name = path.replace( ".scss", "" ).replace( "./", "" )
 			Config.assets.css[name] = cssString
 		})
 
@@ -74,6 +74,8 @@ class DomDriver extends TelechartModule {
 		majorPlot.on( "plot.dom.zoom", this.$onMajorPlotZoom.bind( this ) )
 		majorPlot.on( "plot.dom.doubletap", this.$onMajorPlotClick.bind( this ) )
 
+		this.$modules.domComponent.on( "theme-switcher.click", this.$onThemeSwitcherClick.bind(this) )
+
 		this.$modules.domComponent.addChild( "major-plot-wrapper", majorPlot.domElement )
 		this.$modules.domComponent.addChild( "panorama-plot-wrapper", panoramaPlot.domElement )
 
@@ -92,6 +94,7 @@ class DomDriver extends TelechartModule {
 
 	applySkin ( skinName ) {
 		skinName = skinName || Config.defaultSkin
+		Config.activeSkin = skinName
 		Config.assets.skins[ skinName ] && Config.assets.skins[ skinName ].apply()
 	} 
 
@@ -139,6 +142,16 @@ class DomDriver extends TelechartModule {
 
 		this.$modules.majorPlot.setScale( newScaleX, scale.y )
 	} 
+
+	$onThemeSwitcherClick ( data ) {
+		if ( Config.activeSkin == "day" ) {
+			this.$modules.domComponent.ref("theme-switcher-caption").textContent = "Switch to Night Mode"
+			this.applySkin( "night" )
+		} else {
+			this.$modules.domComponent.ref("theme-switcher-caption").textContent = "Switch to Day Mode"
+			this.applySkin( "day" )
+		}
+	}
 }
 
 DomDriver.loadAssets()

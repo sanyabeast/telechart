@@ -42,6 +42,17 @@ class Component extends TelechartModule {
 		callback ( dom, parentNode )
 
 		Utils.loopCollection( dom.children, ( child, index )=>{
+			let tagName = child.tagName.toLowerCase()
+
+			if ( Config.assets.html[ tagName ] ) {
+
+				let childComponent = new Component( {
+					template: tagName
+				} )
+
+				child = dom.replaceChild( childComponent.domElement, child )
+			}
+
 			this.$traverseDOM( child, callback, parentNode )
 		} )
 	}

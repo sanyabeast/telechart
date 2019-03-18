@@ -7,7 +7,7 @@ class DOMElementEventHandler extends TelechartModule {
 	static eventDetectors = {
 		click: function ( domElement, callback ) {
 			domElement.addEventListener( "click", ( eventData )=>{
-				callback( this.$normalizeEventData( "click", eventData ) )
+				callback( this.$normalizeEventData( "click", eventData, domElement ) )
 			} )
 		},
 
@@ -31,7 +31,7 @@ class DOMElementEventHandler extends TelechartModule {
 			}
 
 			domElement.addEventListener( captureEventName, ( eventData )=>{
-				eventData = this.$normalizeEventData( "drag", eventData )
+				eventData = this.$normalizeEventData( "drag", eventData, domElement )
 				prevX = eventData.pageX
 				prevY = eventData.pageY
 				captured = true
@@ -44,7 +44,7 @@ class DOMElementEventHandler extends TelechartModule {
 			window.addEventListener( moveEventName, ( eventData )=>{
 				if ( captured ) {
 					eventData.preventDefault()
-					eventData = this.$normalizeEventData( "drag", eventData )
+					eventData = this.$normalizeEventData( "drag", eventData, domElement )
 					dx = eventData.pageX - prevX
 					dy = eventData.pageY - prevY
 
@@ -75,7 +75,7 @@ class DOMElementEventHandler extends TelechartModule {
 				} )
 
 				window.addEventListener( "touchmove", ( eventData )=>{
-					let normalizedEventData = this.$normalizeEventData( "pan", eventData )
+					let normalizedEventData = this.$normalizeEventData( "pan", eventData, domElement )
 
 					if ( captured && normalizedEventData.isGesture && normalizedEventData.touchesCount == 2 ) {
 						let panDelta = prevPanDistance / normalizedEventData.panDistance
@@ -93,7 +93,7 @@ class DOMElementEventHandler extends TelechartModule {
 				domElement.addEventListener( "mousewheel", ( eventData )=>{
 					eventData.preventDefault()
 					let zoomIn = eventData.wheelDeltaY > 0
-					eventData = this.$normalizeEventData( "zoom", eventData )
+					eventData = this.$normalizeEventData( "zoom", eventData, domElement )
 					eventData.zoomIn = zoomIn
 					callback ( eventData )
 				}, { passive: false } )
@@ -141,7 +141,7 @@ class DOMElementEventHandler extends TelechartModule {
 
 	}
 
-	$normalizeEventData ( eventName, eventData ) {
+	$normalizeEventData ( eventName, eventData, target ) {
 		eventData.isGesture = false
 
 		if ( eventData instanceof window.TouchEvent ) {
@@ -154,6 +154,8 @@ class DOMElementEventHandler extends TelechartModule {
 		}
 
 		this.$state.normalizedEventData.type = eventName
+		this.$state.normalizedEventData.target = target
+
 		return this.$state.normalizedEventData
 	}
 
