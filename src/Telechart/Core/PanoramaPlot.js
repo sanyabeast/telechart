@@ -1,12 +1,14 @@
 import Plot from "Telechart/Plot"
 import Component from "Telechart/DomDriver/Component"
 import RenderingEngine from "Telechart/RenderingEngine"
+import ChartMath from "Telechart/ChartMath"
 
 class PanoramaPlot extends Plot {
 	constructor ( params ) {
 		super( params )
 
 		this.$state.beginTime = 0
+		this.$state.frameViewport = ChartMath.rect( 0, 0, 0, 0 )
 
 		this.$modules.frameControlComponent = new Component( {
 			template: "frame-control"
@@ -29,25 +31,51 @@ class PanoramaPlot extends Plot {
 		this.$modules.renderingEngine.addChild( this.$modules.frameControlsRenderingObject )
 	}
 
-	$onFrameControlLeftPlaneDrag ( data ) {
-		console.log(data.dragX)
+	setFramePosition ( x ) {
+		if ( x < this.$state.beginTime ) x = this.$state.beginTime
+		if ( x + this.$state.frameViewport.w > this.$state.finishTime ) x = this.$state.finishTime - this.$state.frameViewport.w
 
+		this.$state.frameViewport.x = x
+		this.$modules.frameControlsRenderingObject.position.x = x
+		this.$modules.frameControlsRenderingObject.render()
+		this.emit( "frame.viewport.changed", this.$state.frameViewport )
+	}
+
+	setFrameSize ( w ) {
+		if ( w < this.$state.accuracy ) w = this.$state.accuracy
+		if ( this.$state.frameViewport.x + w > this.$state.finishTime ) w = this.$state.finishTime - this.$state.frameViewport.x
+
+		this.$state.frameViewport.w = w
+		this.$modules.frameControlsRenderingObject.scale.x = w
+		this.$modules.frameControlsRenderingObject.render()
+		this.emit( "frame.viewport.changed", this.$state.frameViewport )
+	}
+
+	$onFrameControlLeftPlaneDrag ( data ) {
+		let delta = this.$modules.renderingEngine.toVirtualScale( data.dragX, 0 )
+		this.setFramePosition( this.$state.frameViewport.x + delta.x )
+		this.setFrameSize( this.$state.frameViewport.w - ( delta.x ) )
 	}
 
 	$onFrameControlRightPlaneDrag ( data ) {
-		console.log(data)
+		let delta = this.$modules.renderingEngine.toVirtualScale( data.dragX, 0 )
+		this.setFrameSize( this.$state.frameViewport.w + delta.x )
 	}
 
 	$onFrameControlFrameDrag ( data ) {
+		console.log("frame")
 		let delta = this.$modules.renderingEngine.toVirtualScale( data.dragX, 0 )
-		this.$modules.frameControlsRenderingObject.position.x += delta.x
-		this.$modules.frameControlsRenderingObject.render()
+		this.setFramePosition( this.$state.frameViewport.x + delta.x )
 	}
 
 	addSeries ( seriesData ) {
 		super.addSeries( seriesData )
 		this.$state.beginTime = seriesData.series.beginTime
-		this.$modules.frameControlsRenderingObject.position.x = seriesData.series.beginTime
+		this.$state.finishTime = seriesData.series.finishTime
+		this.$state.accuracy = seriesData.series.accuracy
+
+		this.setFrameSize( /*seriesData.series.finishTime - seriesData.series.beginTime*/ 10000000000 )
+		this.setFramePosition ( seriesData.series.beginTime )
 	}
 }
 

@@ -3,6 +3,7 @@ import ChartMath from "Telechart/ChartMath"
 
 class Series {
 	get originalAccuracy () { return this.$state.originalAccuracy }
+	get accuracy () { return this.$state.accuracy }
 	get beginTime () { return this.$state.beginTime }
 	get finishTime () { return this.$state.finishTime }
 	get id () { return this.$state.id }

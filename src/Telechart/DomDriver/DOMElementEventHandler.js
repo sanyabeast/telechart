@@ -31,6 +31,7 @@ class DOMElementEventHandler extends TelechartModule {
 			}
 
 			domElement.addEventListener( captureEventName, ( eventData )=>{
+				eventData.stopPropagation()
 				eventData = this.$normalizeEventData( "drag", eventData, domElement )
 				prevX = eventData.pageX
 				prevY = eventData.pageY

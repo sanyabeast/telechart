@@ -2,6 +2,7 @@
 	user-select: none;
 	background-color: var(--telechartBackgroundColor);
 	padding: 16px;
+	-webkit-tap-highlight-color: transparent;
 
 	p {
 		margin: 0;
@@ -26,6 +27,7 @@
 
 	.button {
 		cursor: pointer;
+		user-select: none;
 	}
 
 	.theme-switcher p {
@@ -42,24 +44,29 @@
 		}
 
 		.frame {
-			width: 100px;
+			width: 1px;
 			border-top: 1px solid var(--frameControlPlaneBackgroundColor);
 			border-bottom: 1px solid var(--frameControlPlaneBackgroundColor);
 		}
 
 
 		.plane {
-			width: 6px;
-			cursor: col-resize;
-			background-color: var(--frameControlPlaneBackgroundColor);
+		    width: 6px;
+		    cursor: col-resize;
+		    background-color: var(--frameControlPlaneBackgroundColor);
+		    border-right: 8px solid transparent;
+		    border-left: 8px solid transparent;
+		    background-clip: content-box;
 
 			&.left-plane {
 				left: 0;
+				transform: translateX(-8px);
 			}
 
 			&.right-plane {
 				right: 0;
 				left: auto;
+				transform: translateX(8px);
 			}
 		}
 	}

@@ -149,7 +149,7 @@ class RenderingEngine extends Utils.aggregation( TelechartModule, RenderingObjec
 	}
 
 	toReal ( x, y ) {
-		let position = this.$temp.position
+		let position = ChartMath.point(0, 0)
 
 		position.x = (x - this.position.x) / this.scale.x
 		position.y = this.size.y - ((y - this.position.y) / this.scale.y)
@@ -157,8 +157,17 @@ class RenderingEngine extends Utils.aggregation( TelechartModule, RenderingObjec
 		return position
 	}
 
+	toRealScale ( x, y ) {
+		let position = ChartMath.point(0, 0)
+
+		position.x = x / this.scale.x
+		position.y = y / this.scale.y
+
+		return position
+	}
+
 	toVirtual ( x, y ) {
-		let position = this.$temp.position
+		let position = ChartMath.point(0, 0)
 
 		position.x = ( ( x * this.scale.x ) + this.position.x )
 		position.y = ( ( ( this.size.y - y )   * this.scale.y ) + this.position.y )
@@ -167,10 +176,11 @@ class RenderingEngine extends Utils.aggregation( TelechartModule, RenderingObjec
 	} 
 
 	toVirtualScale ( x, y ) {
-		let position = this.$temp.position
+		let position = ChartMath.point(0, 0)
 
 		position.x = (x) * this.scale.x
 		position.y = (y) * this.scale.y
+
 
 		return position
 	}

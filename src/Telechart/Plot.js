@@ -12,6 +12,7 @@ import Config from "Telechart/Config"
 class Plot extends TelechartModule {
 	get position () { return this.$modules.renderingEngine.position }
 	get scale () { return this.$modules.renderingEngine.scale }
+	get viewport () { return this.$modules.renderingEngine.viewport }
 
 	constructor ( params ) {
 		super()
@@ -31,9 +32,9 @@ class Plot extends TelechartModule {
 		} )
 
 
-		this.domComponent.on( "dom.pan", this.$onUserPan.bind( this ) )
-		this.domComponent.on( "dom.drag", this.$onUserDrag.bind( this ) )
-		this.domComponent.on( "dom.zoom", this.$onUserZoom.bind( this ) )
+		// this.domComponent.on( "dom.pan", this.$onUserPan.bind( this ) )
+		// this.domComponent.on( "dom.drag", this.$onUserDrag.bind( this ) )
+		// this.domComponent.on( "dom.zoom", this.$onUserZoom.bind( this ) )
 		this.domComponent.on( "dom.doubletap", this.$onUserClick.bind( this ) )
 
 		this.$modules.domComponent.addChild( "canvas-wrapper", this.$modules.renderingEngine.domElement )
@@ -104,12 +105,12 @@ class Plot extends TelechartModule {
 		this.$modules.renderingEngine.viewport.h = ( extremum.max - extremum.min )
 	}
 
-	$onUserDrag ( data ) {
-		return
-		let position = this.position
-		let dragDelta = this.toVirtualScale( data.dragX, data.dragY )
-		this.setPosition( position.x - dragDelta.x, position.y )
-	}
+	// $onUserDrag ( data ) {
+	// 	return
+	// 	let position = this.position
+	// 	let dragDelta = this.toVirtualScale( data.dragX, data.dragY )
+	// 	this.setPosition( position.x - dragDelta.x, position.y )
+	// }
 
 	$onUserClick ( data ) {
 		let virtualPosition = this.toVirtual( data.x, data.y )
@@ -118,35 +119,35 @@ class Plot extends TelechartModule {
 		// this.__addText( virtualPosition.x, virtualPosition.y, Utils.generateRandomString("test", 8) )
 	}
 
-	$onUserZoom ( data ) {
-		let scale = this.scale
-		let scaleX = scale.x
-		let newScaleX = scaleX * ( ( data.zoomIn ) ? ( 1/2 ) : ( 2 ) )
+	// $onUserZoom ( data ) {
+	// 	let scale = this.scale
+	// 	let scaleX = scale.x
+	// 	let newScaleX = scaleX * ( ( data.zoomIn ) ? ( 1/2 ) : ( 2 ) )
 
-		this.$temp.killZoomTween && this.$temp.killZoomTween()
+	// 	this.$temp.killZoomTween && this.$temp.killZoomTween()
 
-		this.$temp.killZoomTween = Tweener.tween( {
-			duration: 100,
-			fromValue: scaleX,
-			toValue: newScaleX,
-			ease: "linear",
-			onUpdate: ( value, completed )=>{
-				this.setScale( value, scale.y )
+	// 	this.$temp.killZoomTween = Tweener.tween( {
+	// 		duration: 100,
+	// 		fromValue: scaleX,
+	// 		toValue: newScaleX,
+	// 		ease: "linear",
+	// 		onUpdate: ( value, completed )=>{
+	// 			this.setScale( value, scale.y )
 
-				if ( completed ) {
-					delete this.$temp.killZoomTween
-				}
-			}
-		} )
-	}
+	// 			if ( completed ) {
+	// 				delete this.$temp.killZoomTween
+	// 			}
+	// 		}
+	// 	} )
+	// }
 
-	$onUserPan ( data ) {
-		let scale = this.scale
-		let scaleX = scale.x
-		let newScaleX = scaleX * (data.panDelta || 1)
+	// $onUserPan ( data ) {
+	// 	let scale = this.scale
+	// 	let scaleX = scale.x
+	// 	let newScaleX = scaleX * (data.panDelta || 1)
 
-		this.setScale( newScaleX, scale.y )
-	} 
+	// 	this.setScale( newScaleX, scale.y )
+	// } 
 
 	/* debug code */
 	__addCircle ( x, y ) {

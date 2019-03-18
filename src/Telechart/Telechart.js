@@ -59,6 +59,19 @@ class Telechart extends TelechartModule {
 
 		this.startRendering()
 
+
+		this.$modules.panoramaPlot.on( "frame.viewport.changed", ( viewportRect )=>{
+			
+			this.$modules.majorPlot.setViewport(
+				viewportRect.x,
+				this.$modules.majorPlot.viewport.y,
+				viewportRect.w,
+				this.$modules.majorPlot.viewport.h
+			)
+
+		} )
+
+
 		// debug
 	}
 
@@ -82,13 +95,13 @@ class Telechart extends TelechartModule {
 			this.$modules.majorPlot.addSeries( {
 				points: points,
 				series: series,
-				extremum: this.$modules.storage.getExtremum( series.beginTime, series.finishTime, series.accuracy )
+				extremum: this.$modules.storage.getExtremum( series.beginTime, series.finishTime, series.accuracy ),
 			} )
 
 			this.$modules.panoramaPlot.addSeries( {
 				points: points,
 				series: series,
-				extremum: this.$modules.storage.getExtremum( series.beginTime, series.finishTime, series.accuracy )
+				extremum: this.$modules.storage.getExtremum( series.beginTime, series.finishTime, series.accuracy ),
 			} )
 
 		} )
