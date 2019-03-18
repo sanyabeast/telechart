@@ -1,6 +1,6 @@
 import aggregation from "Telechart/Utils/aggregation"
 import EventProxy from "Telechart/Utils/EventProxy"
-import ChartMath from "Telechart/Utils/ChartMath"
+import ChartMath from "Telechart/ChartMath"
 import DataKeeper from "Telechart/Utils/DataKeeper"
 
 /**

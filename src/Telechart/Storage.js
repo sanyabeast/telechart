@@ -1,7 +1,7 @@
 import Dataset from "Telechart/Storage/Dataset"
 import Series from "Telechart/Storage/Series"
 import Utils from "Telechart/Utils"
-import ChartMath from "Telechart/Utils/ChartMath"
+import ChartMath from "Telechart/ChartMath"
 
 class Storage {
 	static Dataset = Dataset

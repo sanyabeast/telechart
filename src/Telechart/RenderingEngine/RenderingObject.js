@@ -1,5 +1,5 @@
 import Utils from "Telechart/Utils"
-import ChartMath from "Telechart/Utils/ChartMath"
+import ChartMath from "Telechart/ChartMath"
 import Config from "Telechart/Config"
 
 class RenderingObject {
@@ -45,7 +45,15 @@ class RenderingObject {
 		this.$setupHiddenDOM()
 
 		if ( params ) {
-			this.setParams( params )
+			if ( this.defaultParams ) {
+				this.setParams( {
+					...this.defaultParams,
+					params
+				} )
+			} else {
+				this.setParams( params )
+
+			}
 		}
 	
 	}

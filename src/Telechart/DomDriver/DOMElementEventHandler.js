@@ -1,7 +1,7 @@
 import TelechartModule from "Telechart/Utils/TelechartModule"
 import Utils from "Telechart/Utils"
 import Config from "Telechart/Config"
-import ChartMath from "Telechart/Utils/ChartMath"
+import ChartMath from "Telechart/ChartMath"
 
 class DOMElementEventHandler extends TelechartModule {
 	static eventDetectors = {
@@ -43,6 +43,7 @@ class DOMElementEventHandler extends TelechartModule {
 
 			window.addEventListener( moveEventName, ( eventData )=>{
 				if ( captured ) {
+					eventData.stopPropagation()
 					eventData.preventDefault()
 					eventData = this.$normalizeEventData( "drag", eventData, domElement )
 					dx = eventData.pageX - prevX

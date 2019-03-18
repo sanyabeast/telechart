@@ -1,5 +1,5 @@
 import Utils from "Telechart/Utils"
-import ChartMath from "Telechart/Utils/ChartMath"
+import ChartMath from "Telechart/ChartMath"
 
 class Series {
 	get originalAccuracy () { return this.$state.originalAccuracy }

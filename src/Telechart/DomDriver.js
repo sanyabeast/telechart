@@ -69,17 +69,8 @@ class DomDriver extends TelechartModule {
 			eventsList: [ "click", "drag", "zoom", "doubletap", "pan" ]
 		} )
 
-		majorPlot.on( "plot.dom.pan", this.$onMajorPlotPan.bind( this ) )
-		majorPlot.on( "plot.dom.drag", this.$onMajorPlotDrag.bind( this ) )
-		majorPlot.on( "plot.dom.zoom", this.$onMajorPlotZoom.bind( this ) )
-		majorPlot.on( "plot.dom.doubletap", this.$onMajorPlotClick.bind( this ) )
-
 		this.$modules.domComponent.on( "theme-switcher.click", this.$onThemeSwitcherClick.bind(this) )
-		
-		this.$modules.domComponent.on( "frame-control.left-plane.drag", this.$onFrameControlLeftPlaneDrag.bind(this) )
-		this.$modules.domComponent.on( "frame-control.right-plane.drag", this.$onFrameControlRightPlaneDrag.bind(this) )
-		this.$modules.domComponent.on( "frame-control.frame.drag", this.$onFrameControlFrameDrag.bind(this) )
-
+	
 		this.$modules.domComponent.addChild( "major-plot-wrapper", majorPlot.domElement )
 		this.$modules.domComponent.addChild( "panorama-plot-wrapper", panoramaPlot.domElement )
 
@@ -102,51 +93,6 @@ class DomDriver extends TelechartModule {
 		Config.assets.skins[ skinName ] && Config.assets.skins[ skinName ].apply()
 	} 
 
-	$onMajorPlotDrag ( data ) {
-		let position = this.$modules.majorPlot.position
-		let dragDelta = this.$modules.majorPlot.toVirtualScale( data.dragX, data.dragY )
-		this.$modules.majorPlot.setPosition( position.x - dragDelta.x, position.y )
-	}
-
-	$onMajorPlotClick ( data ) {
-		let virtualPosition = this.$modules.majorPlot.toVirtual( data.x, data.y )
-
-		this.$modules.majorPlot.__addCircle( virtualPosition.x, virtualPosition.y )
-		// this.$modules.majorPlot.__addText( virtualPosition.x, virtualPosition.y, Utils.generateRandomString("test", 8) )
-	}
-
-	$onMajorPlotZoom ( data ) {
-		let scale = this.$modules.majorPlot.scale
-		let scaleX = scale.x
-		let newScaleX = scaleX * ( ( data.zoomIn ) ? ( 1/2 ) : ( 2 ) )
-
-		this.$temp.killZoomTween && this.$temp.killZoomTween()
-
-		this.$temp.killZoomTween = Tweener.tween( {
-			duration: 100,
-			fromValue: scaleX,
-			toValue: newScaleX,
-			ease: "linear",
-			onUpdate: ( value, completed )=>{
-				this.$modules.majorPlot.setScale( value, scale.y )
-
-				if ( completed ) {
-					delete this.$temp.killZoomTween
-				}
-			}
-		} )
-
-		
-	}
-
-	$onMajorPlotPan ( data ) {
-		let scale = this.$modules.majorPlot.scale
-		let scaleX = scale.x
-		let newScaleX = scaleX * (data.panDelta || 1)
-
-		this.$modules.majorPlot.setScale( newScaleX, scale.y )
-	} 
-
 	$onThemeSwitcherClick ( data ) {
 		if ( Config.activeSkin == "day" ) {
 			this.$modules.domComponent.ref("theme-switcher-caption").textContent = "Switch to Day Mode"
@@ -155,18 +101,6 @@ class DomDriver extends TelechartModule {
 			this.$modules.domComponent.ref("theme-switcher-caption").textContent = "Switch to Night Mode"
 			this.applySkin( "day" )
 		}
-	}
-
-	$onFrameControlLeftPlaneDrag ( data ) {
-		console.log(data)
-	}
-
-	$onFrameControlRightPlaneDrag ( data ) {
-		console.log(data)
-	}
-
-	$onFrameControlFrameDrag ( data ) {
-		console.log(data)
 	}
 }
 

@@ -1,10 +1,10 @@
 import RenderingObject from "Telechart/RenderingEngine/RenderingObject"
 import Utils from "Telechart/Utils"
-import ChartMath from "Telechart/Utils/ChartMath"
+import ChartMath from "Telechart/ChartMath"
 
 
 class Line extends RenderingObject {
-	constructor (params) {
+	constructor ( params ) {
 		super( params )
 
 		if ( params.points ) {

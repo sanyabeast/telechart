@@ -1,5 +1,5 @@
 import Utils 			from "Telechart/Utils"
-import ChartMath 		from "Telechart/Utils/ChartMath"
+import ChartMath 		from "Telechart/ChartMath"
 import TelechartModule 	from "Telechart/Utils/TelechartModule"
 import DOMComponent from "Telechart/DomDriver/Component"
 
@@ -8,7 +8,7 @@ import Line 			from "Telechart/RenderingEngine/Line"
 import Text 			from "Telechart/RenderingEngine/Text"
 import Circle 			from "Telechart/RenderingEngine/Circle"
 import Group 			from "Telechart/RenderingEngine/Group"
-import DOMLayer 		from "Telechart/RenderingEngine/RenderingObject"
+import DOMElement 			from "Telechart/RenderingEngine/DOMElement"
 
 const DPR = window.devicePixelRatio
 /**
@@ -22,8 +22,8 @@ class RenderingEngine extends Utils.aggregation( TelechartModule, RenderingObjec
 	static Line = Line;
 	static Text = Text;
 	static Circle = Circle;
+	static DOMElement = DOMElement;
 	static Group = Group;
-	static DOMLayer = DOMLayer;
 
 	get domElement () { return this.$dom.canvasElement }
 	get position () { return this.$state.position }

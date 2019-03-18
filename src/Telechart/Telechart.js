@@ -1,5 +1,5 @@
 /* All code written by @sanyabeast from scratch. */
-import ChartMath from "Telechart/Utils/ChartMath"
+import ChartMath from "Telechart/ChartMath"
 import Utils from "Telechart/Utils"
 import MainLoop from "Telechart/MainLoop"
 import EventBus from "Telechart/EventBus"
@@ -7,6 +7,8 @@ import RenderingEngine from "Telechart/RenderingEngine"
 import Tweener from "Telechart/Tweener"
 import TelechartModule from "Telechart/Utils/TelechartModule"
 import Plot from "Telechart/Plot"
+import MajorPlot from "Telechart/Core/MajorPlot"
+import PanoramaPlot from "Telechart/Core/PanoramaPlot"
 import DomDriver from "Telechart/DomDriver"
 import Storage from "Telechart/Storage"
 import Config from "Telechart/Config"
@@ -44,12 +46,8 @@ class Telechart extends TelechartModule {
 
 		this.$modules = new Utils.DataKeeper( {
 			storage: new Storage(),
-			majorPlot: new Plot( {
-				plotType: "major"
-			} ),
-			panoramaPlot: new Plot( {
-				plotType: "panorama"
-			} ),
+			majorPlot: new MajorPlot(),
+			panoramaPlot: new PanoramaPlot(),
 			domDriver: new DomDriver()
 		} )
 
