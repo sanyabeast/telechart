@@ -145,10 +145,10 @@ class DomDriver extends TelechartModule {
 
 	$onThemeSwitcherClick ( data ) {
 		if ( Config.activeSkin == "day" ) {
-			this.$modules.domComponent.ref("theme-switcher-caption").textContent = "Switch to Night Mode"
+			this.$modules.domComponent.ref("theme-switcher-caption").textContent = "Switch to Day Mode"
 			this.applySkin( "night" )
 		} else {
-			this.$modules.domComponent.ref("theme-switcher-caption").textContent = "Switch to Day Mode"
+			this.$modules.domComponent.ref("theme-switcher-caption").textContent = "Switch to Night Mode"
 			this.applySkin( "day" )
 		}
 	}
