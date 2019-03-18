@@ -1,5 +1,5 @@
 import Plot from "Telechart/Plot"
-import Component from "Telechart/DomDriver/Component"
+import Component from "Telechart/Core/DOM/Component"
 import RenderingEngine from "Telechart/RenderingEngine"
 import ChartMath from "Telechart/ChartMath"
 
@@ -63,7 +63,6 @@ class PanoramaPlot extends Plot {
 	}
 
 	$onFrameControlFrameDrag ( data ) {
-		console.log("frame")
 		let delta = this.$modules.renderingEngine.toVirtualScale( data.dragX, 0 )
 		this.setFramePosition( this.$state.frameViewport.x + delta.x )
 	}
@@ -74,7 +73,7 @@ class PanoramaPlot extends Plot {
 		this.$state.finishTime = seriesData.series.finishTime
 		this.$state.accuracy = seriesData.series.accuracy
 
-		this.setFrameSize( /*seriesData.series.finishTime - seriesData.series.beginTime*/ 10000000000 )
+		this.setFrameSize( seriesData.series.accuracy * 120 )
 		this.setFramePosition ( seriesData.series.beginTime )
 	}
 }

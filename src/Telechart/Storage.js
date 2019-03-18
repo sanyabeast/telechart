@@ -1,11 +1,55 @@
-import Dataset from "Telechart/Storage/Dataset"
 import Series from "Telechart/Storage/Series"
 import Utils from "Telechart/Utils"
 import ChartMath from "Telechart/ChartMath"
 
 class Storage {
-	static Dataset = Dataset
-	static Series = Series
+	static normalizeChartData ( data ) {
+		let datasetData = {}
+
+		Utils.loopCollection( data.columns, ( rawData, index )=>{
+			let seriesData = {}
+			let seriesId = ( typeof rawData[0] == "string" ) ? ( rawData.shift() ) : ( index === 0 ? "x" : `y${index - 1}` )
+			let seriesType = data.types[ seriesId ]
+			let seriesName = data.names[ seriesId ]
+			let seriesColor = data.colors[ seriesId ]
+
+			switch ( seriesType ) {
+				case "x":
+					datasetData.time = this.processTimeRawData( rawData )
+				break;
+				default:
+					datasetData.series = datasetData.series || {}
+					datasetData.series[ seriesId ] = {
+						id: seriesId,
+						name: seriesName,
+						type: seriesType,
+						color: seriesColor,
+						points: rawData
+					}
+				break;
+			}
+		} )
+
+		return datasetData
+	}
+
+	static processTimeRawData ( rawData ) {
+		let beginTime, finishTime, accuracy = null;
+
+		Utils.loopCollection( rawData, ( unixTime, index )=>{
+			if ( index == 0 ) {
+				beginTime = unixTime
+			} else if ( index == rawData.length - 1 ) {
+				finishTime = unixTime
+			}
+
+			if ( accuracy === null && index > 0 ) {
+				accuracy = unixTime - rawData[ index - 1 ]
+			}
+		} )
+
+		return { beginTime, finishTime, accuracy }
+	}
 
 	constructor () {
 		this.$state = new Utils.DataKeeper( {
@@ -16,6 +60,10 @@ class Storage {
 		} )
 
 		this.series = new Utils.DataKeeper()
+	}
+
+	importRawDataset ( rawDatasetData ) {
+		this.importDataset( Storage.normalizeChartData( rawDatasetData ) )
 	}
 
 	importDataset ( datasetData ) {

@@ -49,6 +49,10 @@ class Series {
 
 	slice ( from, to, accuracy ) {
 		accuracy = accuracy || this.$state.originalAccuracy
+
+		from = ChartMath.nearestMult( from, this.$state.accuracy, false, true )
+		to = ChartMath.nearestMult( to, this.$state.accuracy, true, true )
+
 		from =  (from - this.$state.beginTime) / accuracy
 		to =  (to - this.$state.beginTime) / accuracy
 

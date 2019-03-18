@@ -17,10 +17,12 @@ class Line extends RenderingObject {
 
 		let extremum = ChartMath.getExtremum( points )
 
-		this.$state.boundRect.x = points[0].x
-		this.$state.boundRect.w = (points[points.length - 1].x) - this.$state.boundRect.x
-		this.$state.boundRect.y = extremum.min
-		this.$state.boundRect.h = extremum.max - extremum.min
+		this.$state.boundRect.set(
+			points[0].x,
+			extremum.min,
+			(points[points.length - 1].x) - this.$state.boundRect.x,
+			extremum.size,
+		)
 		
 	}
 
@@ -51,11 +53,7 @@ class Line extends RenderingObject {
 		} )
 
 		context2d.closePath()
-
 		context2d.stroke()
-
-		super.render()
-
 	}
 }
 

@@ -57,11 +57,11 @@ let webpackConfig = {
             template: path.join(__dirname, "static", "index.html"),
             inject: true,
         }),
-        new BundleAnalyzerPlugin({
-            reportFilename: "../misc/bundle-stats.html",
-            analyzerMode: "server",
-            openAnalyzer: true
-        })
+        // new BundleAnalyzerPlugin({
+        //     reportFilename: "../misc/bundle-stats.html",
+        //     analyzerMode: "server",
+        //     openAnalyzer: true
+        // })
     ],
 };
 

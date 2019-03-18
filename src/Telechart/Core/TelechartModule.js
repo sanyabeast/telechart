@@ -21,6 +21,9 @@ class TelechartModule {
 
 	constructor () {
 		this.UUID = Utils.generateRandomString( this.constructor.name, 32 )
+		this.$state = new Utils.DataKeeper()
+		this.$modules = new Utils.DataKeeper()
+		this.$temp = new Utils.DataKeeper()
 	}
 
 	on (eventName, callback) {

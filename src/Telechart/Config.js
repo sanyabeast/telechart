@@ -1,3 +1,5 @@
+import ChartMath from "Telechart/ChartMath"
+
 
 /**
  * @class
@@ -17,8 +19,10 @@ class Config {
 	static isTouchDevice = ( "ontouchstart" in window )
 	static values = {
 		domDoubletapTimeout: 250,
-		plotLineChunkSize: 10,
-		plotLineDefaultLineWidth: 2
+		plotLineChunkSize: 30,
+		plotLineDefaultLineWidth: 2,
+		plotExtremumTweenDuration: 200,
+		plotExtremumPadding: ChartMath.range( 0, 0.2 )
 	}
 
 	static skinValues = {

@@ -1,7 +1,7 @@
-import TelechartModule from "Telechart/Utils/TelechartModule"
+import TelechartModule from "Telechart/Core/TelechartModule"
 import Utils from "Telechart/Utils"
 import Config from "Telechart/Config"
-import DOMElementEventHandler from "Telechart/DomDriver/DOMElementEventHandler"
+import DOMElementEventHandler from "Telechart/Core/DOM/DOMElementEventHandler"
 
 class Component extends TelechartModule {
 	get domElement () { return this.$dom.element }
@@ -32,13 +32,6 @@ class Component extends TelechartModule {
 		let dom = Utils.parseHTML( htmlString, params )
 
 		this.$traverseDOM( dom, ( node, parentNode )=>{
-			let tagName = node.tagName.toLowerCase()
-
-			if ( Config.assets.html[ tagName ] ) {
-				let nodeDOM = Utils.parseHTML( Config.assets.html[ tagName ], params )
-				node = parentNode.replaceChild( node, nodeDOM )
-			}
-
 			this.$processAttrs( node, parentNode, params )
 		}, null )
 
@@ -68,17 +61,17 @@ class Component extends TelechartModule {
 				}
 			}
 
-			switch ( true ) {
-				case ( attr.name == "$ref" ):
+			switch ( attr.name ) {
+				case "$ref":
 					this.$refs[attr.value] = node
 					node.$ref = attr.value
 				break;
-				case ( attr.name == "$css" ):
+				case "$css":
 					Utils.loopCollection( attr.value.split(" "), ( cssAssetName, index )=>{
 						Utils.injectCSS( cssAssetName, Config.assets.css[cssAssetName] )
 					} )
 				break;
-				case ( attr.name == "$events" ):
+				case "$events":
 
 					let eventHandler = new DOMElementEventHandler( {
 						domElement: node,

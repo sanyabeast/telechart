@@ -12,6 +12,10 @@ class DataKeeper {
 	}
 
 	set ( key, value, isGetter ) {
+		if ( typeof key == "object" && typeof value == "undefined" ) {
+			return this.setMultiple( key )
+		}
+
 		if ( typeof value == "function" && isGetter ) {
 			Utils.defineProperty( this, key, { get: value } )
 		} else {

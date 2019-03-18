@@ -11,8 +11,6 @@ class Skin {
 		this.$name = skinData.name
 		this.$values = new Utils.DataKeeper( skinData.values )
 		this.$updateCSS()
-
-
 	}
 
 	$updateCSS () {

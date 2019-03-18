@@ -1,4 +1,4 @@
-import TelechartModule from "Telechart/Utils/TelechartModule"
+import TelechartModule from "Telechart/Core/TelechartModule"
 import Utils from "Telechart/Utils"
 import Config from "Telechart/Config"
 import ChartMath from "Telechart/ChartMath"

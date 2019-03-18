@@ -1,17 +1,14 @@
 /* All code written by @sanyabeast from scratch. */
-import ChartMath from "Telechart/ChartMath"
 import Utils from "Telechart/Utils"
 import MainLoop from "Telechart/MainLoop"
-import EventBus from "Telechart/EventBus"
-import RenderingEngine from "Telechart/RenderingEngine"
-import Tweener from "Telechart/Tweener"
-import TelechartModule from "Telechart/Utils/TelechartModule"
-import Plot from "Telechart/Plot"
+import TelechartModule from "Telechart/Core/TelechartModule"
 import MajorPlot from "Telechart/Core/MajorPlot"
 import PanoramaPlot from "Telechart/Core/PanoramaPlot"
-import DomDriver from "Telechart/DomDriver"
 import Storage from "Telechart/Storage"
 import Config from "Telechart/Config"
+
+import Skin from "Telechart/Core/DOM/Skin"
+import DOMComponent from "Telechart/Core/DOM/Component"
 
 /** 
  * @class
@@ -19,20 +16,23 @@ import Config from "Telechart/Config"
  * @property {window.Node} domElement - root DOM element
  */
 class Telechart extends TelechartModule {
-	static Config = Config;
-	static MainLoop = MainLoop;
-	static Utils = Utils;
-	static EventBus = EventBus;
-	static Tweener = Tweener;
-	static ChartMath = ChartMath;
+	/* static */
+	static processAsset ( context, assetName, extension, processor ) {
+		context.keys().forEach( ( path )=>{
+			let data = context( path )
+			let name = path.replace( `.${extension}`, "" ).replace( "./", "" )
+			Config.assets[ assetName ][ name ] = ( processor ? processor( data ) : data )
+		})
+	}
 
-	MainLoop = MainLoop;
-	Utils = Utils;
-	EventBus = EventBus;
-	ChartMath = ChartMath;
-	Config = Config
-
-	get domElement () { return this.$modules.domDriver.domElement }
+	static loadAssets () {
+		this.processAsset( require.context("txt!html"), "html", "html" )
+		this.processAsset( require.context("scss"), "css", "scss" )
+		this.processAsset( require.context("skins"), "skins", "yml", ( skinData )=> {
+			if ( skinData.default ) Config.defaultSkin = skinData.name
+			return new Skin( skinData )
+		}  )
+	}
 
 	/** 
 	 * @constructor
@@ -44,35 +44,21 @@ class Telechart extends TelechartModule {
 			renderingPaused: true
 		} )
 
-		this.$modules = new Utils.DataKeeper( {
+		this.$modules.set( {
+			domComponent: new DOMComponent( {
+				template: "telechart"
+			} )
+		} )
+
+		this.$modules.set( {
 			storage: new Storage(),
 			majorPlot: new MajorPlot(),
 			panoramaPlot: new PanoramaPlot(),
-			domDriver: new DomDriver()
-		} )
+		}  )
 
-		this.$modules.domDriver.init({
-			telechart: this,
-			panoramaPlot: this.$modules.panoramaPlot,
-			majorPlot: this.$modules.majorPlot
-		})
-
+		this.$setupDOM()
+		this.$setupEvents()
 		this.startRendering()
-
-
-		this.$modules.panoramaPlot.on( "frame.viewport.changed", ( viewportRect )=>{
-			
-			this.$modules.majorPlot.setViewport(
-				viewportRect.x,
-				this.$modules.majorPlot.viewport.y,
-				viewportRect.w,
-				this.$modules.majorPlot.viewport.h
-			)
-
-		} )
-
-
-		// debug
 	}
 
 	/**
@@ -80,14 +66,7 @@ class Telechart extends TelechartModule {
 	 *
 	 */
 	update ( chartData ) {
-		let datasets = []
-
-		Utils.loopCollection( chartData, ( data, index )=>{
-			let datasetData = Utils.normalizeChartData( data )
-			datasets.push( datasetData )
-		} )
-
-		this.$modules.storage.importDataset( datasets[ 4 ] )
+		this.$modules.storage.importRawDataset( chartData[ 4 ] )
 
 		Utils.loopCollection( this.$modules.storage.series, ( series, seriesName )=>{
 			let points = this.$modules.storage.getSeriesPoints( seriesName )
@@ -107,20 +86,10 @@ class Telechart extends TelechartModule {
 		} )
 	}
 
-	addLine ( lineData ) {
-
-	}
-
-	removeLine ( lineData ) {
-
-	} 
-
-	dispose () {
-
-	}
-
-	setSkin ( name ) {
-		this.$modules.domDriver.applySkin( name )
+	setSkin ( skinName ) {
+		skinName = skinName || Config.defaultSkin
+		Config.activeSkin = skinName
+		Config.assets.skins[ skinName ] && Config.assets.skins[ skinName ].apply()
 	}
 
 	setParentElement( parentElement ) {
@@ -142,8 +111,46 @@ class Telechart extends TelechartModule {
 		this.$modules.majorPlot.stopRendering()
 		this.$modules.panoramaPlot.stopRendering()
 	}
+
+	/* private */
+	$setupDOM () {
+		this.$modules.domComponent.addChild( "major-plot-wrapper", this.$modules.majorPlot.domElement )
+		this.$modules.domComponent.addChild( "panorama-plot-wrapper", this.$modules.panoramaPlot.domElement )
+		this.setSkin()
+	}
+
+	$setupEvents () {
+		this.$modules.domComponent.on( "theme-switcher.click", this.$onThemeSwitcherClick.bind(this) )
+
+		this.$modules.panoramaPlot.on( "frame.viewport.changed", ( frameRect )=>{
+			
+			let majorPlotExtremum = this.$modules.storage.getExtremum( frameRect.x, frameRect.x + frameRect.w )
+
+			this.$modules.majorPlot.setViewport(
+				frameRect.x,
+				this.$modules.majorPlot.viewport.y,
+				frameRect.w,
+				this.$modules.majorPlot.viewport.h
+			)
+
+			this.$modules.majorPlot.setExtremum( majorPlotExtremum, true )
+
+		} )
+	}
+
+	/* event callbacks */
+	$onThemeSwitcherClick ( data ) {
+		if ( Config.activeSkin == "day" ) {
+			this.$modules.domComponent.ref("theme-switcher-caption").textContent = "Switch to Day Mode"
+			this.setSkin( "night" )
+		} else {
+			this.$modules.domComponent.ref("theme-switcher-caption").textContent = "Switch to Night Mode"
+			this.setSkin( "day" )
+		}
+	}
 }
 
+Telechart.loadAssets()
 MainLoop.start()
 
 export default Telechart

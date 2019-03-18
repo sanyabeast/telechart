@@ -1,4 +1,8 @@
 import Utils from "Telechart/Utils"
+import Point from "Telechart/ChartMath/Point"
+import Rect from "Telechart/ChartMath/Rect"
+import Vec2 from "Telechart/ChartMath/Vec2"
+import Range from "Telechart/ChartMath/Range"
 
 /**
  * @class
@@ -8,33 +12,13 @@ import Utils from "Telechart/Utils"
  *
  */
 class ChartMath {
-	static vec2 (x, y) {
-		x = x || 0
-		y = y || 0
-		return { x, y }
-	}
-
+	static vec2 (x, y) { return new Vec2( x, y ) }
 	/* I have overriden the `valueOf` method so that I can easely find the minima and maxima of sequence 
 	 * using `Math.max.apply(Math, ...) and Math.min.apply(Math, ...)` constructions.
 	 */
-	static point ( x, y ) {
-		x = x || 0
-		y = y || 0
-
-		return {
-			x, 
-			y,
-			valueOf () { return this.y }
-		}
-	}
-
-	static rect (x, y, w, h) {
-		x = x || 0
-		y = y || 0
-		w = w || 0
-		h = h || 0
-		return { x, y, w, h }
-	}
+	static point ( x, y ) { return new Point( x, y ) }
+	static range ( min, max ) { return new Range( min, max ) }
+	static rect (x, y, w, h) { return new Rect( x, y, w, h ) }
 
 	static translateRect ( targetRect, srcRect, x, y ) {
 		targetRect.x = srcRect.x + x
@@ -58,23 +42,25 @@ class ChartMath {
 	}
 
 	static getExtremum ( points ) {
-		let min = null;
-		let max = null;
-
-		/*Utils.loopCollection( points, (point, index)=>{
-			if (min === null || point.y < min) min = point.y
-			if (max === null || point.y > max) max = point.y
-		} )*/
-
-		min = Math.min.apply( Math, points )
-		max = Math.max.apply( Math, points )
-
-		return { min, max }
+		return this.range( Math.min.apply( Math, points ), Math.max.apply( Math, points ) )
 	}
 
 	static getDistance ( pointA, pointB ) {
 		return Math.sqrt( Math.pow( Math.abs( pointA.x - pointB.x ), 2 ) + Math.pow( Math.abs( pointA.y - pointB.y ), 2 ) )
 	}
+
+	static nearestMult (num, div, greater, include) {
+        return (greater ? Math.ceil((num + (include?0:1))/div)*div: Math.floor((num - (include?0:1))/div)*div) || 0;
+    }
+
+    static getOrder (num) {
+        return (num < 0) ? Math.pow(10, 1 / Math.floor(1 / Math.log10(num))): Math.pow(10, Math.floor(Math.log10(num)));
+    }
+
+    static smoothstep ( from, to, transition ) {
+    	return to + ( ( from - to ) * transition )
+    }
+
 }
 
 export default ChartMath

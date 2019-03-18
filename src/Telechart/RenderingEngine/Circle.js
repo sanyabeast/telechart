@@ -33,10 +33,12 @@ class Circle extends RenderingObject {
 	}
 
 	$updateBoundRect () {
-		this.$state.boundRect.x = (-this.$params.radius)
-		this.$state.boundRect.y = (-this.$params.radius)
-		this.$state.boundRect.w = (this.$params.radius * 2)
-		this.$state.boundRect.h = (this.$params.radius * 2)
+		this.$state.boundRect.set(
+			-this.$params.radius,
+			-this.$params.radius,
+			this.$params.radius * 2,
+			this.$params.radius * 2,
+		)
 	}
 }
 

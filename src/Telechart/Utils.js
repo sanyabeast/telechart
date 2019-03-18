@@ -1,5 +1,4 @@
 import aggregation from "Telechart/Utils/aggregation"
-import EventProxy from "Telechart/Utils/EventProxy"
 import ChartMath from "Telechart/ChartMath"
 import DataKeeper from "Telechart/Utils/DataKeeper"
 
@@ -12,7 +11,6 @@ let testContext2D = document.createElement( "canvas" ).getContext( "2d" )
 
 class Utils {
 	static aggregation = aggregation;
-	static EventProxy = EventProxy;
 	static DataKeeper = DataKeeper;
 	
 	/* generic tools */
@@ -117,6 +115,23 @@ class Utils {
 		Object.defineProperty( target, name, descriptor )
 	}
 
+	static proxyMethods ( target, source, methods ) {
+		this.loopCollection( methods, ( methodMan, index )=>{
+			target[methodMan] = function (...args) {
+				return source[methodMan](...args)
+			}
+		} )
+	}
+
+	static proxyProps ( target, source, propNames ) {
+		this.loopCollection( propNames, ( propName, index )=>{
+			this.defineProperty( target, propName, {
+				get: ()=>{ return source[propName] },
+				set: ( v )=>{ source[propName] = v }
+			} )
+		} )
+	}
+
 	/* misc */
 	static generateRandomCSSHexColor () { return `#${( Math.floor( Math.random() * 16777215 ) ).toString("16")}` }
 	static measureText ( textContent, font ) {
@@ -126,57 +141,6 @@ class Utils {
 
 		return ChartMath.vec2( width, height )
 	}
-
-	/* charting */
-	static normalizeChartData ( data ) {
-		let datasetData = {}
-
-		Utils.loopCollection( data.columns, ( rawData, index )=>{
-			let seriesData = {}
-			let seriesId = ( typeof rawData[0] == "string" ) ? ( rawData.shift() ) : ( index === 0 ? "x" : `y${index - 1}` )
-			let seriesType = data.types[ seriesId ]
-			let seriesName = data.names[ seriesId ]
-			let seriesColor = data.colors[ seriesId ]
-
-			switch ( seriesType ) {
-				case "x":
-					datasetData.time = this.processTimeRawData( rawData )
-				break;
-				default:
-					datasetData.series = datasetData.series || {}
-					datasetData.series[ seriesId ] = {
-						id: seriesId,
-						name: seriesName,
-						type: seriesType,
-						color: seriesColor,
-						points: rawData
-					}
-				break;
-			}
-		} )
-
-		return datasetData
-	}
-
-	static processTimeRawData ( rawData ) {
-		let beginTime, finishTime, accuracy = null;
-
-		Utils.loopCollection( rawData, ( unixTime, index )=>{
-			if ( index == 0 ) {
-				beginTime = unixTime
-			} else if ( index == rawData.length - 1 ) {
-				finishTime = unixTime
-			}
-
-			if ( accuracy === null && index > 0 ) {
-				accuracy = unixTime - rawData[ index - 1 ]
-			}
-		} )
-
-		return { beginTime, finishTime, accuracy }
-	}
-
-	static 
 }
 
 export default Utils

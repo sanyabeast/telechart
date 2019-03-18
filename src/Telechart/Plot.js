@@ -1,10 +1,10 @@
 import RenderingEngine from "Telechart/RenderingEngine"
 import Utils from "Telechart/Utils"
-import TelechartModule from "Telechart/Utils/TelechartModule"
+import TelechartModule from "Telechart/Core/TelechartModule"
 import MainLoop from "Telechart/MainLoop"
 import Tweener from "Telechart/Tweener"
 import ChartMath from "Telechart/ChartMath"
-import DOMComponent from "Telechart/DomDriver/Component"
+import DOMComponent from "Telechart/Core/DOM/Component"
 import Config from "Telechart/Config"
 
 /* plot */
@@ -17,13 +17,11 @@ class Plot extends TelechartModule {
 	constructor ( params ) {
 		super()
 		
-		this.$temp =new Utils.DataKeeper()
-
-		this.$state = new Utils.DataKeeper( {
-
+		this.$state.set( {
+			extremum: ChartMath.range( 0, 0 )
 		} )
 
-		this.$modules = new Utils.DataKeeper( {
+		this.$modules.set( {
 			renderingEngine: new RenderingEngine(),
 			domComponent: new DOMComponent( {
 				template: "plot",
@@ -31,23 +29,17 @@ class Plot extends TelechartModule {
 			} ),
 		} )
 
-
-		// this.domComponent.on( "dom.pan", this.$onUserPan.bind( this ) )
-		// this.domComponent.on( "dom.drag", this.$onUserDrag.bind( this ) )
-		// this.domComponent.on( "dom.zoom", this.$onUserZoom.bind( this ) )
-		this.domComponent.on( "dom.doubletap", this.$onUserClick.bind( this ) )
+		Utils.proxyMethods( this, this.$modules.renderingEngine, [
+			"toVirtual",
+			"toVirtualScale",
+			"setViewport",
+			"fitSize",
+			"setPosition",
+			"setScale"
+		] )
 
 		this.$modules.domComponent.addChild( "canvas-wrapper", this.$modules.renderingEngine.domElement )
 	}
-
-	fitSize ( ...args ) { return this.$modules.renderingEngine.fitSize( ...args ) }
-	setPosition ( ...args ) { return this.$modules.renderingEngine.setPosition( ...args ) }
-	setScale ( ...args ) { return this.$modules.renderingEngine.setScale( ...args ) }
-	setScalePriority ( ...args ) { return this.$modules.renderingEngine.setScalePriority( ...args ) }
-	setViewport ( ...args ) { return this.$modules.renderingEngine.setViewport( ...args ) }
-
-	toVirtual ( ...args ) { return this.$modules.renderingEngine.toVirtual( ...args ) }
-	toVirtualScale ( ...args ) { return this.$modules.renderingEngine.toVirtualScale( ...args ) }
 
 	/* CHARTING */
 	addSeries ( seriesData ) {
@@ -71,7 +63,6 @@ class Plot extends TelechartModule {
 				},
 				points: chunk
 			})
-
 
 			seriesGroup.addChild( line )
 		} )
@@ -100,83 +91,55 @@ class Plot extends TelechartModule {
 
 	stopRendering () {}
 
-	setExtremum ( extremum ) {
-		this.$modules.renderingEngine.viewport.y = extremum.min
-		this.$modules.renderingEngine.viewport.h = ( extremum.max - extremum.min )
+	setExtremum ( extremum, tween ) {
+		if ( extremum.min == this.$state.extremum.min && this.$state.extremum.max == extremum.max ) {
+			return
+		}
+
+		this.$state.extremum.set( extremum )
+
+		extremum.expand( Config.values.plotExtremumPadding )
+
+		let vp = this.$modules.renderingEngine.viewport
+
+		if ( tween ) {
+			this.$temp.killExtremumTweenY && ( this.$temp.killExtremumTweenY() )
+			this.$temp.killExtremumTweenY = Tweener.tween( {
+				fromValue: vp.y,
+				toValue: extremum.min,
+				duration: Config.values.plotExtremumTweenDuration,
+				ease: "linear",
+				onUpdate: ( value, completed )=>{
+					vp.y = value
+					this.$modules.renderingEngine.updateProjection()
+
+					if ( completed ) {
+						delete this.$temp.killExtremumTweenY()
+					}
+				}
+			} )
+
+			this.$temp.killExtremumTweenH && ( this.$temp.killExtremumTweenH() )
+			this.$temp.killExtremumTweenH = Tweener.tween( {
+				fromValue: vp.h,
+				toValue: ( extremum.max - extremum.min ),
+				duration: Config.values.plotExtremumTweenDuration,
+				ease: "linear",
+				onUpdate: ( value, completed )=>{
+					vp.h = value
+					this.$modules.renderingEngine.updateProjection()
+
+					if ( completed ) {
+						delete this.$temp.killExtremumTweenH()
+					}
+				}
+			} )
+		} else {
+			vp.y = extremum.min
+			vp.h = ( extremum.max - extremum.min )
+		}
 	}
 
-	// $onUserDrag ( data ) {
-	// 	return
-	// 	let position = this.position
-	// 	let dragDelta = this.toVirtualScale( data.dragX, data.dragY )
-	// 	this.setPosition( position.x - dragDelta.x, position.y )
-	// }
-
-	$onUserClick ( data ) {
-		let virtualPosition = this.toVirtual( data.x, data.y )
-
-		this.__addCircle( virtualPosition.x, virtualPosition.y )
-		// this.__addText( virtualPosition.x, virtualPosition.y, Utils.generateRandomString("test", 8) )
-	}
-
-	// $onUserZoom ( data ) {
-	// 	let scale = this.scale
-	// 	let scaleX = scale.x
-	// 	let newScaleX = scaleX * ( ( data.zoomIn ) ? ( 1/2 ) : ( 2 ) )
-
-	// 	this.$temp.killZoomTween && this.$temp.killZoomTween()
-
-	// 	this.$temp.killZoomTween = Tweener.tween( {
-	// 		duration: 100,
-	// 		fromValue: scaleX,
-	// 		toValue: newScaleX,
-	// 		ease: "linear",
-	// 		onUpdate: ( value, completed )=>{
-	// 			this.setScale( value, scale.y )
-
-	// 			if ( completed ) {
-	// 				delete this.$temp.killZoomTween
-	// 			}
-	// 		}
-	// 	} )
-	// }
-
-	// $onUserPan ( data ) {
-	// 	let scale = this.scale
-	// 	let scaleX = scale.x
-	// 	let newScaleX = scaleX * (data.panDelta || 1)
-
-	// 	this.setScale( newScaleX, scale.y )
-	// } 
-
-	/* debug code */
-	__addCircle ( x, y ) {
-		let circle = new RenderingEngine.Circle( {
-			radius: 10,
-			lineWidth: 1 * Config.DPR,
-			styles: {
-				strokeStyle: Utils.generateRandomCSSHexColor(),
-				fillStyle: "#ffffff",
-			}
-		} )
-
-		circle.position.x = x
-		circle.position.y = y
-
-		// Tweener.tween( {
-		// 	fromValue: 1,
-		// 	toValue: 10,
-		// 	duration: 250,
-		// 	onUpdate: ( value, completed )=>{
-		// 		circle.radius = value
-		// 	}
-		// } ) 
-
-		console.log( circle )
-
-		this.$modules.renderingEngine.addChild( circle )
-		this.$modules.renderingEngine.updateProjection()
-	}
 }
 
 export default Plot
