@@ -2,29 +2,31 @@
 	class="frame-control pos-absolute fit-height border-box fit-width flex-row"
 	$ref="frame-control"
 >
-	<div
-		class="filler left-filler fit-height flex-grow"
-	></div>
+		<div
+			class="filler left-filler fit-height pos-absolute"
+			$ref="frame-control.filler.left"
+		></div>
+		
+		<div
+			class="frame fit-height flex-no-shrink pos-absolute"
+			$ref="frame-control.frame"
+			$events="drag"
+		>
+				<div
+					class="plane left-plane fit-height flex-no-shrink pos-absolute"
+					$ref="frame-control.left-plane"
+					$events="drag"
+				></div>
+		
+				<div
+					class="plane right-plane fit-height flex-no-shrink pos-absolute"
+					$ref="frame-control.right-plane"
+					$events="drag"
+				></div>
+		</div>
 	
-	<div
-		class="frame fit-height flex-no-shrink pos-absolute"
-		$ref="frame-control.frame"
-		$events="drag"
-	>
 		<div
-			class="plane left-plane fit-height flex-no-shrink pos-absolute"
-			$ref="frame-control.left-plane"
-			$events="drag"
-		></div>
-
-		<div
-			class="plane right-plane fit-height flex-no-shrink pos-absolute"
-			$ref="frame-control.right-plane"
-			$events="drag"
-		></div>
-	</div>
-
-	<div
-		class="filler left-filler fit-height flex-grow"
+			class="filler right-filler fit-height pos-absolute"
+			$ref="frame-control.filler.right"
 	></div>
 </div>

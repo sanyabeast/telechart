@@ -36,17 +36,28 @@
 
 	.frame-control {
 		z-index: 1;
-		cursor: move;
 		flex-wrap: 0;
 
 		.filler {
+			background:black;
 			background-color: var(--frameControlBackgroundColor);
+
+			&.left-filler {
+				left:0;
+			}
+
+			&.right-filler {
+				right:0;
+				left: auto;
+			}
 		}
 
 		.frame {
 			width: 1px;
-			border-top: 1px solid var(--frameControlPlaneBackgroundColor);
-			border-bottom: 1px solid var(--frameControlPlaneBackgroundColor);
+			border-top: 2px solid var(--frameControlPlaneBackgroundColor);
+			border-bottom: 2px solid var(--frameControlPlaneBackgroundColor);
+			z-index: 1;
+			cursor: move;
 		}
 
 
@@ -60,13 +71,15 @@
 
 			&.left-plane {
 				left: 0;
-				transform: translateX(-8px);
+				transform: translateX(-48px);
+				border-left: 48px solid transparent;
 			}
 
 			&.right-plane {
 				right: 0;
 				left: auto;
-				transform: translateX(8px);
+				transform: translateX(48px);
+				border-right: 48px solid transparent;
 			}
 		}
 	}

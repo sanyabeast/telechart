@@ -5,11 +5,13 @@ import Utils from "Telechart/Utils"
 
 class DOMElement extends RenderingObject {
 	get scale () { return this.$params.scale }
+	get size () { return this.$params.size }
 	get soloRenderingAvailable () { return !!this.$temp.prevEngine }
 
 	constructor ( params ) {
 		super ( {
 			scale: ChartMath.vec2( 1, 1 ),
+			size: ChartMath.vec2( 1, 1 ),
 			applyScaleX: false, 
 			applyScaleY: false,
 			applySizeX: false,
@@ -61,8 +63,8 @@ class DOMElement extends RenderingObject {
 		py += this.$state.position.y
 
 		let position = engine.toReal( px, py )
-		position.y = position.y
 		let scale = engine.toRealScale( this.$params.scale.x, this.$params.scale.y )
+		let size = engine.toRealScale( this.$params.size.x, this.$params.size.y )
 
 		let applyScaleX = this.$params.applyScaleX
 		let applyScaleY = this.$params.applyScaleY
@@ -75,8 +77,8 @@ class DOMElement extends RenderingObject {
 		this.setStyle( "transform", `translate(${applyPosX?position.x/DPR:0}px, ${applyPosY?position.y/DPR:0}px) scale(${applyScaleX?scale.x/DPR:1}, ${applyScaleY?scale.y/DPR:1})` )
 
 
-		applySizeX && ( this.setStyle( "width", `${scale.x/DPR}px`  ) )
-		applySizeY && ( this.setStyle( "height", `${scale.y/DPR}px` ) )
+		applySizeX && ( this.setStyle( "width", `${size.x/DPR}px`  ) )
+		applySizeY && ( this.setStyle( "height", `${size.y/DPR}px` ) )
 	}
 }
 

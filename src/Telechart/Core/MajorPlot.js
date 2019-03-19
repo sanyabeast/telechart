@@ -3,12 +3,15 @@ import Utils from "Telechart/Utils"
 import RenderingEngine from "Telechart/RenderingEngine"
 import DOMComponent from "Telechart/Core/DOM/Component"
 import Config from "Telechart/Config"
+import ChartMath from "Telechart/ChartMath"
+import Tweener from "Telechart/Tweener"
 
 class MajorPlot extends Plot {
 	constructor ( params ) {
 		super( params )
 
 		this.$temp.circlesRenderingObjects = {}
+		// this.$temp.prevSelectedPosition = ChartMath.point()
 
 		this.$modules.domComponent.on( "dom.drag", this.$onUserDrag.bind(this) )
 		this.$modules.domComponent.on( "dom.click", this.$onUserClick.bind(this) )
@@ -27,7 +30,13 @@ class MajorPlot extends Plot {
 	}
 
 	$onUserPan ( eventData ) {
+		
+		if ( eventData.panDelta > 0 ) {
+			let scale = this.$modules.renderingEngine.scale
+			this.$modules.renderingEngine.setScale( scale.x * eventData.panDelta, scale.y )
+		}
 
+		// console.log( eventData.panDelta )
 	}
 
 	setSelectedPositionValues ( values ) {
@@ -71,6 +80,7 @@ class MajorPlot extends Plot {
 			
 			if ( circleRenderingObject.soloRenderingAvailable ) {
 				circleRenderingObject.render()
+				this.$modules.renderingEngine.updateProjection()				
 			} else {
 				this.$modules.renderingEngine.updateProjection()				
 			}

@@ -44,7 +44,10 @@ class Plot extends TelechartModule {
 
 	/* CHARTING */
 	addSeries ( seriesData ) {
-		console.log( seriesData )
+		this.$state.beginTime = seriesData.series.beginTime
+		this.$state.finishTime = seriesData.series.finishTime
+		this.$state.accuracy = seriesData.series.accuracy
+
 		let pointsChunks = Utils.splitToChunks( seriesData.points, Config.plotChunkSize )
 		let seriesGroup = new RenderingEngine.Group( {
 			attributes: {
