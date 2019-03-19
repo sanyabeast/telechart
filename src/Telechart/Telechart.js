@@ -66,7 +66,23 @@ class Telechart extends TelechartModule {
 	 *
 	 */
 	update ( chartData ) {
-		this.$modules.storage.importRawDataset( chartData[ 2 ] )
+		console.log(chartData)
+		Utils.loopCollection( chartData[ 0 ].columns[1], ( value, index )=>{
+			chartData[ 0 ].columns[1][index] = ( index % 2 == 0 ) ? 1 : 0
+
+			if ( index % 20 == 0 ) chartData[ 0 ].columns[1][index] = 2
+			if ( index % 40 == 0 ) chartData[ 0 ].columns[1][index] = 4
+
+		} )
+
+		Utils.loopCollection( chartData[ 0 ].columns[2], ( value, index )=>{
+			chartData[ 0 ].columns[2][index] = ( index % 2 == 0 ) ? 1 : 0
+
+			if ( index % 15 == 0 ) chartData[ 0 ].columns[2][index] = 3
+			if ( index % 30 == 0 ) chartData[ 0 ].columns[2][index] = 60
+		} )
+
+		this.$modules.storage.importRawDataset( chartData[ 1 ] )
 
 		Utils.loopCollection( this.$modules.storage.series, ( series, seriesName )=>{
 			let points = this.$modules.storage.getSeriesPoints( seriesName )

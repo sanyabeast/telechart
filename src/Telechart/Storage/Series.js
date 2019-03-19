@@ -50,6 +50,9 @@ class Series {
 	slice ( from, to, accuracy ) {
 		accuracy = accuracy || this.$state.originalAccuracy
 
+		from -= this.$state.accuracy
+		to += this.$state.accuracy
+
 		if ( from < this.$state.beginTime ) from = this.$state.beginTime
 		if ( to < this.$state.beginTime ) to = this.$state.finishTime
 

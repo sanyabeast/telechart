@@ -21,7 +21,7 @@ class Config {
 		domDoubletapTimeout: 250,
 		plotLineChunkSize: 30,
 		plotLineDefaultLineWidth: 2,
-		plotExtremumTweenDuration: 200,
+		plotExtremumTweenDuration: 250,
 		plotExtremumPadding: ChartMath.range( 0, 0.2 )
 	}
 
