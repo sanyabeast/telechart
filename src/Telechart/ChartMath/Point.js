@@ -7,6 +7,10 @@ class Point {
 	}
 
 	set ( x, y ) {
+		if ( typeof x == "object" ) {
+			return this.set( x.x, x.y )
+		}
+		
 		this.x = x
 		this.y = y
 	} 

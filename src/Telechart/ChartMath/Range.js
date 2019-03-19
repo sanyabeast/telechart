@@ -12,12 +12,6 @@ class Range {
 		this.max = max
 	}
 
-	expand ( padding ) {
-		let size = this.size
-		this.min -= padding.min * size
-		this.max += padding.max * size
-	}
-
 	get size () { return ( this.max - this.min ) }
 }
 

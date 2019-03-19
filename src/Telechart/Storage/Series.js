@@ -54,9 +54,9 @@ class Series {
 		to += this.$state.accuracy
 
 		if ( from < this.$state.beginTime ) from = this.$state.beginTime
-		if ( to < this.$state.beginTime ) to = this.$state.finishTime
+		if ( to > this.$state.finishTime ) to = this.$state.finishTime
 
-		from = ChartMath.nearestMult( from, this.$state.accuracy, false, true )
+		
 		to = ChartMath.nearestMult( to, this.$state.accuracy, true, true )
 
 		from =  (from - this.$state.beginTime) / accuracy
@@ -69,6 +69,27 @@ class Series {
 		let piece = this.slice( from, to, accuracy )
 		let extremum = ChartMath.getExtremum(piece)
 		return extremum
+	}
+
+	getValueAt ( position, accuracy ) {
+		let layer = this.$content[ accuracy ]
+
+		if ( position < this.$state.beginTime ) position = this.$state.beginTime
+		if ( position > this.$state.finishTime ) position = this.$state.finishTime
+
+		let from = position
+
+		from = ChartMath.nearestMult( position, accuracy, false, true )
+
+		let to = from + accuracy
+		let step = ChartMath.getStep( from, to, position )
+
+		from =  (from - this.$state.beginTime) / accuracy
+		to =  (to - this.$state.beginTime) / accuracy
+
+		let intermediateValue = ChartMath.smoothstep( layer[from], layer[to], step )
+
+		return ChartMath.point( position, intermediateValue )
 	}
 }
 

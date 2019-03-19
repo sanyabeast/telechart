@@ -98,19 +98,23 @@ class Plot extends TelechartModule {
 
 		this.$state.extremum.set( extremum )
 
-		extremum.expand( Config.values.plotExtremumPadding )
+		let padding = extremum.size * Config.values.plotExtremumPadding
+
+		extremum.min -= padding
+		extremum.max += padding
 
 		let vp = this.$modules.renderingEngine.viewport
+		let position = this.$modules.renderingEngine.position
 
 		if ( tween ) {
 			this.$temp.killExtremumTweenY && ( this.$temp.killExtremumTweenY() )
 			this.$temp.killExtremumTweenY = Tweener.tween( {
-				fromValue: vp.y,
+				fromValue: position.y,
 				toValue: extremum.min,
 				duration: Config.values.plotExtremumTweenDuration,
 				ease: "linear",
 				onUpdate: ( value, completed )=>{
-					vp.y = value
+					position.y = value
 					this.$modules.renderingEngine.updateProjection()
 
 					if ( completed ) {
@@ -122,7 +126,7 @@ class Plot extends TelechartModule {
 			this.$temp.killExtremumTweenH && ( this.$temp.killExtremumTweenH() )
 			this.$temp.killExtremumTweenH = Tweener.tween( {
 				fromValue: vp.h,
-				toValue: ( extremum.max - extremum.min ),
+				toValue: ( extremum.size ),
 				duration: Config.values.plotExtremumTweenDuration,
 				ease: "linear",
 				onUpdate: ( value, completed )=>{

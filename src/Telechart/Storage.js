@@ -67,7 +67,6 @@ class Storage {
 	}
 
 	importDataset ( datasetData ) {
-		console.log( datasetData )
 
 		Utils.loopCollection( datasetData.series, ( seriesData, seriesName )=>{
 			this.series[ seriesName ] = new Series( seriesName, seriesData, datasetData.time )
@@ -89,15 +88,27 @@ class Storage {
 		)
 	}
 
-	getExtremum ( from, to, accuracy ) {
+	getExtremum ( from, to ) {
 		let values = []
 
 		Utils.loopCollection( this.series, ( series, seriesName )=>{
-			let extremum = series.getExtremum( from, to, accuracy )
+			let extremum = series.getExtremum( from, to, this.$state.accuracy )
 			values.push( extremum.min, extremum.max )
 		} )
 
-		return ChartMath.getExtremum( values )
+		let extremum = ChartMath.getExtremum( values )
+
+		return extremum
+	}
+
+	getValueAt ( time, accuracy ) {
+		let values = {}
+
+		Utils.loopCollection( this.series, ( series, seriesName )=>{
+			values[ seriesName ] = series.getValueAt( time, this.$state.accuracy )
+		} )
+
+		return values
 	}
 }
 

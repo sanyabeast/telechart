@@ -61,6 +61,10 @@ class ChartMath {
     	return to + ( ( from - to ) * transition )
     }
 
+    static getStep ( from, to, position ) {
+    	return ( to - position ) / ( to - from )
+    }
+
 }
 
 export default ChartMath

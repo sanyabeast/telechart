@@ -66,7 +66,6 @@ class Telechart extends TelechartModule {
 	 *
 	 */
 	update ( chartData ) {
-		console.log(chartData)
 		Utils.loopCollection( chartData[ 0 ].columns[1], ( value, index )=>{
 			chartData[ 0 ].columns[1][index] = ( index % 2 == 0 ) ? 1 : 0
 
@@ -82,7 +81,7 @@ class Telechart extends TelechartModule {
 			if ( index % 30 == 0 ) chartData[ 0 ].columns[2][index] = 60
 		} )
 
-		this.$modules.storage.importRawDataset( chartData[ 1 ] )
+		this.$modules.storage.importRawDataset( chartData[ 4 ] )
 
 		Utils.loopCollection( this.$modules.storage.series, ( series, seriesName )=>{
 			let points = this.$modules.storage.getSeriesPoints( seriesName )
@@ -151,6 +150,11 @@ class Telechart extends TelechartModule {
 
 			this.$modules.majorPlot.setExtremum( majorPlotExtremum, true )
 
+		} )
+
+		this.$modules.majorPlot.on( "user.position.select", ( position )=>{
+			let values = this.$modules.storage.getValueAt( position.x )
+			this.$modules.majorPlot.setSelectedPositionValues( values )
 		} )
 	}
 
