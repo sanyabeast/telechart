@@ -127,7 +127,8 @@ class Utils {
 		this.loopCollection( propNames, ( propName, index )=>{
 			this.defineProperty( target, propName, {
 				get: ()=>{ return source[propName] },
-				set: ( v )=>{ source[propName] = v }
+				set: ( v )=>{ source[propName] = v },
+				configurable: true
 			} )
 		} )
 	}

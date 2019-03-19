@@ -21,7 +21,8 @@ class Config {
 		domDoubletapTimeout: 250,
 		plotLineChunkSize: 30,
 		plotLineDefaultLineWidth: 2,
-		plotExtremumTweenDuration: 250,
+		plotExtremumTweenDuration: 500,
+		plotSeriesVisibilityTweenDuration: 250,
 		plotExtremumPadding: 0.3,
 		plotSelectedPositionCircleRadius: 10
 	}

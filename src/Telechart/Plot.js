@@ -155,8 +155,23 @@ class Plot extends TelechartModule {
 			"content-type": "series",
 			"series-id": seriesId,
 		}, ( object )=>{
-			object.visible = isVisible
-			this.$modules.renderingEngine.updateProjection()
+
+			if ( isVisible ) object.visible = isVisible
+
+			Tweener.tween( {
+				fromValue: object.alpha,
+				toValue: ( isVisible ) ? 1 : 0,
+				duration: Config.values.plotSeriesVisibilityTweenDuration,
+				ease: ( isVisible ) ? "easeInQuad" : "easeOutQuad",
+				onUpdate: ( v, completed )=>{
+					object.alpha = v
+					this.$modules.renderingEngine.updateProjection()
+
+					if ( completed && !isVisible ) {
+						object.isVisible = isVisible
+					}
+				}
+			} )
 		} )
 	}
 

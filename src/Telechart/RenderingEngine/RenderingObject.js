@@ -15,13 +15,8 @@ class RenderingObject {
 
 	parentNode = null;
 
-	get culled () { return this.$state.culled }
-	set culled (v) { this.$state.culled = v }
-	get visible () { return this.$state.visible }
-	set visible (v) { this.$state.visible = v }
-	get projectionCulled () { return this.$state.projectionCulled }
-	set projectionCulled (v) { this.$state.projectionCulled = v }
-	get position () { return this.$state.position }
+	get alpha () { return this.$styles.globalAlpha }
+	set alpha ( v ) { this.$styles.globalAlpha = v }
 
 	constructor ( params ) {
 		this.children = []
@@ -55,6 +50,13 @@ class RenderingObject {
 
 			}
 		}
+
+		Utils.proxyProps( this, this.$state, [
+			"culled",
+			"projectionCulled",
+			"position",
+			"visible"
+		] )
 	
 	}
 
