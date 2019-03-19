@@ -6,7 +6,6 @@ class Skin {
 	cssText = "";
 
 	constructor ( skinData ) {
-		console.log(skinData)
 
 		this.$name = skinData.name
 		this.$values = new Utils.DataKeeper( skinData.values )

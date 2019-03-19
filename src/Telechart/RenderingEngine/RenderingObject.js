@@ -110,13 +110,15 @@ class RenderingObject {
 		this.parentNode && this.parentNode.removeChild( this )
 	}
 
-	render ( engine, context2d, px, py ) {
+	render ( engine, context2d, px, py, alpha ) {
+		let multipliedAlpha = this.$applyAlpha( alpha, context2d )
+
 		px += this.$state.position.x
 		py += this.$state.position.y
 
 		Utils.loopCollection( this.children, (child, index)=>{
 			if ( !engine.isCulled( child, px + child.position.x, py + child.position.y )) {
-				child.render( engine, context2d, px, py )
+				child.render( engine, context2d, px, py, multipliedAlpha )
 			} else {
 				engine.incrementCulledObjectsCount()
 			}
@@ -138,6 +140,12 @@ class RenderingObject {
 		this.$hiddenDOM = document.createElement( this.constructor.name )
 		this.$hiddenDOM.$renderingObject = this
 		this.$hiddenDOM.setAttribute( "type", this.constructor.name )
+	}
+
+	$applyAlpha ( parentAlpha, context2d ) {
+		let alpha = parentAlpha * this.$styles.globalAlpha
+		context2d.globalAlpha = alpha
+		return alpha
 	}
 }
 

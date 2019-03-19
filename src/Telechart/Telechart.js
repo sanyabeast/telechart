@@ -2,13 +2,15 @@
 import Utils from "Telechart/Utils"
 import MainLoop from "Telechart/MainLoop"
 import TelechartModule from "Telechart/Core/TelechartModule"
-import MajorPlot from "Telechart/Core/MajorPlot"
-import PanoramaPlot from "Telechart/Core/PanoramaPlot"
-import Storage from "Telechart/Storage"
 import Config from "Telechart/Config"
 
 import Skin from "Telechart/Core/DOM/Skin"
 import DOMComponent from "Telechart/Core/DOM/Component"
+
+import MajorPlot from "Telechart/Core/MajorPlot"
+import PanoramaPlot from "Telechart/Core/PanoramaPlot"
+import ChartControl from "Telechart/Core/ChartControl"
+import Storage from "Telechart/Storage"
 
 /** 
  * @class
@@ -45,6 +47,7 @@ class Telechart extends TelechartModule {
 		} )
 
 		this.$modules.set( {
+			chartControl: new ChartControl(),
 			domComponent: new DOMComponent( {
 				template: "telechart"
 			} )
@@ -129,6 +132,7 @@ class Telechart extends TelechartModule {
 
 	/* private */
 	$setupDOM () {
+		this.$modules.domComponent.addChild( "chart-controls-wrapper", this.$modules.chartControl.domElement )
 		this.$modules.domComponent.addChild( "major-plot-wrapper", this.$modules.majorPlot.domElement )
 		this.$modules.domComponent.addChild( "panorama-plot-wrapper", this.$modules.panoramaPlot.domElement )
 		this.setSkin()
@@ -155,6 +159,22 @@ class Telechart extends TelechartModule {
 		this.$modules.majorPlot.on( "user.position.select", ( position )=>{
 			let values = this.$modules.storage.getValueAt( position.x )
 			this.$modules.majorPlot.setSelectedPositionValues( values )
+		} )
+
+		this.$modules.storage.on( "series.visibility.changed", ( series )=>{
+			let panoramaPlotFrameRect = this.$modules.panoramaPlot.frameViewportRect
+			let majorPlotExtremum = this.$modules.storage.getExtremum( panoramaPlotFrameRect.x, panoramaPlotFrameRect.x + panoramaPlotFrameRect.w )
+			let panoramaPlotExtremum = this.$modules.storage.getExtremum( series.beginTime, series.finishTime, series.accuracy )
+
+			this.$modules.majorPlot.setSeriesVisibility( series.id, series.visible )
+			this.$modules.panoramaPlot.setSeriesVisibility( series.id, series.visible )
+
+			this.$modules.panoramaPlot.setExtremum( 
+				panoramaPlotExtremum,
+				true
+			)
+
+			this.$modules.majorPlot.setExtremum( majorPlotExtremum, true )
 		} )
 	}
 

@@ -150,6 +150,16 @@ class Plot extends TelechartModule {
 		}
 	}
 
+	setSeriesVisibility ( seriesId, isVisible ) {
+		this.$modules.renderingEngine.select( {
+			"content-type": "series",
+			"series-id": seriesId,
+		}, ( object )=>{
+			object.visible = isVisible
+			this.$modules.renderingEngine.updateProjection()
+		} )
+	}
+
 }
 
 export default Plot

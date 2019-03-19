@@ -1,9 +1,10 @@
 import Series from "Telechart/Storage/Series"
 import Utils from "Telechart/Utils"
 import ChartMath from "Telechart/ChartMath"
+import TelechartModule from "Telechart/Core/TelechartModule"
 
-class Storage {
-	static normalizeChartData ( data ) {
+class Storage extends TelechartModule {
+	static normalizeChartData  ( data ) {
 		let datasetData = {}
 
 		Utils.loopCollection( data.columns, ( rawData, index )=>{
@@ -52,6 +53,8 @@ class Storage {
 	}
 
 	constructor () {
+		super()
+
 		this.$state = new Utils.DataKeeper( {
 			accuracy: null,
 			originalAccuracy: null,
@@ -68,11 +71,11 @@ class Storage {
 
 	importDataset ( datasetData ) {
 
-		Utils.loopCollection( datasetData.series, ( seriesData, seriesName )=>{
-			this.series[ seriesName ] = new Series( seriesName, seriesData, datasetData.time )
-			this.$state.originalAccuracy = this.series[ seriesName ].originalAccuracy
-			this.$state.beginTime = this.series[ seriesName ].beginTime
-			this.$state.finishTime = this.series[ seriesName ].finishTime
+		Utils.loopCollection( datasetData.series, ( seriesData, seriesId )=>{
+			this.series[ seriesId ] = new Series( seriesId, seriesData, datasetData.time )
+			this.$state.originalAccuracy = this.series[ seriesId ].originalAccuracy
+			this.$state.beginTime = this.series[ seriesId ].beginTime
+			this.$state.finishTime = this.series[ seriesId ].finishTime
 
 			if ( this.$state.accuracy === null ) {
 				this.$state.accuracy = this.$state.originalAccuracy
@@ -80,8 +83,8 @@ class Storage {
 		} )
 	}
 
-	getSeriesPoints ( seriesName ) {
-		return this.series[ seriesName ].slice(
+	getSeriesPoints ( seriesId ) {
+		return this.series[ seriesId ].slice(
 			this.$state.beginTime,
 			this.$state.finishTime,
 			this.$state.accuracy
@@ -91,8 +94,12 @@ class Storage {
 	getExtremum ( from, to ) {
 		let values = []
 
-		Utils.loopCollection( this.series, ( series, seriesName )=>{
-			let extremum = series.getExtremum( from, to, this.$state.accuracy )
+		Utils.loopCollection( this.series, ( series, seriesId )=>{
+			if ( !series.visible ) {
+				return
+			}
+
+ 			let extremum = series.getExtremum( from, to, this.$state.accuracy )
 			values.push( extremum.min, extremum.max )
 		} )
 
@@ -104,11 +111,16 @@ class Storage {
 	getValueAt ( time, accuracy ) {
 		let values = {}
 
-		Utils.loopCollection( this.series, ( series, seriesName )=>{
-			values[ seriesName ] = series.getValueAt( time, this.$state.accuracy )
+		Utils.loopCollection( this.series, ( series, seriesId )=>{
+			values[ seriesId ] = series.getValueAt( time, this.$state.accuracy )
 		} )
 
 		return values
+	}
+
+	setSeriesVisibility ( seriesId, isVisible ) {
+		this.series[ seriesId ].visible = isVisible
+		this.emit( "series.visibility.changed", this.series[ seriesId ] )
 	}
 }
 

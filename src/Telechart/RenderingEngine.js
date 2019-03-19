@@ -129,7 +129,7 @@ class RenderingEngine extends Utils.aggregation( TelechartModule, RenderingObjec
 
 	prerender () {
 		this.$state.culledObjectsCount = 0
-		super.render( this, this.$state.offscreenContext2d, -this.$state.position.x, -this.$state.position.y )
+		super.render( this, this.$state.offscreenContext2d, -this.$state.position.x, -this.$state.position.y, 1 )
 	}
 
 	render () {

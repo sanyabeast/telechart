@@ -15,11 +15,11 @@
 	}
 
 	.major-plot-wrapper {
-		height: 60%;
+		max-height: 70%;
 	}
 
 	.panorama-plot-wrapper {
-		height: 72px;
+		height: 56px;
 		min-height: 48px;
 		background-color: var(--panormaPlotBackground);
 		margin: 16px 0;
@@ -93,5 +93,10 @@
 			border-radius: 50%;
 			border: 2px solid var(--borderColor);
 		}
+	}
+
+	/* chart controls */
+	.chart-controls {
+		min-height: 56px
 	}
 }

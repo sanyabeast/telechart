@@ -26,11 +26,12 @@ class Line extends RenderingObject {
 		
 	}
 
-	render ( engine, context2d, px, py ) {		
+	render ( engine, context2d, px, py, alpha ) {		
 		let points = this.$data.points
 		let started = false;
 
 		this.$applyStyles( context2d )
+		this.$applyAlpha( alpha, context2d )
 
 		context2d.beginPath()
 

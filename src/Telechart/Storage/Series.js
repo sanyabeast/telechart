@@ -2,13 +2,14 @@ import Utils from "Telechart/Utils"
 import ChartMath from "Telechart/ChartMath"
 
 class Series {
-	get originalAccuracy () { return this.$state.originalAccuracy }
-	get accuracy () { return this.$state.accuracy }
-	get beginTime () { return this.$state.beginTime }
-	get finishTime () { return this.$state.finishTime }
-	get id () { return this.$state.id }
-	get color () { return this.$state.color }
-	get type () { return this.$state.type }
+	// get originalAccuracy 						() { return this.$state.originalAccuracy }
+	// get accuracy 						() { return this.$state.accuracy }
+	// get beginTime 						() { return this.$state.beginTime }
+	// get finishTime 						() { return this.$state.finishTime }
+	// get id 						() { return this.$state.id }
+	// get color 						() { return this.$state.color }
+	// get type 						() { return this.$state.type }
+	// get visible 						() { return this.$state.visible }
 
 	constructor ( seriesName, seriesData, timeData ) {
 		this.name = seriesName
@@ -19,8 +20,20 @@ class Series {
 			originalAccuracy: 1,
 			id: seriesData.id,
 			color: seriesData.color,
-			type: seriesData.type
+			type: seriesData.type,
+			visible: true
 		} )
+
+		Utils.proxyProps( this, this.$state, [
+			"originalAccuracy", 
+			"accuracy", 		
+			"beginTime", 		
+			"finishTime", 		
+			"id", 				
+			"color", 			
+			"type", 			
+			"visible", 		
+		] )
 
 		this.$content = new Utils.DataKeeper()
 		this.$setSeriesData( seriesData, timeData )

@@ -1,29 +1,29 @@
 <div 
 	class="telechart flex-column fit-width fit-height border-box"
 	$ref="telechart"
-	$css="modifiers telechart"
->
-	<div class="header caption flex-row flex-a-center flex-no-shrink">
-		<p class="font-w-bold">Folowers</p>
-	</div>
-	<div 
-		class="major-plot-wrapper fit-width pos-relative"
-		$ref="major-plot-wrapper"
-	></div>
-	<div 
-		class="panorama-plot-wrapper fit-width pos-relative"
-		$ref="panorama-plot-wrapper"
-	>
-	</div>
-	<div class="added-lines flex-row fit-width flex-grow"></div>
-	<div 
-		class="theme-switcher button fit-width flex-row flex-j-center"
-		$ref="theme-switcher"
-		$events="click"
-	>
-		<p 
-			class="font-w-bold"
-			$ref="theme-switcher-caption"
-		>Switch to Night Mode</p>
-	</div>
+	$css="modifiers telechart">
+		<div class="header caption flex-row flex-a-center flex-no-shrink">
+			<p class="font-w-bold">Folowers</p>
+		</div>
+		<div 
+			class="major-plot-wrapper fit-width pos-relative flex-grow"
+			$ref="major-plot-wrapper">
+		</div>
+		<div 
+			class="panorama-plot-wrapper fit-width pos-relative"
+			$ref="panorama-plot-wrapper">
+		</div>
+		<div 
+			class="chart-controls-wrapper flex-row fit-width flex-no-shrink"
+			$ref="chart-controls-wrapper">
+		</div>
+		<div 
+			class="theme-switcher button fit-width flex-row flex-j-center"
+			$ref="theme-switcher"
+			$events="click">
+				<p 
+					class="font-w-bold"
+					$ref="theme-switcher-caption">Switch to Night Mode
+				</p>
+		</div>
 </div>

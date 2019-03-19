@@ -2,13 +2,14 @@ import Plot from "Telechart/Plot"
 import Component from "Telechart/Core/DOM/Component"
 import RenderingEngine from "Telechart/RenderingEngine"
 import ChartMath from "Telechart/ChartMath"
+import Utils from "Telechart/Utils"
 
 class PanoramaPlot extends Plot {
 	constructor ( params ) {
 		super( params )
 
 		this.$state.beginTime = 0
-		this.$state.frameViewport = ChartMath.rect( 0, 0, 0, 0 )
+		this.$state.frameViewportRect = ChartMath.rect( 0, 0, 0, 0 )
 
 		let frameControlComponent = this.$modules.frameControlComponent = new Component( {
 			template: "frame-control"
@@ -47,11 +48,15 @@ class PanoramaPlot extends Plot {
 		this.$modules.renderingEngine.addChild( this.$modules.frameControlsRenderingObject )
 		this.$modules.renderingEngine.addChild( this.$modules.frameControlsLeftFillerRenderingObject )
 		this.$modules.renderingEngine.addChild( this.$modules.frameControlsRightFillerRenderingObject )
+
+		Utils.proxyProps( this, this.$state, [
+			"frameViewportRect"
+		] )
 	}
 
 	setFramePosition ( x ) {
 		let frameControlsRO = this.$modules.frameControlsRenderingObject
-		let frameViewport = this.$state.frameViewport
+		let frameViewport = this.$state.frameViewportRect
 		let beginTime = this.$state.beginTime
 		let finishTime = this.$state.finishTime
 
@@ -68,7 +73,7 @@ class PanoramaPlot extends Plot {
 	setFrameSize ( w ) {
 		let frameControlsRO = this.$modules.frameControlsRenderingObject
 
-		let frameViewport = this.$state.frameViewport
+		let frameViewport = this.$state.frameViewportRect
 		let beginTime = this.$state.beginTime
 		let finishTime = this.$state.finishTime
 		let accuracy = this.$state.accuracy
@@ -89,7 +94,7 @@ class PanoramaPlot extends Plot {
 		let frameControlsLeftFillerRO = this.$modules.frameControlsLeftFillerRenderingObject
 		let frameControlsRightFillerRO = this.$modules.frameControlsRightFillerRenderingObject
 
-		let frameViewport = this.$state.frameViewport
+		let frameViewport = this.$state.frameViewportRect
 		let beginTime = this.$state.beginTime
 		let finishTime = this.$state.finishTime
 		let accuracy = this.$state.accuracy
@@ -103,8 +108,8 @@ class PanoramaPlot extends Plot {
 
 	$onFrameControlLeftPlaneDrag ( data ) {
 		let delta = this.$modules.renderingEngine.toVirtualScale( data.dragX, 0 )
-		let newPosition = ( this.$state.frameViewport.x + delta.x )
-		let newFrameSize = ( this.$state.frameViewport.w - delta.x )
+		let newPosition = ( this.$state.frameViewportRect.x + delta.x )
+		let newFrameSize = ( this.$state.frameViewportRect.w - delta.x )
 
 		if ( newFrameSize <= this.$state.accuracy ) {
 			newFrameSize = this.$state.accuracy
@@ -124,13 +129,13 @@ class PanoramaPlot extends Plot {
 	$onFrameControlRightPlaneDrag ( data ) {
 		let delta = this.$modules.renderingEngine.toVirtualScale( data.dragX, 0 )
 
-		this.setFrameSize( this.$state.frameViewport.w + delta.x )
+		this.setFrameSize( this.$state.frameViewportRect.w + delta.x )
 	}
 
 	$onFrameControlFrameDrag ( data ) {
 		let delta = this.$modules.renderingEngine.toVirtualScale( data.dragX, 0 )
 
-		this.setFramePosition( this.$state.frameViewport.x + delta.x )
+		this.setFramePosition( this.$state.frameViewportRect.x + delta.x )
 	}
 
 	addSeries ( seriesData ) {
