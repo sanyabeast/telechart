@@ -10,45 +10,56 @@ class PanoramaPlot extends Plot {
 		this.$state.beginTime = 0
 		this.$state.frameViewport = ChartMath.rect( 0, 0, 0, 0 )
 
-		this.$modules.frameControlComponent = new Component( {
+		let frameControlComponent = this.$modules.frameControlComponent = new Component( {
 			template: "frame-control"
 		} )
 
 		this.$modules.domComponent.addChild( "dom-layer", this.$modules.frameControlComponent.domElement )
 
-		this.$modules.frameControlComponent.on( "frame-control.left-plane.drag", this.$onFrameControlLeftPlaneDrag.bind(this) )
-		this.$modules.frameControlComponent.on( "frame-control.right-plane.drag", this.$onFrameControlRightPlaneDrag.bind(this) )
-		this.$modules.frameControlComponent.on( "frame-control.frame.drag", this.$onFrameControlFrameDrag.bind(this) )
+		frameControlComponent.on( "frame-control.left-plane.drag", this.$onFrameControlLeftPlaneDrag.bind(this) )
+		frameControlComponent.on( "frame-control.right-plane.drag", this.$onFrameControlRightPlaneDrag.bind(this) )
+		frameControlComponent.on( "frame-control.frame.drag", this.$onFrameControlFrameDrag.bind(this) )
 
 		this.$modules.frameControlsRenderingObject = new RenderingEngine.DOMElement( {
-			domElement: this.$modules.frameControlComponent.ref( "frame-control.frame" ),
+			domElement: frameControlComponent.ref( "frame-control.frame" ),
 			applyPosX: true,
 			applyPosY: false,
-			applyScaleX: true,
-			applyScaleY: false
+			applySizeX: true,
+			applySizeY: false
 		} )
 
 		this.$modules.renderingEngine.addChild( this.$modules.frameControlsRenderingObject )
 	}
 
 	setFramePosition ( x ) {
-		if ( x < this.$state.beginTime ) x = this.$state.beginTime
-		if ( x + this.$state.frameViewport.w > this.$state.finishTime ) x = this.$state.finishTime - this.$state.frameViewport.w
+		let frameControlsRO = this.$modules.frameControlsRenderingObject
+		let frameViewport = this.$state.frameViewport
+		let beginTime = this.$state.beginTime
+		let finishTime = this.$state.finishTime
 
-		this.$state.frameViewport.x = x
-		this.$modules.frameControlsRenderingObject.position.x = x
-		this.$modules.frameControlsRenderingObject.render()
-		this.emit( "frame.viewport.changed", this.$state.frameViewport )
+		if ( x < beginTime ) x = beginTime
+		if ( x + frameViewport.w > finishTime ) x = finishTime - frameViewport.w
+
+		frameViewport.x = x
+		frameControlsRO.position.x = x
+		frameControlsRO.render()
+		this.emit( "frame.viewport.changed", frameViewport )
 	}
 
 	setFrameSize ( w ) {
-		if ( w < this.$state.accuracy ) w = this.$state.accuracy
-		if ( this.$state.frameViewport.x + w > this.$state.finishTime ) w = this.$state.finishTime - this.$state.frameViewport.x
+		let frameControlsRO = this.$modules.frameControlsRenderingObject
+		let frameViewport = this.$state.frameViewport
+		let beginTime = this.$state.beginTime
+		let finishTime = this.$state.finishTime
+		let accuracy = this.$state.accuracy
 
-		this.$state.frameViewport.w = w
-		this.$modules.frameControlsRenderingObject.scale.x = w
-		this.$modules.frameControlsRenderingObject.render()
-		this.emit( "frame.viewport.changed", this.$state.frameViewport )
+		if ( w < accuracy ) w = accuracy
+		if ( frameViewport.x + w > this.$state.finishTime ) w = this.$state.finishTime - frameViewport.x
+
+		frameViewport.w = w
+		frameControlsRO.scale.x = w
+		frameControlsRO.render()
+		this.emit( "frame.viewport.changed", frameViewport )
 	}
 
 	$onFrameControlLeftPlaneDrag ( data ) {

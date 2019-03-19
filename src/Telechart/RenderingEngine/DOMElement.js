@@ -1,15 +1,19 @@
 import RenderingObject from "Telechart/RenderingEngine/RenderingObject"
 import ChartMath from "Telechart/ChartMath"
 import Config from "Telechart/Config"
+import Utils from "Telechart/Utils"
 
 class DOMElement extends RenderingObject {
 	get scale () { return this.$params.scale }
+	get soloRenderingAvailable () { return !!this.$temp.prevEngine }
 
 	constructor ( params ) {
 		super ( {
 			scale: ChartMath.vec2( 1, 1 ),
 			applyScaleX: false, 
 			applyScaleY: false,
+			applySizeX: false,
+			applySizeY: false,
 			applyPosX: true,
 			applyPosY: true,
 			...params
@@ -25,16 +29,24 @@ class DOMElement extends RenderingObject {
 		this.$state.culled = false
 	}
 
-	render ( engine, context2d, px, py ) {		
+	setStyles ( styles, target ) {
+		Utils.assignValues( (target||this.$params.domElement)["style"], styles )
+	}
 
+	setStyle ( styleName, styleValue ) {
+		this.$params.domElement.style[ styleName ] = styleValue
+	} 
+
+	render ( engine, context2d, px, py ) {		
 		if ( !engine ) {
-			if ( !this.$temp.prevEngine ) {
-				return
-			} else {
+			if ( this.soloRenderingAvailable ) {
 				engine = this.$temp.prevEngine
 				context2d = this.$temp.prevContext2d
 				px = this.$temp.prevPx
 				py = this.$temp.prevPy
+				
+			} else {
+				return
 			}
 		}
 
@@ -49,17 +61,22 @@ class DOMElement extends RenderingObject {
 		py += this.$state.position.y
 
 		let position = engine.toReal( px, py )
-		position.y = engine.size.y - position.y
+		position.y = position.y
 		let scale = engine.toRealScale( this.$params.scale.x, this.$params.scale.y )
 
 		let applyScaleX = this.$params.applyScaleX
 		let applyScaleY = this.$params.applyScaleY
+		let applySizeX = this.$params.applySizeX
+		let applySizeY = this.$params.applySizeY
 		let applyPosX = this.$params.applyPosX
 		let applyPosY = this.$params.applyPosY
 
-		this.$params.domElement.style.transform = `translate(${applyPosX?position.x/DPR:0}px, ${applyPosY?position.y/DPR:0}px)`// scale(${applyScaleX?scale.x/DPR:1}, ${applyScaleY?scale.y/DPR:1})`
-		applyScaleX && ( this.$params.domElement.style.width = `${scale.x/DPR}px` )
-		applyScaleY && ( this.$params.domElement.style.height = `${scale.y/DPR}px` )
+		this.$params.domElement.style.transform = 
+		this.setStyle( "transform", `translate(${applyPosX?position.x/DPR:0}px, ${applyPosY?position.y/DPR:0}px) scale(${applyScaleX?scale.x/DPR:1}, ${applyScaleY?scale.y/DPR:1})` )
+
+
+		applySizeX && ( this.setStyle( "width", `${scale.x/DPR}px`  ) )
+		applySizeY && ( this.setStyle( "height", `${scale.y/DPR}px` ) )
 	}
 }
 

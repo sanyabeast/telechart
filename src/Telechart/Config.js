@@ -22,7 +22,8 @@ class Config {
 		plotLineChunkSize: 30,
 		plotLineDefaultLineWidth: 2,
 		plotExtremumTweenDuration: 250,
-		plotExtremumPadding: 0.3
+		plotExtremumPadding: 0.3,
+		plotSelectedPositionCircleRadius: 10
 	}
 
 	static skinValues = {

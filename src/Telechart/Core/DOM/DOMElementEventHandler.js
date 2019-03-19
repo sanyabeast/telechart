@@ -111,7 +111,7 @@ class DOMElementEventHandler extends TelechartModule {
 				let now = +new Date()
 
 				if ( ( now - prevClickTime ) < Config.values.domDoubletapTimeout ) {
-					callback( this.$normalizeEventData( "doubletap", eventData ) )
+					callback( this.$normalizeEventData( "doubletap", eventData, domElement ) )
 				} 
 
 				prevClickTime = now
@@ -144,13 +144,14 @@ class DOMElementEventHandler extends TelechartModule {
 	}
 
 	$normalizeEventData ( eventName, eventData, target ) {
-		eventData.isGesture = false
+		let boundingRect = target.getBoundingClientRect()
+		this.$state.normalizedEventData.isGesture = false
 
 		if ( eventData instanceof window.TouchEvent ) {
-			this.$state.normalizedEventData = this.$normalizeTouchEventData( eventName, eventData )
+			this.$state.normalizedEventData = this.$normalizeTouchEventData( eventName, eventData, target )
 		} else {
-			this.$state.normalizedEventData.x = eventData.offsetX * window.devicePixelRatio	
-			this.$state.normalizedEventData.y = eventData.offsetY * window.devicePixelRatio	
+			this.$state.normalizedEventData.x = ( eventData.pageX - boundingRect.x ) * window.devicePixelRatio	
+			this.$state.normalizedEventData.y = ( eventData.pageX - boundingRect.y ) * window.devicePixelRatio	
 			this.$state.normalizedEventData.pageX = eventData.pageX * window.devicePixelRatio
 			this.$state.normalizedEventData.pageY = eventData.pageY * window.devicePixelRatio		
 		}
@@ -161,11 +162,11 @@ class DOMElementEventHandler extends TelechartModule {
 		return this.$state.normalizedEventData
 	}
 
-	$normalizeTouchEventData ( eventName, eventData ) {
+	$normalizeTouchEventData ( eventName, eventData, target ) {
 		if ( eventData.touches.length > 1 ) {
 			this.$state.normalizedEventData = this.$normalizeTouchGestureEventData( eventName, eventData )
 		} else if ( eventData.touches.length === 1 ) {
-			this.$state.normalizedEventData = this.$normalizeEventData( eventName, eventData.touches[ 0 ] )
+			this.$state.normalizedEventData = this.$normalizeEventData( eventName, eventData.touches[ 0 ], target )
 		} else {
 			console.log( 1 )
 		}

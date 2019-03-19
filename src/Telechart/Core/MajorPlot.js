@@ -1,6 +1,8 @@
 import Plot from "Telechart/Plot"
 import Utils from "Telechart/Utils"
 import RenderingEngine from "Telechart/RenderingEngine"
+import DOMComponent from "Telechart/Core/DOM/Component"
+import Config from "Telechart/Config"
 
 class MajorPlot extends Plot {
 	constructor ( params ) {
@@ -25,35 +27,54 @@ class MajorPlot extends Plot {
 	}
 
 	$onUserPan ( eventData ) {
-		console.log( eventData )
+
 	}
 
 	setSelectedPositionValues ( values ) {
-		console.log( values )
 
 		Utils.loopCollection( this.$temp.circlesRenderingObjects, ( circleObject, name )=>{
 			circleObject.visible = false
 		} )
 
-		Utils.loopCollection( values, ( seriesValue, seriesName )=>{
 
-			if ( !this.$temp.circlesRenderingObjects[ seriesName ] ) {
-				console.log(1)
-				let circleRenderingObject = new RenderingEngine.Circle( {
-					radius: 10
+		Utils.loopCollection( values, ( seriesValue, seriesName )=>{
+			let circleRenderingObject = this.$temp.circlesRenderingObjects[ seriesName ]
+
+			if ( !circleRenderingObject ) {
+				let circleComponent = new DOMComponent( {
+					template: "selected-position-circle"
 				} )
 
+				circleRenderingObject = new RenderingEngine.DOMElement( {
+					domElement: circleComponent.domElement,
+					domComponent: circleComponent,
+					applyScaleY: false,
+					applyScaleX: false,
+					applyPosY: true,
+					applyPosX: true,
+					test: true,
+				} )
 
-				circleRenderingObject.culled = false
-				this.$temp.circlesRenderingObjects[ seriesName ] = circleRenderingObject
+				circleRenderingObject.setStyles( {
+					borderColor: this.$state.series[ seriesName ].series.color,
+					width: `${Config.values.plotSelectedPositionCircleRadius}px`,
+					height: `${Config.values.plotSelectedPositionCircleRadius}px`,
+				}, circleComponent.ref( "inner" ) )
+
+				this.$modules.domComponent.addChild( "dom-layer", circleComponent.domElement )
 				this.$modules.renderingEngine.addChild( circleRenderingObject )
+				this.$temp.circlesRenderingObjects[ seriesName ] = circleRenderingObject
 			} 
 
-		
-			this.$temp.circlesRenderingObjects[ seriesName ].position.set(seriesValue)
-			console.log(this.$temp.circlesRenderingObjects[ seriesName ].position)
+			circleRenderingObject.visible = true
+			circleRenderingObject.position.set( seriesValue )
+			
+			if ( circleRenderingObject.soloRenderingAvailable ) {
+				circleRenderingObject.render()
+			} else {
+				this.$modules.renderingEngine.updateProjection()				
+			}
 
-			this.$modules.renderingEngine.updateProjection()
 
 		} )
 	}

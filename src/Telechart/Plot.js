@@ -18,7 +18,8 @@ class Plot extends TelechartModule {
 		super()
 		
 		this.$state.set( {
-			extremum: ChartMath.range( 0, 0 )
+			extremum: ChartMath.range( 0, 0 ),
+			series: new Utils.DataKeeper()
 		} )
 
 		this.$modules.set( {
@@ -43,7 +44,7 @@ class Plot extends TelechartModule {
 
 	/* CHARTING */
 	addSeries ( seriesData ) {
-
+		console.log( seriesData )
 		let pointsChunks = Utils.splitToChunks( seriesData.points, Config.plotChunkSize )
 		let seriesGroup = new RenderingEngine.Group( {
 			attributes: {
@@ -76,6 +77,8 @@ class Plot extends TelechartModule {
 
 		this.setPosition( seriesData.series.beginTime )
 		this.$modules.renderingEngine.addChild( seriesGroup )
+
+		this.$state.series.set( seriesData.series.id, seriesData )
 
 	}
 	/* !CHARTING */

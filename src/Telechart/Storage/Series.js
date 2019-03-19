@@ -89,6 +89,8 @@ class Series {
 
 		let intermediateValue = ChartMath.smoothstep( layer[from], layer[to], step )
 
+		// console.log(intermediateValue, position, from)
+
 		return ChartMath.point( position, intermediateValue )
 	}
 }

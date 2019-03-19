@@ -70,4 +70,15 @@
 			}
 		}
 	}
+
+	.selected-position-circle {
+		.inner {
+			width: 16px;
+			height: 16px;
+			background: var(--telechartBackgroundColor);
+			transform: translate(-50%, -50%);
+			border-radius: 50%;
+			border: 2px solid var(--borderColor);
+		}
+	}
 }
