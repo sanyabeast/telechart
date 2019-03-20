@@ -12,17 +12,17 @@ let rowSize = Math.ceil(Math.sqrt(chartsCount));
 let windowWidth = window.innerWidth - ((rowSize + 1) * padding);
 let windowHeight = window.innerHeight - ((rowSize + 1) * padding);
 
-if (isMobile){
-    document.body.addEventListener("click", ()=>{
-        try {
-            document.body.webkitRequestFullScreen()
-        } catch (err) {}
+// if (isMobile){
+//     document.body.addEventListener("click", ()=>{
+//         try {
+//             document.body.webkitRequestFullScreen()
+//         } catch (err) {}
 
-        try {
-            document.body.requestFullScreen()
-        } catch (err) {}
-    })
-}
+//         try {
+//             document.body.requestFullScreen()
+//         } catch (err) {}
+//     })
+// }
 
 
 class App {

@@ -13,6 +13,7 @@ class Range {
 	}
 
 	get size () { return ( this.max - this.min ) }
+	get isFinite () { return ( isFinite( this.min ) && isFinite( this.max ) ) }
 }
 
 export default Range

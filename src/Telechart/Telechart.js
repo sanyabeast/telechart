@@ -84,7 +84,7 @@ class Telechart extends TelechartModule {
 			if ( index % 30 == 0 ) chartData[ 0 ].columns[2][index] = 60
 		} )
 
-		this.$modules.storage.importRawDataset( chartData[ 4 ] )
+		this.$modules.storage.importRawDataset( chartData[ 2 ] )
 
 		Utils.loopCollection( this.$modules.storage.series, ( series, seriesName )=>{
 			let points = this.$modules.storage.getSeriesPoints( seriesName )
@@ -166,6 +166,7 @@ class Telechart extends TelechartModule {
 			let majorPlotExtremum = this.$modules.storage.getExtremum( panoramaPlotFrameRect.x, panoramaPlotFrameRect.x + panoramaPlotFrameRect.w )
 			let panoramaPlotExtremum = this.$modules.storage.getExtremum( series.beginTime, series.finishTime, series.accuracy )
 
+			this.$modules.chartControl.setSeriesVisibility( series.id, series.visible )
 			this.$modules.majorPlot.setSeriesVisibility( series.id, series.visible )
 			this.$modules.panoramaPlot.setSeriesVisibility( series.id, series.visible )
 
@@ -175,6 +176,14 @@ class Telechart extends TelechartModule {
 			)
 
 			this.$modules.majorPlot.setExtremum( majorPlotExtremum, true )
+		} )
+
+		this.$modules.storage.on( "series.added", ( series )=>{
+			this.$modules.chartControl.addSeriesButton( series )
+		} )
+
+		this.$modules.chartControl.on( "toggle.series.visibility", ( series )=>{
+			this.$modules.storage.toggleSeriesVisibility( series.id )
 		} )
 	}
 

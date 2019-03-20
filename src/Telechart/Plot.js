@@ -98,6 +98,10 @@ class Plot extends TelechartModule {
 	stopRendering () {}
 
 	setExtremum ( extremum, tween ) {
+		if ( !extremum.isFinite ) {
+			return
+		}
+
 		if ( extremum.min == this.$state.extremum.min && this.$state.extremum.max == extremum.max ) {
 			return
 		}

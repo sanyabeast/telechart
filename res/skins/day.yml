@@ -8,3 +8,4 @@ values:
   themeSwitherCaptionColor: "#108be3"
   frameControlBackgroundColor: "#edf4f8d6"
   frameControlPlaneBackgroundColor: "#0000001f"
+  seriesButtonBorderColor: "#0000001f"

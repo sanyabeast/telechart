@@ -6,7 +6,7 @@
 
 	p {
 		margin: 0;
-		font-family: sans-serif;
+		font-family: Tahoma, Verdana, Segoe, sans-serif;
 		color: var(--majorTextColor);
 	}
 
@@ -28,6 +28,13 @@
 	.button {
 		cursor: pointer;
 		user-select: none;
+		-webkit-touch-callout: none; /* iOS Safari */
+	    -webkit-user-select: none; /* Safari */
+	     -khtml-user-select: none; /* Konqueror HTML */
+	       -moz-user-select: none; /* Firefox */
+	        -ms-user-select: none; /* Internet Explorer/Edge */
+	            user-select: none; /* Non-prefixed version, currently
+	                                  supported by Chrome and Opera */
 	}
 
 	.theme-switcher p {
@@ -97,6 +104,38 @@
 
 	/* chart controls */
 	.chart-controls {
-		min-height: 56px
+		min-height: 56px;
+
+		.series-buttons {
+			align-items: flex-start;
+
+			.series-button {
+			    padding: 6px;
+				border-radius: 40px;
+				border: 1px solid var(--seriesButtonBorderColor);
+				margin-right: 16px;
+
+				.checkbox-wrapper {
+					width: 20px;
+					height: 20px;
+					margin-right: 8px;
+					border-radius: 50%;
+					border-width: 10px;
+					border-style: solid;
+					transition: border-width 0.1s ease-in;
+				}
+
+				p.caption {
+					margin-right: 8px;
+					font-size: 13px;
+				}
+
+				&.disabled {
+					.checkbox-wrapper {
+						border-width: 1px;
+					}
+				}
+			}
+		}
 	}
 }

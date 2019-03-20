@@ -80,6 +80,8 @@ class Storage extends TelechartModule {
 			if ( this.$state.accuracy === null ) {
 				this.$state.accuracy = this.$state.originalAccuracy
 			}
+
+			this.emit( "series.added", this.series[ seriesId ] )
 		} )
 	}
 
@@ -120,6 +122,11 @@ class Storage extends TelechartModule {
 
 	setSeriesVisibility ( seriesId, isVisible ) {
 		this.series[ seriesId ].visible = isVisible
+		this.emit( "series.visibility.changed", this.series[ seriesId ] )
+	}
+
+	toggleSeriesVisibility ( seriesId ) {
+		this.series[ seriesId ].visible = !this.series[ seriesId ].visible
 		this.emit( "series.visibility.changed", this.series[ seriesId ] )
 	}
 }

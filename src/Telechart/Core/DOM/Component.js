@@ -5,6 +5,7 @@ import DOMElementEventHandler from "Telechart/Core/DOM/DOMElementEventHandler"
 
 class Component extends TelechartModule {
 	get domElement () { return this.$dom.element }
+	get classList () { return this.domElement.classList }
 
 	constructor ( params ) {
 		super()
@@ -45,6 +46,7 @@ class Component extends TelechartModule {
 			this.$traverseDOM( child, callback, child.parentNode )
 		} )
 	}
+
 
 	$processAttrs ( node, parentNode, params ) {
 		Utils.loopCollection( node.attributes, ( attr, index )=>{

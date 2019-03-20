@@ -7,3 +7,4 @@ values:
   themeSwitherCaptionColor: "#36a8f1"
   frameControlBackgroundColor: "#1f2a38cc"
   frameControlPlaneBackgroundColor: "#40566bcc"
+  seriesButtonBorderColor: "#40566bcc"
