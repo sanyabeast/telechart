@@ -108,6 +108,10 @@ class RenderingEngine extends Utils.aggregation( TelechartModule, RenderingObjec
 			return
 		}
 
+		if ( !w || !h ){
+			return
+		}
+
 		this.$dom.canvasElement.width = w
 		this.$dom.canvasElement.height = h
 		
@@ -140,6 +144,7 @@ class RenderingEngine extends Utils.aggregation( TelechartModule, RenderingObjec
 			this.$state.context2d.clearRect( 0, 0, this.$state.size.x, this.$state.size.y )
 			this.$state.offscreenContext2d.clearRect( 0, 0, this.$state.size.x, this.$state.size.y )
 			this.prerender()
+
 			this.$state.context2d.drawImage( this.$dom.offscreenCanvasElement, 0, 0 )
 		}
 	}

@@ -84,7 +84,7 @@ class Telechart extends TelechartModule {
 			if ( index % 30 == 0 ) chartData[ 0 ].columns[2][index] = 60
 		} )
 
-		this.$modules.storage.importRawDataset( chartData[ 2 ] )
+		this.$modules.storage.importRawDataset( chartData[ 4 ] )
 
 		Utils.loopCollection( this.$modules.storage.series, ( series, seriesName )=>{
 			let points = this.$modules.storage.getSeriesPoints( seriesName )
