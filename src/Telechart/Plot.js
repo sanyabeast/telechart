@@ -19,8 +19,14 @@ class Plot extends TelechartModule {
 		
 		this.$state.set( {
 			extremum: ChartMath.range( 0, 0 ),
-			series: new Utils.DataKeeper()
+			series: new Utils.DataKeeper(),
+			accuracyMultiplier: 1
 		} )
+
+		this.$state.set( "accuracy", ()=>{
+			return this.$state.originalAccuracy * this.$state.accuracyMultiplier
+		}, true )
+
 
 		this.$modules.set( {
 			renderingEngine: new RenderingEngine(),
@@ -40,13 +46,15 @@ class Plot extends TelechartModule {
 		] )
 
 		this.$modules.domComponent.addChild( "canvas-wrapper", this.$modules.renderingEngine.domElement )
+
+		this.$modules.renderingEngine.on( "viewport.updated", this.$onRenderingEngineViewportUpdated.bind(this) )
 	}
 
 	/* CHARTING */
 	addSeries ( seriesData ) {
 		this.$state.beginTime = seriesData.series.beginTime
 		this.$state.finishTime = seriesData.series.finishTime
-		this.$state.accuracy = seriesData.series.accuracy
+		this.$state.originalAccuracy = seriesData.series.accuracy
 
 		let pointsChunks = Utils.splitToChunks( seriesData.points, Config.plotChunkSize )
 		let seriesGroup = new RenderingEngine.Group( {
@@ -178,6 +186,45 @@ class Plot extends TelechartModule {
 			} )
 		} )
 	}
+
+	setSeriesAccuracyVisibility ( accuracy, isVisible ) {
+		this.$modules.renderingEngine.select( {
+			"content-type": "series",
+			"accuracy": `${accuracy}`
+		}, ( object )=>{
+
+			if ( isVisible ) object.visible = isVisible
+
+			Tweener.tween( {
+				fromValue: object.alpha,
+				toValue: ( isVisible ) ? 1 : 0,
+				duration: Config.values.plotSeriesVisibilityTweenDuration,
+				ease: ( isVisible ) ? "easeInQuad" : "easeOutQuad",
+				onUpdate: ( v, completed )=>{
+					object.alpha = v
+					this.$modules.renderingEngine.updateProjection()
+
+					if ( completed && !isVisible ) {
+						object.isVisible = isVisible
+					}
+				}
+			} )
+
+		} )
+	} 
+
+	$onRenderingEngineViewportUpdated ( viewport ) {
+		let pointsDensity = viewport.w / this.$state.accuracy
+		let accuracyMultiplier = Math.ceil( pointsDensity / 100 )
+
+		this.$setAccuracyMultiplier( accuracyMultiplier )
+	} 
+
+	$setAccuracyMultiplier ( accuracyMultiplier ) {
+		if ( accuracyMultiplier !== this.$state.accuracyMultiplier ) {
+			this.$state.accuracyMultiplier = accuracyMultiplier
+		}
+	} 
 
 }
 

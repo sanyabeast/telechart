@@ -61,6 +61,9 @@ class RenderingEngine extends Utils.aggregation( TelechartModule, RenderingObjec
 			sizeNeedsUpdate: true
 		}
 
+		this.$state.context2d.imageSmoothingEnabled = false
+		this.$state.offscreenContext2d.imageSmoothingEnabled = false
+
 		Utils.proxyProps( this, this.$state, [
 			"position",
 			"scale",
@@ -97,6 +100,7 @@ class RenderingEngine extends Utils.aggregation( TelechartModule, RenderingObjec
 
 		this.$state.position.set( viewport.x, viewport.y )
 
+		this.emit( "viewport.updated", viewport )
 		this.updateProjection()
 	} 
 
@@ -151,15 +155,15 @@ class RenderingEngine extends Utils.aggregation( TelechartModule, RenderingObjec
 
 	toReal ( x, y ) {
 		return ChartMath.point(
-			(x - this.position.x) / this.scale.x, 
-			this.size.y - ((y - this.position.y) / this.scale.y)
+			Math.round( (x - this.position.x) / this.scale.x ), 
+			Math.round( this.size.y - ((y - this.position.y) / this.scale.y) )
 		)
 	}
 
 	toRealScale ( x, y ) {
 		return ChartMath.point(
-			x / this.scale.x,
-			y / this.scale.y,
+			Math.round( x / this.scale.x ),
+			Math.round( y / this.scale.y ),
 		)
 	}
 

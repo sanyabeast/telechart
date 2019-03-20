@@ -56,11 +56,15 @@ class Storage extends TelechartModule {
 		super()
 
 		this.$state = new Utils.DataKeeper( {
-			accuracy: null,
 			originalAccuracy: null,
+			accuracyMultiplier: 1,
 			beginTime: 0,
 			finishTime: 0
 		} )
+
+		this.$state.set( "accuracy", ()=>{
+			return this.$state.originalAccuracy * this.$state.accuracyMultiplier
+		}, true )
 
 		this.series = new Utils.DataKeeper()
 	}
@@ -110,7 +114,7 @@ class Storage extends TelechartModule {
 		return extremum
 	}
 
-	getValueAt ( time, accuracy ) {
+	getValueAt ( time ) {
 		let values = {}
 
 		Utils.loopCollection( this.series, ( series, seriesId )=>{
@@ -128,6 +132,10 @@ class Storage extends TelechartModule {
 	toggleSeriesVisibility ( seriesId ) {
 		this.series[ seriesId ].visible = !this.series[ seriesId ].visible
 		this.emit( "series.visibility.changed", this.series[ seriesId ] )
+	}
+
+	setAccuracyMultiplier ( accuracyMultiplier ) {
+		this.$state.accuracyMultiplier = accuracyMultiplier
 	}
 }
 

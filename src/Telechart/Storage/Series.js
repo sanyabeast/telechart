@@ -52,11 +52,19 @@ class Series {
 		} )
 
 		this.$content[ accuracy ] = layer
+		this.$content[ accuracy * 2 ] = this.downsampleLayer( layer, accuracy * 2 )
+		this.$content[ accuracy * 3 ] = this.downsampleLayer( layer, accuracy * 3 )
+		this.$content[ accuracy * 4 ] = this.downsampleLayer( layer, accuracy * 4 )
 	}
 
 	getLayer ( accuracy ) {
 		accuracy = accuracy || this.$state.originalAccuracy
 		let layer = this.$content[ accuracy ]
+
+		if ( !layer ) {
+			layer = this.$content[ accuracy ] = this.downsampleLayer( this.$content[ this.$state.originalAccuracy ], accuracy )
+		}
+
 		return layer || null
 	}
 
@@ -106,6 +114,22 @@ class Series {
 
 		return ChartMath.point( position, intermediateValue )
 	}
+
+	downsampleLayer ( sourceLayer, newAccuracy ) {
+
+		let beginTime = this.$state.beginTime
+		let finishTime = this.$state.finishTime
+		let originalAccuracy = this.$state.originalAccuracy
+
+		let layer = []
+
+		Utils.loop( beginTime, finishTime, newAccuracy, false, ( unixTime, iteration )=>{
+			let point = this.getValueAt( unixTime, this.originalAccuracy )
+			layer.push( point )
+		} )
+
+		return layer
+	} 
 }
 
 export default Series
