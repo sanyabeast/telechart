@@ -22,7 +22,7 @@ class Geometry {
 		this.$state.attributesData = attributesData
 	}
 
-	init ( engine, gl ) {
+	init ( engine, gl, shaderProgram ) {
 		this.$state.geometryInited = true
 		
 		Utils.loopCollection( this.$state.attributesData, ( vertices, name )=>{
@@ -34,6 +34,8 @@ class Geometry {
         gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array( this.$state.indices ), gl.STATIC_DRAW);
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, null);
 
+
+        this.$bind( engine, gl, shaderProgram )
 	}
 
 	$addAttribute ( engine, gl, name, vertices ) {
@@ -62,7 +64,11 @@ class Geometry {
 		this.$state.indices = indices
 	} 
 
-	bind ( engine, gl, shaderProgram ) {
+	$bind ( engine, gl, shaderProgram ) {
+		if ( this.$state.bound ) return
+
+		this.$state.bound = true
+
 		Utils.loopCollection( this.attributes, ( attribute, name )=>{
 			let buffer = attribute.buffer
 
@@ -71,8 +77,11 @@ class Geometry {
 
 	        let loc = gl.getAttribLocation( shaderProgram, name )
 
-	        gl.vertexAttribPointer( loc, 2, gl.FLOAT, false, 0, 0 );
-	        gl.enableVertexAttribArray( loc );
+	        if ( loc > -1 ) {
+		        gl.vertexAttribPointer( loc, 2, gl.FLOAT, false, 0, 0 );
+		        gl.enableVertexAttribArray( loc );	        	
+	        }
+
 		} )
 	}
 }

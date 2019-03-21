@@ -21,7 +21,7 @@ class Mesh extends RenderingObject {
 		}
 
 		if ( !this.geometry.geometryInited ) {
-			this.geometry.init( engine, gl )
+			this.geometry.init( engine, gl, this.material.program )
 		}
 
 		gl.useProgram( this.material.program )
@@ -31,8 +31,7 @@ class Mesh extends RenderingObject {
 		this.material.uniforms.position.value.set( this.$state.position )
 		this.material.uniforms.worldPosition.value.set( engine.position )
 		this.material.uniforms.worldScale.value.set( engine.scale )
-
-		this.geometry.bind( engine, gl, this.material.program )
+		this.material.uniforms.viewportSize.value.set( engine.size )
 
 		gl.drawElements(gl.TRIANGLES, this.geometry.indicesCount, gl.UNSIGNED_SHORT,0);
 

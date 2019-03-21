@@ -80,7 +80,7 @@ class ChartMath {
         let x = a.x,
             y = a.y
         let len = x * x + y * y
-        if ( en > 0 ) {
+        if ( len > 0 ) {
             //TODO: evaluate use of glm_invsqrt here?
             len = 1 / Math.sqrt( len )
             out.x = a.x * len
@@ -103,20 +103,20 @@ class ChartMath {
         return Math.sqrt( Math.pow( a.x, 2 ) + Math.pow( a.y, 2 ) );
     }
 
-    static vec2set (out, x, y) {
+    static vec2set ( out, x, y ) {
         out.x = x
         out.y = y
         return out
     }
 
-    static vec2normal (out, dir, inverted) {
-        inverted ? this.set( out, dir.y, -dir.x ): this.set( out, -dir.y, dir.x )
+    static vec2normal ( out, dir, inverted ) {
+        inverted ? this.vec2set( out, dir.y, -dir.x ) : this.vec2set( out, -dir.y, dir.x )
         return out
     }
 
-    static vec2direction (out, a, b) {
-        this.subtract( out, a, b )
-        this.normalize( out, out )
+    static vec2direction ( out, a, b ) {
+        this.vec2subtract( out, a, b )
+        this.vec2normalize( out, out )
         return out
     }
 

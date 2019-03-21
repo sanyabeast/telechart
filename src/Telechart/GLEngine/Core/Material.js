@@ -30,7 +30,8 @@ class Material {
 
 		gl.attachShader(this.$state.shaderProgram, this.$state.vertexShader);
 	    gl.attachShader(this.$state.shaderProgram, this.$state.fragmentShader);
-	    gl.linkProgram(this.$state.shaderProgram);
+	    
+	    this.$linkProgram( gl )
 
 	    this.$initUniforms( engine, gl )
 	}
@@ -61,8 +62,13 @@ class Material {
 		this.addUniform( "position", gl, shaderProgram, "uniform2fv", ChartMath.vec2( 0, 0 ) )
 		this.addUniform( "worldPosition", gl, shaderProgram, "uniform2fv", ChartMath.vec2( 0, 0 ) )
 		this.addUniform( "worldScale", gl, shaderProgram, "uniform2fv", ChartMath.vec2( 0, 0 ) )
+		this.addUniform( "viewportSize", gl, shaderProgram, "uniform2fv", ChartMath.vec2( 0, 0 ) )
 
 		console.log( this.uniforms, engine, gl, this.$state.uniformsData )
+	}
+
+	$linkProgram ( gl ) {
+		gl.linkProgram( this.$state.shaderProgram )
 	}
 
 	addUniform ( name, gl, shaderProgram, type, value ) {

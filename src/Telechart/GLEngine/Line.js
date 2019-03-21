@@ -17,6 +17,10 @@ class Line extends Mesh {
 			uniforms: params.uniforms
 		} )
 
+		this.$temp.direction = ChartMath.vec2( 0, 0 )
+		this.$temp.negNormal = ChartMath.vec2( 0, 0 )
+		this.$temp.posNormal = ChartMath.vec2( 0, 0 )
+
 		this.$params.geometry = new Geometry()
 
 		if ( params.points ) {
@@ -45,23 +49,47 @@ class Line extends Mesh {
 
 		console.log( points )
 
+		let vertexIndex = 0
+
 		Utils.loopCollection( points, ( point, index )=>{
-			let pointIndex = index;
 
 			if ( index < points.length - 2 ) {
 				let nextPoint = points[ index + 1 ]
 
-				BufferAttribute.setValue( coordsVertices, 2, index, point.x, point.y )
+				let direction = ChartMath.vec2direction( this.$temp.direction, point, nextPoint )
+				let negNormal = ChartMath.vec2normal( this.$temp.negNormal, direction, false )
+				let posNormal = ChartMath.vec2normal( this.$temp.posNormal, direction, true )
+
+				console.log(direction, negNormal, posNormal)
+
+				/* top triangle */
+				BufferAttribute.setValue( coordsVertices, 2, vertexIndex  , point.x, point.y )
+				BufferAttribute.setValue( normalVertices, 2, vertexIndex++, negNormal.x, negNormal.y )
+
+				BufferAttribute.setValue( coordsVertices, 2, vertexIndex  , nextPoint.x, nextPoint.y )
+				BufferAttribute.setValue( normalVertices, 2, vertexIndex++, negNormal.x, negNormal.y )
+
+				BufferAttribute.setValue( coordsVertices, 2, vertexIndex  , point.x, point.y )
+				BufferAttribute.setValue( normalVertices, 2, vertexIndex++, posNormal.x, posNormal.y )
+
+				/* bottom triangle */
+				BufferAttribute.setValue( coordsVertices, 2, vertexIndex  , point.x, point.y )
+				BufferAttribute.setValue( normalVertices, 2, vertexIndex++, posNormal.x, posNormal.y )
+
+				BufferAttribute.setValue( coordsVertices, 2, vertexIndex  , nextPoint.x, nextPoint.y )
+				BufferAttribute.setValue( normalVertices, 2, vertexIndex++, negNormal.x, negNormal.y )
+
+				BufferAttribute.setValue( coordsVertices, 2, vertexIndex  , nextPoint.x, nextPoint.y )
+				BufferAttribute.setValue( normalVertices, 2, vertexIndex++, posNormal.x, posNormal.y )
 			}
 			
-			console.log( this )
 		} )
 
 		console.log( coordsVertices, normalVertices )
 
 		return {
 			coords: coordsVertices,
-			// normal: normalVertices
+			normal: normalVertices
 		}
 	}
 }

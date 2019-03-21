@@ -69,7 +69,7 @@ class App {
             },
         });
 
-        for ( var a = 0; a < 1; a++ ){
+        for ( var a = 0; a < 0; a++ ){
             let geometry = new GLEngine.Geometry( {
                 attributes: {
                     coords: [
@@ -110,12 +110,12 @@ class App {
 
         let line = new GLEngine.Line( {
             points: [
-                { x: 0, y: 0 },
-                { x: 1, y: 1 },
-                { x: 2, y: 0 },
-                { x: 3, y: 2 },
-                { x: 4, y: 2 },
-                { x: 5, y: -1},
+                { x: 0 / 1, y:  0 / 1 },
+                { x: 1 / 1, y:  1 / 1 },
+                { x: 2 / 1, y:  0 / 1 },
+                { x: 3 / 1, y:  2 / 1 },
+                { x: 4 / 1, y:  0 / 1 },
+                { x: 5 / 1, y:  1 / 1 },
             ],
             uniforms: {
                 diffuse: {
@@ -128,6 +128,8 @@ class App {
                 }
             }
         } )
+
+        window.line = line
 
         glengine.setViewport( 0, 0, 400, 400 )
 

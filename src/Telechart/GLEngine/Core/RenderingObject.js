@@ -11,6 +11,7 @@ class RenderingObject {
 		this.UUID = Utils.generateRandomString( `rendering-object-${this.constructor.name}`, 16 )
 
 		this.$data = {}
+		this.$temp = {}
 		this.$params = {}
 
 		this.$state = {
