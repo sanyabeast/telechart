@@ -1,12 +1,14 @@
 import TelechartModule from "Telechart/Core/TelechartModule"
 import ChartMath from "Telechart/ChartMath"
 import Utils from "Telechart/Utils"
+import Config from "Telechart/Config"
 
 import Geometry from "Telechart/GLEngine/Core/Geometry"
 import Material from "Telechart/GLEngine/Core/Material"
 import Mesh from "Telechart/GLEngine/Core/Mesh"
 import Uniform from "Telechart/GLEngine/Core/Uniform"
 import RenderingObject from "Telechart/GLEngine/Core/RenderingObject"
+import DOMComponent from "Telechart/Core/DOM/Component"
 
 class GLEngine extends Utils.aggregation( TelechartModule, RenderingObject ) {
 	static Geometry = Geometry
@@ -15,47 +17,163 @@ class GLEngine extends Utils.aggregation( TelechartModule, RenderingObject ) {
 	static RenderingObject = RenderingObject
 	static Uniform = Uniform
 
+   get domElement () { return this.$dom.canvasElement }
+
 	constructor () {
 		super()
 
-		this.canvasElement = document.createElement( "canvas" )
-		let gl = this.gl = this.canvasElement.getContext( "webgl" )
+      this.$modules = {
+         canvas: new DOMComponent( {
+            template: "canvas-element"
+         } ),
+         offscreenCanvas: new DOMComponent( {
+            template: "canvas-element"
+         } )
+      }
 
-		document.body.appendChild( this.canvasElement )
+
+      this.$dom = {
+         canvasElement: this.$modules.canvas.domElement,
+         offscreenCanvasElement: this.$modules.offscreenCanvas.domElement,
+      }
+
+      this.$state = {
+         gl: this.$dom.canvasElement.getContext( "webgl" ),
+         size: ChartMath.vec2( 100, 100 ),
+         position: ChartMath.vec2( 0, 0 ),
+         scale: ChartMath.vec2( 1, 1 ),
+         viewport: ChartMath.rect( 0, 0, 0, 0 ),
+         culledObjectsCount: 0,
+         projectionModified: true,
+         sizeNeedsUpdate: true
+      }
+
+      Utils.proxyProps( this, this.$state, [
+         "position",
+         "scale",
+         "viewport",
+         "size"
+      ] )
+
  	
-		gl.clearColor(0.0, 0.0, 1.0, 1.0);                      
-	    gl.enable(gl.DEPTH_TEST);                               
-	    gl.depthFunc(gl.LEQUAL);                                
-	    gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT); 
+		// gl.clearColor(0.0, 0.0, 1.0, 1.0);                      
+	 //   gl.enable(gl.DEPTH_TEST);                               
+	 //   gl.depthFunc(gl.LEQUAL);                                
+	 //   gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT); 
 
-	    this.render = this.render.bind( this )
+	  this.render = this.render.bind( this )
 
 	}
 
 	setSize ( w, h ) {
-		this.canvasElement.width = w
-		this.canvasElement.height = h
+      w *= Config.DPR
+      h *= Config.DPR
 
-		let gl = this.gl
+      if ( this.$state.size.x === w  && this.$state.size.y === h ) {
+         return
+      }
 
-		gl.viewport( 0, 0, w, h )
-		gl.clearColor(0.0, 0.0, 1.0, 1.0)
-		gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);
+      if ( !w || !h ){
+         return
+      }
+
+      this.$dom.canvasElement.width = w
+      this.$dom.canvasElement.height = h
+      
+      this.$state.size.set( w, h )
+      this.$state.gl.viewport( 0, 0, w, h )
+
+      this.updateProjection()
+
+		// this.domElement.width = w
+		// this.domElement.height = h
+
+		// let gl = this.$state.gl
+
+		// gl.viewport( 0, 0, w, h )
+		// gl.clearColor(0.0, 0.0, 1.0, 1.0)
+		// gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);
 	}
 
 	fitSize () {
-		if ( this.canvasElement.parentNode) {
-			let rect = this.canvasElement.parentElement.getBoundingClientRect()
+		if ( this.domElement.parentNode) {
+			let rect = this.domElement.parentElement.getBoundingClientRect()
 			this.setSize( rect.width, rect.height )
 		}
 	}
 
-	render () {
+   isCulled ( child, px, py ) {
+      if ( !child.visible ) return true
 
-		this.fitSize()
-		super.render( this, this.gl, 0, 0, 1 )
+      if ( !child.culled ) {
+         return false
+      } else {
+         let boundRect = child.getBoundRect()
+         let translatedRect = ChartMath.translateRect( this.$temp.boundRect, boundRect, px, py )
+         child.projectionCulled = !ChartMath.rectIntersectsRect( translatedRect, this.$state.viewport )
 
-		let gl = this.gl;
+         return child.projectionCulled
+      }
+   }
+
+   updateProjection () {
+      let viewport = this.$state.viewport
+      let position = this.$state.position
+      let size = this.$state.size
+
+      this.$state.scale.set(
+         viewport.w / size.x,
+         viewport.h / size.y
+      )
+
+      viewport.x = position.x
+      viewport.y = position.y
+
+      this.$state.projectionModified = true
+   }
+
+   toReal ( x, y ) {
+      return ChartMath.point(
+         ( (x - this.position.x) / this.scale.x ) | 0, 
+         ( this.size.y - ((y - this.position.y) / this.scale.y) ) | 0
+      )
+   }
+
+   toRealScale ( x, y ) {
+      return ChartMath.point(
+         ( x / this.scale.x ) | 0,
+         ( y / this.scale.y ) | 0,
+      )
+   }
+
+   toVirtual ( x, y ) {
+      return ChartMath.point(
+         ( ( x * this.scale.x ) + this.position.x ),
+         ( ( ( this.size.y - y )   * this.scale.y ) + this.position.y ),
+      )
+   } 
+
+   toVirtualScale ( x, y ) {
+      return ChartMath.point(
+         x * this.scale.x,
+         y * this.scale.y,
+      )
+   }
+
+	render ( force ) {
+
+      this.fitSize()
+
+      if ( true || this.$state.projectionModified || force === true ) {
+         this.$state.projectionModified = false;
+         // this.$state.context2d.clearRect( 0, 0, this.$state.size.x, this.$state.size.y )
+         // this.$state.offscreenContext2d.clearRect( 0, 0, this.$state.size.x, this.$state.size.y )
+         super.render( this, this.$state.gl, 0, 0, 1 )
+      }
+
+      return
+
+		let gl = this.$state.gl;
 
 		// var vertices = [
   //           -0.5,0.5,0.0,
@@ -188,6 +306,12 @@ class GLEngine extends Utils.aggregation( TelechartModule, RenderingObject ) {
          // Draw the triangle
          gl.drawElements(gl.TRIANGLES, indices.length, gl.UNSIGNED_SHORT,0);
 	}
+
+   updateValue ( value ) {
+      this.value = value || this.value
+
+
+   }
 }
 
 export default GLEngine

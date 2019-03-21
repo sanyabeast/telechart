@@ -75,8 +75,20 @@ class RenderingObject {
 		this.parentNode && this.parentNode.removeChild( this )
 	}
 
-	render ( engine, context, px, py, alpha ) {
-		
+	render ( engine, gl, px, py, alpha ) {
+		// console.log( this )
+
+		px += this.$state.position.x
+		py += this.$state.position.y
+
+		Utils.loopCollection( this.children, (child, index)=>{
+			child.render( engine, gl, px, py, alpha )
+			// if ( !engine.isCulled( child, px + child.position.x, py + child.position.y )) {
+			// 	child.render( engine, context2d, px, py, multipliedAlpha )
+			// } else {
+			// 	engine.incrementCulledObjectsCount()
+			// }
+		} )
 	}
 
 	select ( attributes, iteratee ) {

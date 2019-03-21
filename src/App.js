@@ -64,48 +64,46 @@ class App {
                 y: 400
             },
             onCreate: (xframe)=>{
-                xframe.bodyElement.appendChild( glengine.canvasElement )
+                xframe.bodyElement.appendChild( glengine.domElement )
                 glengine.setSize( 400, 400 )
             },
         });
 
-        let geometry = new GLEngine.Geometry( {
-            attributes: {
-                position: [
-                    0.5,  0.5,
-                    0.5, -0.5,
-                    -0.5,-0.5,
-                    0.5, -0.5,
-                    -0.5,-0.5,
-                    -0.5, 0.5,
-                ]
-            }
-        } )
-
-        let material = new GLEngine.Material( {
-            vertexShader: `
-                attribute vec2 position;
-                uniform vec2 u_offset;
-                void main(void) {
-                   gl_Position = vec4(position.x + u_offset.x, position.y, 0., 1.0);
+        for ( var a = 0; a < 2; a++ ){
+            let geometry = new GLEngine.Geometry( {
+                attributes: {
+                    coords: [
+                        0, 0,
+                        0, 1,
+                        1, 0,
+                        1, 0,
+                        0, 1,
+                        1, 1,
+                    ]
                 }
-            `,
-            fragmentShader: `
-                void main(void) {
-                   gl_FragColor = vec4(0.0, 0.0, 0.0, 0.1);
-                }
-            `,
-            uniforms: {
-                u_offset: {
-                    type: "v2",
-                    value: ChartMath.vec2(0.5, 0)
-                }
-            }
-        } )
+            } )
 
-        let mesh = new GLEngine.Mesh( geometry, material )
+            let material = new GLEngine.Material( {
+                vertexShader: "vert.default",
+                fragmentShader: "frag.default",
+                uniforms: {
+                    u_offset: {
+                        type: "uniform2fv",
+                        value: ChartMath.vec2(a / 2, 0)
+                    },
+                    diffuse: {
+                        type: "uniform3fv",
+                        value: ChartMath.color(a / 2, 1, 0)
+                    }
+                }
+            } )
 
-        glengine.addChild( mesh )
+            let mesh = new GLEngine.Mesh( geometry, material )
+
+            window.mesh = mesh
+
+            glengine.addChild( mesh )
+        }
 
         MainLoop.addTask( glengine.render )
 

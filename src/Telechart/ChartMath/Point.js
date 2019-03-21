@@ -20,11 +20,11 @@ class Point {
 	}
 
 	toArray () {
-		return [ thix.x, this.y ]
+		return [ this.x, this.y ]
 	}
 
 	fromArray ( array ) {
-		thix.x = array[0]
+		this.x = array[0]
 		this.y = array[1]
 	}
 }

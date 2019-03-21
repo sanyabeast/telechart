@@ -2,6 +2,7 @@ import Utils from "Telechart/Utils"
 import Point from "Telechart/ChartMath/Point"
 import Rect from "Telechart/ChartMath/Rect"
 import Vec2 from "Telechart/ChartMath/Vec2"
+import Color from "Telechart/ChartMath/Color"
 import Range from "Telechart/ChartMath/Range"
 
 /**
@@ -13,6 +14,7 @@ import Range from "Telechart/ChartMath/Range"
  */
 class ChartMath {
 	static vec2 (x, y) { return new Vec2( x, y ) }
+	static color (x, y, z) { return new Color( x, y, z ) }
 	/* I have overriden the `valueOf` method so that I can easely find the minima and maxima of sequence 
 	 * using `Math.max.apply(Math, ...) and Math.min.apply(Math, ...)` constructions.
 	 */
