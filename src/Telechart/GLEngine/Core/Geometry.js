@@ -35,7 +35,7 @@ class Geometry {
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, null);
 
 
-        this.$bind( engine, gl, shaderProgram )
+        // this.$bind( engine, gl, shaderProgram )
 	}
 
 	$addAttribute ( engine, gl, name, vertices ) {
@@ -64,11 +64,7 @@ class Geometry {
 		this.$state.indices = indices
 	} 
 
-	$bind ( engine, gl, shaderProgram ) {
-		if ( this.$state.bound ) return
-
-		this.$state.bound = true
-
+	bind ( engine, gl, shaderProgram ) {
 		Utils.loopCollection( this.attributes, ( attribute, name )=>{
 			let buffer = attribute.buffer
 

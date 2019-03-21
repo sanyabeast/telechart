@@ -45,10 +45,10 @@ class GLEngine extends Utils.aggregation( TelechartModule, RenderingObject ) {
 
       this.$state = {
          gl: this.$dom.canvasElement.getContext( "webgl" ),
-         size: ChartMath.vec2( 100, 100 ),
+         size: ChartMath.vec2( 1, 1 ),
          position: ChartMath.vec2( 0, 0 ),
          scale: ChartMath.vec2( 1, 1 ),
-         viewport: ChartMath.rect( 0, 0, 0, 0 ),
+         viewport: ChartMath.rect( 0, 0, 1, 1 ),
          culledObjectsCount: 0,
          projectionModified: true,
          sizeNeedsUpdate: true

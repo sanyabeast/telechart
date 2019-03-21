@@ -26,6 +26,8 @@ class Mesh extends RenderingObject {
 
 		gl.useProgram( this.material.program )
 
+		this.geometry.bind( engine, gl, this.material.program )
+
 		this.material.updateUniforms()
 
 		this.material.uniforms.position.value.set( this.$state.position )

@@ -69,16 +69,16 @@ class App {
             },
         });
 
-        for ( var a = 0; a < 0; a++ ){
+        for ( var a = 0; a < 4; a++ ){
             let geometry = new GLEngine.Geometry( {
                 attributes: {
                     coords: [
                         0, 0,
-                        0, 1,
-                        1, 0,
-                        1, 0,
-                        0, 1,
-                        1, 1,
+                        0, 10,
+                        10, 0,
+                        10, 0,
+                        0, 10,
+                        10, 10,
                     ]
                 }
             } )
@@ -93,7 +93,7 @@ class App {
                     },
                     diffuse: {
                         type: "uniform3fv",
-                        value: ChartMath.color(a / 2, 1, 0)
+                        value: ChartMath.color(Math.random(), a, a)
                     }
                 }
             } )
@@ -103,6 +103,9 @@ class App {
                 material: material
             } )
 
+            mesh.position.x = a * 2 * 10
+            mesh.position.y = 100
+
             window.mesh = mesh
 
             glengine.addChild( mesh )
@@ -110,12 +113,18 @@ class App {
 
         let line = new GLEngine.Line( {
             points: [
-                { x: 0 / 1, y:  0 / 1 },
-                { x: 1 / 1, y:  1 / 1 },
-                { x: 2 / 1, y:  0 / 1 },
-                { x: 3 / 1, y:  2 / 1 },
-                { x: 4 / 1, y:  0 / 1 },
-                { x: 5 / 1, y:  1 / 1 },
+                { x: 0 * 10,  y:  0 * 10 },
+                { x: 1 * 10,  y:  1 * 10 },
+                { x: 2 * 10,  y:  0 * 10 },
+                { x: 3 * 10,  y:  2 * 10 },
+                { x: 4 * 10,  y:  0 * 10 },
+                { x: 5 * 10,  y:  3 * 10 },
+                { x: 6 * 10,  y:  0 * 10 },
+                { x: 7 * 10,  y:  5 * 10 },
+                { x: 8 * 10,  y:  0 * 10 },
+                { x: 9 * 10,  y:  6 * 10 },
+                { x: 10 * 10, y:  0 * 10 },
+                { x: 11 * 10, y:  8 * 10 },
             ],
             uniforms: {
                 diffuse: {
@@ -124,14 +133,14 @@ class App {
                 },
                 thickness: {
                     type: "uniform1f",
-                    value: ChartMath.float32( 1 )
+                    value: ChartMath.float32( 2 )
                 }
             }
         } )
 
         window.line = line
 
-        glengine.setViewport( 0, 0, 400, 400 )
+        // glengine.setViewport( 0, 0, 400, 400 )
 
         glengine.addChild( line )
 
