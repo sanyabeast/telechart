@@ -47,7 +47,6 @@ class Line extends Mesh {
 		let coordsVertices = []
 		let normalVertices = []
 
-		console.log( points )
 
 		let vertexIndex = 0
 
@@ -60,7 +59,6 @@ class Line extends Mesh {
 				let negNormal = ChartMath.vec2normal( this.$temp.negNormal, direction, false )
 				let posNormal = ChartMath.vec2normal( this.$temp.posNormal, direction, true )
 
-				console.log(direction, negNormal, posNormal)
 
 				/* top triangle */
 				BufferAttribute.setValue( coordsVertices, 2, vertexIndex  , point.x, point.y )
@@ -85,7 +83,6 @@ class Line extends Mesh {
 			
 		} )
 
-		console.log( coordsVertices, normalVertices )
 
 		return {
 			coords: coordsVertices,

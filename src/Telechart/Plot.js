@@ -1,4 +1,4 @@
-import RenderingEngine from "Telechart/RenderingEngine"
+import RenderingEngine from "Telechart/GLEngine"
 import Utils from "Telechart/Utils"
 import TelechartModule from "Telechart/Core/TelechartModule"
 import MainLoop from "Telechart/MainLoop"
@@ -73,7 +73,17 @@ class Plot extends TelechartModule {
 					lineWidth: ( Config.values.plotLineDefaultLineWidth * Config.DPR ),
 					strokeStyle: seriesData.series.color
 				},
-				points: chunk
+				points: chunk,
+				uniforms: {
+					thickness: {
+						type: "uniform1f",
+						value: ChartMath.float32(4)
+					},
+					diffuse: {
+						type: "uniform3fv",
+						value: ChartMath.color(1, 0, 0, 1)
+					}
+				}
 			})
 
 			seriesGroup.addChild( line )

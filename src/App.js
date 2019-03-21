@@ -69,7 +69,8 @@ class App {
             },
         });
 
-        for ( var a = 0; a < 4; a++ ){
+        let boxGroup = new GLEngine.Group()
+        for ( var a = 0; a < 10; a++ ){
             let geometry = new GLEngine.Geometry( {
                 attributes: {
                     coords: [
@@ -108,8 +109,10 @@ class App {
 
             window.mesh = mesh
 
-            glengine.addChild( mesh )
+            boxGroup.addChild( mesh )
         }
+
+        glengine.addChild(boxGroup)
 
         let line = new GLEngine.Line( {
             points: [
@@ -129,11 +132,11 @@ class App {
             uniforms: {
                 diffuse: {
                     type: "uniform3fv",
-                    value: ChartMath.color(0.4, 0.2, 0.1, 1)
+                    value: ChartMath.color(1, 0.7, 0.5, 1)
                 },
                 thickness: {
                     type: "uniform1f",
-                    value: ChartMath.float32( 2 )
+                    value: ChartMath.float32( 3 )
                 }
             }
         } )

@@ -37,7 +37,6 @@ class Material {
 	}
 
 	$compileShader ( engine, gl, type, shaderCode ) {
-		console.log(shaderCode)
 		let shader = gl.createShader( type == "vertex" ? gl.VERTEX_SHADER : gl.FRAGMENT_SHADER );
 
 		gl.shaderSource(shader, shaderCode)
@@ -46,7 +45,6 @@ class Material {
 		let compileSuccess = gl.getShaderParameter( shader, gl.COMPILE_STATUS );
 		
 		if ( !compileSuccess ) {
-			console.log( `Shader compilation failed: ${gl.getShaderInfoLog( shader )} `)
 		}
 
 		return shader
@@ -64,7 +62,6 @@ class Material {
 		this.addUniform( "worldScale", gl, shaderProgram, "uniform2fv", ChartMath.vec2( 0, 0 ) )
 		this.addUniform( "viewportSize", gl, shaderProgram, "uniform2fv", ChartMath.vec2( 0, 0 ) )
 
-		console.log( this.uniforms, engine, gl, this.$state.uniformsData )
 	}
 
 	$linkProgram ( gl ) {

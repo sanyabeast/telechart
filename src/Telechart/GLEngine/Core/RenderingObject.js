@@ -54,6 +54,10 @@ class RenderingObject {
 		} )
 	} 
 
+	setStyles ( styles ) {
+		// console.log(styles)
+	}
+
 	setParams ( params ) {
 		Utils.loopCollection( params, ( value, name )=>{
 			if ( name == "styles" ) {

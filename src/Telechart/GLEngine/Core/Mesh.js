@@ -5,8 +5,6 @@ class Mesh extends RenderingObject {
 	constructor ( params ) {
 		super( params )
 
-		console.log( params )
-
 		Utils.proxyProps( this, this.$params, [
 			"material",
 			"geometry"
@@ -15,6 +13,9 @@ class Mesh extends RenderingObject {
 
 	render ( engine, gl, px, py, alpha ) {
 		super.render( engine, gl, px, py, alpha )
+
+		px += this.position.x
+		py += this.position.y
 
 		if ( !this.material.materialInited ) {
 			this.material.init( engine, gl )
@@ -30,7 +31,7 @@ class Mesh extends RenderingObject {
 
 		this.material.updateUniforms()
 
-		this.material.uniforms.position.value.set( this.$state.position )
+		this.material.uniforms.position.value.set( px, py )
 		this.material.uniforms.worldPosition.value.set( engine.position )
 		this.material.uniforms.worldScale.value.set( engine.scale )
 		this.material.uniforms.viewportSize.value.set( engine.size )
