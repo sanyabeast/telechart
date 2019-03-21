@@ -23,13 +23,24 @@ class RenderingObject {
 
 		this.$setupHiddenDOM()
 
+		if ( params ) {
+			if ( this.defaultParams ) {
+				this.setParams( {
+					...this.defaultParams,
+					params
+				} )
+			} else {
+				this.setParams( params )
+			}
+		}
+
 		Utils.proxyProps( this, this.$state, [
 			"culled",
 			"projectionCulled",
 			"position",
 			"visible"
 		] )
-	
+
 	}
 
 	getBoundRect () {

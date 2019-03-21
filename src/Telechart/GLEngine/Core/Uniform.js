@@ -16,7 +16,12 @@ class Uniform {
 	}
 
 	update () {
-		this.gl[ this.type ](this.$state.loc, this.value.toArray() )
+		if ( this.value.isSimple ) {
+			this.gl[ this.type ](this.$state.loc, this.value.valueOf() )
+		} else {
+			this.gl[ this.type ](this.$state.loc, this.value.toArray() )
+		}
+		
 	}
 }
 

@@ -1,11 +1,16 @@
 import RenderingObject from "Telechart/GLEngine/Core/RenderingObject"
+import Utils from "Telechart/Utils"
 
 class Mesh extends RenderingObject {
-	constructor ( geometry, material ) {
-		super()
+	constructor ( params ) {
+		super( params )
 
-		this.geometry = geometry
-		this.material = material
+		console.log( params )
+
+		Utils.proxyProps( this, this.$params, [
+			"material",
+			"geometry"
+		] )
 	}
 
 	render ( engine, gl, px, py, alpha ) {
@@ -22,9 +27,12 @@ class Mesh extends RenderingObject {
 		gl.useProgram( this.material.program )
 
 		this.material.updateUniforms()
-		this.material.uniforms.position.value.set( this.$state.position )
 
-		this.geometry.bindAttribute( "coords", engine, gl, this.material.program )
+		this.material.uniforms.position.value.set( this.$state.position )
+		this.material.uniforms.worldPosition.value.set( engine.position )
+		this.material.uniforms.worldScale.value.set( engine.scale )
+
+		this.geometry.bind( engine, gl, this.material.program )
 
 		gl.drawElements(gl.TRIANGLES, this.geometry.indicesCount, gl.UNSIGNED_SHORT,0);
 

@@ -69,7 +69,7 @@ class App {
             },
         });
 
-        for ( var a = 0; a < 2; a++ ){
+        for ( var a = 0; a < 1; a++ ){
             let geometry = new GLEngine.Geometry( {
                 attributes: {
                     coords: [
@@ -98,12 +98,40 @@ class App {
                 }
             } )
 
-            let mesh = new GLEngine.Mesh( geometry, material )
+            let mesh = new GLEngine.Mesh( {
+                geometry: geometry,
+                material: material
+            } )
 
             window.mesh = mesh
 
             glengine.addChild( mesh )
         }
+
+        let line = new GLEngine.Line( {
+            points: [
+                { x: 0, y: 0 },
+                { x: 1, y: 1 },
+                { x: 2, y: 0 },
+                { x: 3, y: 2 },
+                { x: 4, y: 2 },
+                { x: 5, y: -1},
+            ],
+            uniforms: {
+                diffuse: {
+                    type: "uniform3fv",
+                    value: ChartMath.color(0.4, 0.2, 0.1, 1)
+                },
+                thickness: {
+                    type: "uniform1f",
+                    value: ChartMath.float32( 1 )
+                }
+            }
+        } )
+
+        glengine.setViewport( 0, 0, 400, 400 )
+
+        glengine.addChild( line )
 
         MainLoop.addTask( glengine.render )
 

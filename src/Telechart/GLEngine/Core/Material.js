@@ -52,14 +52,21 @@ class Material {
 	}
 
 	$initUniforms ( engine, gl ) {
+		let shaderProgram = this.$state.shaderProgram
 
 		Utils.loopCollection( this.$state.uniformsData, ( data, name )=>{
-			this.uniforms[ name ] = new Uniform( name, gl, this.$state.shaderProgram, data.type, data.value )
+			this.addUniform( name, gl, shaderProgram, data.type, data.value )
 		} )
 
-		this.uniforms[ "position" ] = new Uniform( "position", gl, this.$state.shaderProgram, "uniform2fv", ChartMath.vec2( 0, 0 ) )
+		this.addUniform( "position", gl, shaderProgram, "uniform2fv", ChartMath.vec2( 0, 0 ) )
+		this.addUniform( "worldPosition", gl, shaderProgram, "uniform2fv", ChartMath.vec2( 0, 0 ) )
+		this.addUniform( "worldScale", gl, shaderProgram, "uniform2fv", ChartMath.vec2( 0, 0 ) )
 
 		console.log( this.uniforms, engine, gl, this.$state.uniformsData )
+	}
+
+	addUniform ( name, gl, shaderProgram, type, value ) {
+		this.uniforms[ name ] = new Uniform( name, gl, shaderProgram, type, value )
 	}
 
 	updateUniforms () {

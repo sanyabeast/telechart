@@ -116,8 +116,6 @@ class RenderingEngine extends Utils.aggregation( TelechartModule, RenderingObjec
 			return
 		}
 
-		console.log(w, h)
-
 		this.$dom.canvasElement.width = w
 		this.$dom.canvasElement.height = h
 		

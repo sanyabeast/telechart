@@ -4,6 +4,7 @@ import Rect from "Telechart/ChartMath/Rect"
 import Vec2 from "Telechart/ChartMath/Vec2"
 import Color from "Telechart/ChartMath/Color"
 import Range from "Telechart/ChartMath/Range"
+import Float32 from "Telechart/ChartMath/Float32"
 
 /**
  * @class
@@ -13,6 +14,7 @@ import Range from "Telechart/ChartMath/Range"
  *
  */
 class ChartMath {
+    static float32 ( value ) { return new Float32( value ) }
 	static vec2 (x, y) { return new Vec2( x, y ) }
 	static color (x, y, z) { return new Color( x, y, z ) }
 	/* I have overriden the `valueOf` method so that I can easely find the minima and maxima of sequence 
@@ -66,6 +68,58 @@ class ChartMath {
     static getStep ( from, to, position ) {
     	return ( to - position ) / ( to - from )
     }
+
+    /* geometry */
+    static vec2add ( out, a, b ) {
+        out.x = a.x + b.x
+        out.y = a.y + b.y
+        return out
+    }
+
+    static vec2normalize ( out, a ) {
+        let x = a.x,
+            y = a.y
+        let len = x * x + y * y
+        if ( en > 0 ) {
+            //TODO: evaluate use of glm_invsqrt here?
+            len = 1 / Math.sqrt( len )
+            out.x = a.x * len
+            out.y = a.y * len
+        }
+        return out
+    }
+
+    static vec2subtract ( out, a, b ) {
+        out.x = a.x - b.x
+        out.y = a.y - b.y
+        return out
+    }
+
+    static vec2dot ( a, b ) {
+        return a.x * b.x + a.y * b.y
+    }
+
+    static vec2magnitude ( a ) {
+        return Math.sqrt( Math.pow( a.x, 2 ) + Math.pow( a.y, 2 ) );
+    }
+
+    static vec2set (out, x, y) {
+        out.x = x
+        out.y = y
+        return out
+    }
+
+    static vec2normal (out, dir, inverted) {
+        inverted ? this.set( out, dir.y, -dir.x ): this.set( out, -dir.y, dir.x )
+        return out
+    }
+
+    static vec2direction (out, a, b) {
+        this.subtract( out, a, b )
+        this.normalize( out, out )
+        return out
+    }
+
 
 }
 
