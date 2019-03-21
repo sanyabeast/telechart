@@ -18,6 +18,8 @@ import Storage from "Telechart/Storage"
  * @property {window.Node} domElement - root DOM element
  */
 class Telechart extends TelechartModule {
+	Config = Config
+
 	/* static */
 	static processAsset ( context, assetName, extension, processor ) {
 		context.keys().forEach( ( path )=>{
@@ -30,6 +32,7 @@ class Telechart extends TelechartModule {
 	static loadAssets () {
 		this.processAsset( require.context("txt!html"), "html", "html" )
 		this.processAsset( require.context("scss"), "css", "scss" )
+		this.processAsset( require.context("txt!shaders"), "shaders", "glsl" )
 		this.processAsset( require.context("skins"), "skins", "yml", ( skinData )=> {
 			if ( skinData.default ) Config.defaultSkin = skinData.name
 			return new Skin( skinData )

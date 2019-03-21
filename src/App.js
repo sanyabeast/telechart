@@ -3,6 +3,9 @@ import Utils from "Telechart/Utils"
 import Telechart from "Telechart/Telechart"
 import Tweener from "Telechart/Tweener"
 
+import GLEngine from "Telechart/GLEngine"
+
+
 import chartData from "chart_data.json"
 
 let isMobile = !!('ontouchstart' in window || navigator.msMaxTouchPoints);
@@ -44,6 +47,25 @@ class App {
 
         // window.benchmark = new Benchmark(this, unicycle)
         // window.benchmark.check();
+
+        /**/
+        let glengine = window.glengine = new GLEngine();
+        this.xframes.create({
+            id: "glengine",
+            name: "glengine",
+            position: {
+                x: 500,
+                y: 500
+            },
+            size: {
+                x: 400,
+                y: 400
+            },
+            onCreate: (xframe)=>{
+                xframe.bodyElement.appendChild( glengine.canvasElement )
+                glengine.setSize( 400, 400 )
+            },
+        });
 
     }
 

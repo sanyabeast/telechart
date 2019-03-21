@@ -13,7 +13,8 @@ class Config {
 	static assets = {
 		html: {},
 		css: {},
-		skins: {}
+		skins: {},
+		shaders: {}
 	}
 	
 	static isTouchDevice = ( "ontouchstart" in window )
