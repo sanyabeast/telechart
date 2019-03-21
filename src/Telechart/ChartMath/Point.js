@@ -18,6 +18,15 @@ class Point {
 	valueOf () {
 		return this.y
 	}
+
+	toArray () {
+		return [ thix.x, this.y ]
+	}
+
+	fromArray ( array ) {
+		thix.x = array[0]
+		this.y = array[1]
+	}
 }
 
 export default Point

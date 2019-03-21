@@ -23,9 +23,9 @@ class GLEngine extends Utils.aggregation( TelechartModule, RenderingObject ) {
 
 		document.body.appendChild( this.canvasElement )
  	
-		gl.clearColor(0.0, 0.0, 1.0, 1.0);                      // установить в качестве цвета очистки буфера цвета черный, полная непрозрачность
-	    gl.enable(gl.DEPTH_TEST);                               // включает использование буфера глубины
-	    gl.depthFunc(gl.LEQUAL);                                // определяет работу буфера глубины: более ближние объекты перекрывают дальние
+		gl.clearColor(0.0, 0.0, 1.0, 1.0);                      
+	    gl.enable(gl.DEPTH_TEST);                               
+	    gl.depthFunc(gl.LEQUAL);                                
 	    gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT); 
 
 	    this.render = this.render.bind( this )
@@ -53,17 +53,28 @@ class GLEngine extends Utils.aggregation( TelechartModule, RenderingObject ) {
 	render () {
 
 		this.fitSize()
+		super.render( this, this.gl, 0, 0, 1 )
 
 		let gl = this.gl;
 
-		var vertices = [
-            -0.5,0.5,0.0,
+		// var vertices = [
+  //           -0.5,0.5,0.0,
+  //           -0.5,-0.5,0.0,
+  //           0.5,-0.5,0.0,
+  //           0.5,0.5,0.0 
+  //        ];
+
+         var vertices = [
+            0.5,0.5,0.0,
+            0.5,-0.5,0.0,
             -0.5,-0.5,0.0,
             0.5,-0.5,0.0,
-            0.5,0.5,0.0 
+            -0.5,-0.5,0.0,
+            -0.5,0.5,0.0,
          ];
 
-         var indices = [3,2,1,3,1,0];
+
+         var indices = [0,1,2,3,4,5];
 
          // Create an empty buffer object to store vertex buffer
          var vertex_buffer = gl.createBuffer();
@@ -158,7 +169,7 @@ class GLEngine extends Utils.aggregation( TelechartModule, RenderingObject ) {
 
          /**/
          var offsetLoc = gl.getUniformLocation(shaderProgram, "u_offset");
-         gl.uniform4fv(offsetLoc, [1, 0, 0, 0]);  // offset it to the right half the screen
+         gl.uniform4fv(offsetLoc, [0.5, 0, 0, 0]);  // offset it to the right half the screen
 
          /*============= Drawing the Quad ================*/
 

@@ -3,6 +3,7 @@ import Utils from "Telechart/Utils"
 import Telechart from "Telechart/Telechart"
 import Tweener from "Telechart/Tweener"
 import MainLoop from "Telechart/MainLoop"
+import ChartMath from "Telechart/ChartMath"
 
 import GLEngine from "Telechart/GLEngine"
 
@@ -67,6 +68,44 @@ class App {
                 glengine.setSize( 400, 400 )
             },
         });
+
+        let geometry = new GLEngine.Geometry( {
+            attributes: {
+                position: [
+                    0.5,  0.5,
+                    0.5, -0.5,
+                    -0.5,-0.5,
+                    0.5, -0.5,
+                    -0.5,-0.5,
+                    -0.5, 0.5,
+                ]
+            }
+        } )
+
+        let material = new GLEngine.Material( {
+            vertexShader: `
+                attribute vec2 position;
+                uniform vec2 u_offset;
+                void main(void) {
+                   gl_Position = vec4(position.x + u_offset.x, position.y, 0., 1.0);
+                }
+            `,
+            fragmentShader: `
+                void main(void) {
+                   gl_FragColor = vec4(0.0, 0.0, 0.0, 0.1);
+                }
+            `,
+            uniforms: {
+                u_offset: {
+                    type: "v2",
+                    value: ChartMath.vec2(0.5, 0)
+                }
+            }
+        } )
+
+        let mesh = new GLEngine.Mesh( geometry, material )
+
+        glengine.addChild( mesh )
 
         MainLoop.addTask( glengine.render )
 
