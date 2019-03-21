@@ -2,6 +2,7 @@ import XFrames from "XFrames"
 import Utils from "Telechart/Utils"
 import Telechart from "Telechart/Telechart"
 import Tweener from "Telechart/Tweener"
+import MainLoop from "Telechart/MainLoop"
 
 import GLEngine from "Telechart/GLEngine"
 
@@ -66,6 +67,8 @@ class App {
                 glengine.setSize( 400, 400 )
             },
         });
+
+        MainLoop.addTask( glengine.render )
 
     }
 

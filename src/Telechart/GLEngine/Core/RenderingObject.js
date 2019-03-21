@@ -4,19 +4,7 @@ import Config from "Telechart/Config"
 
 class RenderingObject {
 
-	static defaultStyles = {
-		// fillStyle: "#000000",
-		strokeStyle: "#000000",
-		lineWidth: 1 * Config.DPR,
-		lineJoin: "bevel",
-		font: "16px sans-serif",
-		globalAlpha: 1
-	}
-
 	parentNode = null;
-
-	get alpha () { return this.$styles.globalAlpha }
-	set alpha ( v ) { this.$styles.globalAlpha = v }
 
 	constructor ( params ) {
 		this.children = []
@@ -24,10 +12,6 @@ class RenderingObject {
 
 		this.$data = {}
 		this.$params = {}
-
-		this.$styles = {
-			...RenderingObject.defaultStyles	
-		}
 
 		this.$state = {
 			position: ChartMath.vec2( 0, 0 ),
@@ -38,18 +22,6 @@ class RenderingObject {
 		}
 
 		this.$setupHiddenDOM()
-
-		if ( params ) {
-			if ( this.defaultParams ) {
-				this.setParams( {
-					...this.defaultParams,
-					params
-				} )
-			} else {
-				this.setParams( params )
-
-			}
-		}
 
 		Utils.proxyProps( this, this.$state, [
 			"culled",
@@ -62,11 +34,6 @@ class RenderingObject {
 
 	getBoundRect () {
 		return this.$state.boundRect
-	}
-
-	$applyStyles ( context2d ) {
-		Utils.assignValues( context2d, RenderingObject.defaultStyles )
-		Utils.assignValues( context2d, this.$styles )
 	}
 
 	setAttributes ( attrs ) {
@@ -85,10 +52,6 @@ class RenderingObject {
 				this.$params[name] = ( typeof value != "undefined" ) ? value : this.$params.name
 			}
 		} )
-	}
-
-	setStyles (params) {
-		Utils.assignValues( this.$styles, params )
 	}
 
 	addChild ( child ) {
@@ -112,19 +75,8 @@ class RenderingObject {
 		this.parentNode && this.parentNode.removeChild( this )
 	}
 
-	render ( engine, context2d, px, py, alpha ) {
-		let multipliedAlpha = this.$applyAlpha( alpha, context2d )
-
-		px += this.$state.position.x
-		py += this.$state.position.y
-
-		Utils.loopCollection( this.children, (child, index)=>{
-			if ( !engine.isCulled( child, px + child.position.x, py + child.position.y )) {
-				child.render( engine, context2d, px, py, multipliedAlpha )
-			} else {
-				engine.incrementCulledObjectsCount()
-			}
-		} )
+	render ( engine, context, px, py, alpha ) {
+		
 	}
 
 	select ( attributes, iteratee ) {
@@ -142,12 +94,6 @@ class RenderingObject {
 		this.$hiddenDOM = document.createElement( this.constructor.name )
 		this.$hiddenDOM.$renderingObject = this
 		this.$hiddenDOM.setAttribute( "type", this.constructor.name )
-	}
-
-	$applyAlpha ( parentAlpha, context2d ) {
-		let alpha = parentAlpha * this.$styles.globalAlpha
-		context2d.globalAlpha = alpha
-		return alpha
 	}
 }
 

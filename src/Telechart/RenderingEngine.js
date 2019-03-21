@@ -116,6 +116,8 @@ class RenderingEngine extends Utils.aggregation( TelechartModule, RenderingObjec
 			return
 		}
 
+		console.log(w, h)
+
 		this.$dom.canvasElement.width = w
 		this.$dom.canvasElement.height = h
 		
@@ -155,15 +157,15 @@ class RenderingEngine extends Utils.aggregation( TelechartModule, RenderingObjec
 
 	toReal ( x, y ) {
 		return ChartMath.point(
-			Math.round( (x - this.position.x) / this.scale.x ), 
-			Math.round( this.size.y - ((y - this.position.y) / this.scale.y) )
+			( (x - this.position.x) / this.scale.x ) | 0, 
+			( this.size.y - ((y - this.position.y) / this.scale.y) ) | 0
 		)
 	}
 
 	toRealScale ( x, y ) {
 		return ChartMath.point(
-			Math.round( x / this.scale.x ),
-			Math.round( y / this.scale.y ),
+			( x / this.scale.x ) | 0,
+			( y / this.scale.y ) | 0,
 		)
 	}
 
