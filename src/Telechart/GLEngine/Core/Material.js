@@ -45,6 +45,7 @@ class Material {
 		let compileSuccess = gl.getShaderParameter( shader, gl.COMPILE_STATUS );
 		
 		if ( !compileSuccess ) {
+			console.log( `Shader compilation failed: ${gl.getShaderInfoLog( shader )} `)
 		}
 
 		return shader

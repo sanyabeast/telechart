@@ -9,17 +9,28 @@ uniform vec2  worldPosition;
 uniform vec2  worldScale;
 uniform vec2  viewportSize;
 
+vec2 scaleNormal ( vec2 normal, vec2 scale ) {
+   normal /= scale;    
+
+   float hypo = sqrt( pow( normal.x, 2. ) + pow( normal.y, 2. ) );
+   float nsin = normal.y / hypo;
+   float ncos = normal.x / hypo;
+
+   normal.x = nsin;
+   normal.y = ncos;                                                             
+
+   return(normal);
+}
+
 void main(void) {
    	vec2 pos = vec2( coords );
-
-   	float normalSin = normal.y / normal.x;
-   	float worldScaleSin = worldScale.y / worldScale.x;
 
    	pos -= position;
    	pos -= worldPosition;
    	pos /= worldScale;
 
-   	vec2 n = normal * worldScale;
+      vec2 n = scaleNormal( normal, worldScale );
+
    	pos += ( n * ( thickness ) );
 
    	pos /= viewportSize;

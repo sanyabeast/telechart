@@ -70,7 +70,7 @@ class Plot extends TelechartModule {
 				uniforms: {
 					thickness: {
 						type: "uniform1f",
-						value: ChartMath.float32( 200 )
+						value: ChartMath.float32( 2 )
 					},
 					diffuse: {
 						type: "uniform3fv",
