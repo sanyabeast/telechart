@@ -45,6 +45,8 @@ class Plot extends TelechartModule {
 
 	/* CHARTING */
 	addSeries ( seriesData ) {
+
+		console.log( seriesData )
 		this.$state.beginTime = seriesData.series.beginTime
 		this.$state.finishTime = seriesData.series.finishTime
 		this.$state.accuracy = seriesData.series.accuracy
@@ -70,7 +72,7 @@ class Plot extends TelechartModule {
 				uniforms: {
 					thickness: {
 						type: "uniform1f",
-						value: ChartMath.float32( 2 )
+						value: ChartMath.float32( 4 )
 					},
 					diffuse: {
 						type: "uniform3fv",
@@ -189,32 +191,6 @@ class Plot extends TelechartModule {
 			} )
 		} )
 	}
-
-	setSeriesAccuracyVisibility ( accuracy, isVisible ) {
-		this.$modules.renderingEngine.select( {
-			"content-type": "series",
-			"accuracy": `${accuracy}`
-		}, ( object )=>{
-
-			if ( isVisible ) object.visible = isVisible
-
-			Tweener.tween( {
-				fromValue: object.alpha,
-				toValue: ( isVisible ) ? 1 : 0,
-				duration: Config.values.plotSeriesVisibilityTweenDuration,
-				ease: ( isVisible ) ? "easeInQuad" : "easeOutQuad",
-				onUpdate: ( v, completed )=>{
-					object.alpha = v
-					this.$modules.renderingEngine.updateProjection()
-
-					if ( completed && !isVisible ) {
-						object.isVisible = isVisible
-					}
-				}
-			} )
-
-		} )
-	} 
 }
 
 export default Plot

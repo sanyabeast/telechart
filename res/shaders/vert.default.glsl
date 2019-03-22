@@ -9,13 +9,15 @@ uniform vec2  viewportSize;
 
 vec2 translate ( vec2 pos ) {
 	pos += position;
+	pos -= worldPosition;
 	return( pos );
 }
 
 vec2 project ( vec2 pos ) {
-	pos -= worldPosition;
-	pos /= viewportSize;
+	// pos -= worldPosition;
 	pos /= worldScale;
+	pos /= viewportSize;
+	// pos -= 1.;
 	return( pos );
 }
 

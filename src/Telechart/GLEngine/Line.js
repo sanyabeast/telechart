@@ -79,6 +79,32 @@ class Line extends Mesh {
 
 				BufferAttribute.setValue( coordsVertices, 2, vertexIndex  , nextPoint.x, nextPoint.y )
 				BufferAttribute.setValue( normalVertices, 2, vertexIndex++, posNormal.x, posNormal.y )
+			} else {
+				let nextPoint = points[ index - 1 ]
+
+				let direction = ChartMath.vec2direction( this.$temp.direction, point, nextPoint )
+				let negNormal = ChartMath.vec2normal( this.$temp.negNormal, direction, false )
+				let posNormal = ChartMath.vec2normal( this.$temp.posNormal, direction, true )
+
+				/* top triangle */
+				BufferAttribute.setValue( coordsVertices, 2, vertexIndex  , point.x, point.y )
+				BufferAttribute.setValue( normalVertices, 2, vertexIndex++, negNormal.x, negNormal.y )
+
+				BufferAttribute.setValue( coordsVertices, 2, vertexIndex  , nextPoint.x, nextPoint.y )
+				BufferAttribute.setValue( normalVertices, 2, vertexIndex++, negNormal.x, negNormal.y )
+
+				BufferAttribute.setValue( coordsVertices, 2, vertexIndex  , point.x, point.y )
+				BufferAttribute.setValue( normalVertices, 2, vertexIndex++, posNormal.x, posNormal.y )
+
+				/* bottom triangle */
+				BufferAttribute.setValue( coordsVertices, 2, vertexIndex  , point.x, point.y )
+				BufferAttribute.setValue( normalVertices, 2, vertexIndex++, posNormal.x, posNormal.y )
+
+				BufferAttribute.setValue( coordsVertices, 2, vertexIndex  , nextPoint.x, nextPoint.y )
+				BufferAttribute.setValue( normalVertices, 2, vertexIndex++, negNormal.x, negNormal.y )
+
+				BufferAttribute.setValue( coordsVertices, 2, vertexIndex  , nextPoint.x, nextPoint.y )
+				BufferAttribute.setValue( normalVertices, 2, vertexIndex++, posNormal.x, posNormal.y )
 			}
 			
 		} )

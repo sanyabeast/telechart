@@ -32,8 +32,8 @@ class Mesh extends RenderingObject {
 		this.material.updateUniforms()
 
 		this.material.uniforms.position.value.set( px, py )
-		this.material.uniforms.worldPosition.value.set( engine.position )
-		this.material.uniforms.worldScale.value.set( engine.scale )
+		this.material.uniforms.worldPosition.value.set( engine.worldPosition )
+		this.material.uniforms.worldScale.value.set( engine.worldScale )
 		this.material.uniforms.viewportSize.value.set( engine.size )
 
 		gl.drawElements(gl.TRIANGLES, this.geometry.indicesCount, gl.UNSIGNED_SHORT,0);

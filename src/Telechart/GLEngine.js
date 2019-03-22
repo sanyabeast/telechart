@@ -34,15 +34,11 @@ class GLEngine extends Utils.aggregation( TelechartModule, RenderingObject ) {
          canvas: new DOMComponent( {
             template: "canvas-element"
          } ),
-         offscreenCanvas: new DOMComponent( {
-            template: "canvas-element"
-         } )
       }
 
 
       this.$dom = {
          canvasElement: this.$modules.canvas.domElement,
-         offscreenCanvasElement: this.$modules.offscreenCanvas.domElement,
       }
 
       this.$state = {
@@ -51,6 +47,8 @@ class GLEngine extends Utils.aggregation( TelechartModule, RenderingObject ) {
          position: ChartMath.vec2( 0, 0 ),
          scale: ChartMath.vec2( 1, 1 ),
          viewport: ChartMath.rect( 0, 0, 1, 1 ),
+         worldPosition: ChartMath.vec2( 0, 0 ),
+         worldScale: ChartMath.vec2( 1, 1 ),
          culledObjectsCount: 0,
          projectionModified: true,
          sizeNeedsUpdate: true
@@ -60,16 +58,13 @@ class GLEngine extends Utils.aggregation( TelechartModule, RenderingObject ) {
          "position",
          "scale",
          "viewport",
-         "size"
+         "size",
+         "worldScale",
+         "worldPosition"
       ] )
 
- 	
-		// gl.clearColor(0.0, 0.0, 1.0, 1.0);                      
-	 //   gl.enable(gl.DEPTH_TEST);                               
-	 //   gl.depthFunc(gl.LEQUAL);                                
-	 //   gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT); 
-
-	  this.render = this.render.bind( this )
+ 
+	   this.render = this.render.bind( this )
 
 	}
 
@@ -90,8 +85,6 @@ class GLEngine extends Utils.aggregation( TelechartModule, RenderingObject ) {
       
       this.$state.size.set( w, h )
       this.$state.gl.viewport( 0, 0, w, h )
-
-      // this.setViewport( 0, 0, w, h )
 
       this.updateProjection()
 	}
@@ -150,6 +143,8 @@ class GLEngine extends Utils.aggregation( TelechartModule, RenderingObject ) {
    updateProjection () {
       let viewport = this.$state.viewport
       let position = this.$state.position
+      let worldPosition = this.$state.worldPosition
+      let worldScale = this.$state.worldScale
       let size = this.$state.size
 
       this.$state.scale.set(
@@ -160,6 +155,12 @@ class GLEngine extends Utils.aggregation( TelechartModule, RenderingObject ) {
       viewport.x = position.x
       viewport.y = position.y
 
+      worldPosition.x = viewport.x
+      worldPosition.y = viewport.y
+
+      worldScale.x = this.$state.scale.x / 2.
+      worldScale.y = this.$state.scale.y / 2.
+
       this.$state.projectionModified = true
    }
 
@@ -168,6 +169,7 @@ class GLEngine extends Utils.aggregation( TelechartModule, RenderingObject ) {
          ( (x - this.position.x) / this.scale.x ) | 0, 
          ( this.size.y - ((y - this.position.y) / this.scale.y) ) | 0
       )
+
    }
 
    toRealScale ( x, y ) {
@@ -197,7 +199,7 @@ class GLEngine extends Utils.aggregation( TelechartModule, RenderingObject ) {
 
       if ( true || this.$state.projectionModified || force === true ) {
          this.$state.projectionModified = false;
-         super.render( this, this.$state.gl, 0, 0, 1 )
+         super.render( this, this.$state.gl, -this.$state.position.x, -this.$state.position.y, 1 )
       }
 	}
 

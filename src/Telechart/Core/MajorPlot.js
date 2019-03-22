@@ -21,6 +21,7 @@ class MajorPlot extends Plot {
 
 	$onUserDrag ( eventData ) {
 		let position = this.$modules.renderingEngine.toVirtual( eventData.x, eventData.y )
+		console.log( position )
 		this.emit( "user.position.select", position )
 	}
 
@@ -77,6 +78,8 @@ class MajorPlot extends Plot {
 
 			circleRenderingObject.visible = true
 			circleRenderingObject.position.set( seriesValue )
+
+			console.log( seriesValue )
 			
 			if ( circleRenderingObject.soloRenderingAvailable ) {
 				circleRenderingObject.render()
