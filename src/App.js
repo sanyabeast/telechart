@@ -51,103 +51,105 @@ class App {
         // window.benchmark.check();
 
         /**/
-        let glengine = window.glengine = new GLEngine();
-        this.xframes.create({
-            id: "glengine",
-            name: "glengine",
-            position: {
-                x: 500,
-                y: 500
-            },
-            size: {
-                x: 400,
-                y: 400
-            },
-            onCreate: (xframe)=>{
-                xframe.bodyElement.appendChild( glengine.domElement )
-                glengine.setSize( 400, 400 )
-            },
-        });
+        if ( !isMobile ) {
+            let glengine = window.glengine = new GLEngine();
+            this.xframes.create({
+                id: "glengine",
+                name: "glengine",
+                position: {
+                    x: 500,
+                    y: 500
+                },
+                size: {
+                    x: 400,
+                    y: 400
+                },
+                onCreate: (xframe)=>{
+                    xframe.bodyElement.appendChild( glengine.domElement )
+                    glengine.setSize( 400, 400 )
+                },
+            });
 
-        let boxGroup = new GLEngine.Group()
-        for ( var a = 0; a < 10; a++ ){
-            let geometry = new GLEngine.Geometry( {
-                attributes: {
-                    coords: [
-                        0, 0,
-                        0, 10,
-                        10, 0,
-                        10, 0,
-                        0, 10,
-                        10, 10,
-                    ]
-                }
-            } )
+            let boxGroup = new GLEngine.Group()
+            for ( var a = 0; a < 10; a++ ){
+                let geometry = new GLEngine.Geometry( {
+                    attributes: {
+                        coords: [
+                            0, 0,
+                            0, 10,
+                            10, 0,
+                            10, 0,
+                            0, 10,
+                            10, 10,
+                        ]
+                    }
+                } )
 
-            let material = new GLEngine.Material( {
-                vertexShader: "vert.default",
-                fragmentShader: "frag.default",
+                let material = new GLEngine.Material( {
+                    vertexShader: "vert.default",
+                    fragmentShader: "frag.default",
+                    uniforms: {
+                        u_offset: {
+                            type: "uniform2fv",
+                            value: ChartMath.vec2(a / 2, 0)
+                        },
+                        diffuse: {
+                            type: "uniform3fv",
+                            value: ChartMath.color(Math.random(), a, a)
+                        }
+                    }
+                } )
+
+                let mesh = new GLEngine.Mesh( {
+                    geometry: geometry,
+                    material: material
+                } )
+
+                mesh.position.x = a * 10
+                mesh.position.y = 100
+
+                window.mesh = mesh
+
+                boxGroup.addChild( mesh )
+            }
+
+            glengine.addChild(boxGroup)
+
+            let line = new GLEngine.Line( {
+                points: [
+                    { x: 0 * 10,  y:  0 * 10 },
+                    { x: 1 * 10,  y:  1 * 10 },
+                    { x: 2 * 10,  y:  0 * 10 },
+                    { x: 3 * 10,  y:  2 * 10 },
+                    { x: 4 * 10,  y:  0 * 10 },
+                    { x: 5 * 10,  y:  3 * 10 },
+                    { x: 6 * 10,  y:  0 * 10 },
+                    { x: 7 * 10,  y:  5 * 10 },
+                    { x: 8 * 10,  y:  0 * 10 },
+                    { x: 9 * 10,  y:  6 * 10 },
+                    { x: 10 * 10, y:  0 * 10 },
+                    { x: 11 * 10, y:  8 * 10 },
+                ],
                 uniforms: {
-                    u_offset: {
-                        type: "uniform2fv",
-                        value: ChartMath.vec2(a / 2, 0)
-                    },
                     diffuse: {
                         type: "uniform3fv",
-                        value: ChartMath.color(Math.random(), a, a)
+                        value: ChartMath.color(1, 0.7, 0.5, 1)
+                    },
+                    thickness: {
+                        type: "uniform1f",
+                        value: ChartMath.float32( 3 )
                     }
                 }
             } )
 
-            let mesh = new GLEngine.Mesh( {
-                geometry: geometry,
-                material: material
-            } )
+            window.line = line
 
-            mesh.position.x = a * 2 * 10
-            mesh.position.y = 100
+            // glengine.setViewport( 0, 0, 400, 400 )
 
-            window.mesh = mesh
+            glengine.addChild( line )
 
-            boxGroup.addChild( mesh )
-        }
-
-        glengine.addChild(boxGroup)
-
-        let line = new GLEngine.Line( {
-            points: [
-                { x: 0 * 10,  y:  0 * 10 },
-                { x: 1 * 10,  y:  1 * 10 },
-                { x: 2 * 10,  y:  0 * 10 },
-                { x: 3 * 10,  y:  2 * 10 },
-                { x: 4 * 10,  y:  0 * 10 },
-                { x: 5 * 10,  y:  3 * 10 },
-                { x: 6 * 10,  y:  0 * 10 },
-                { x: 7 * 10,  y:  5 * 10 },
-                { x: 8 * 10,  y:  0 * 10 },
-                { x: 9 * 10,  y:  6 * 10 },
-                { x: 10 * 10, y:  0 * 10 },
-                { x: 11 * 10, y:  8 * 10 },
-            ],
-            uniforms: {
-                diffuse: {
-                    type: "uniform3fv",
-                    value: ChartMath.color(1, 0.7, 0.5, 1)
-                },
-                thickness: {
-                    type: "uniform1f",
-                    value: ChartMath.float32( 3 )
-                }
-            }
-        } )
-
-        window.line = line
-
-        // glengine.setViewport( 0, 0, 400, 400 )
-
-        glengine.addChild( line )
-
-        MainLoop.addTask( glengine.render )
+            MainLoop.addTask( glengine.render )
+        } 
 
     }
 
