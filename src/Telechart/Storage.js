@@ -56,7 +56,6 @@ class Storage extends TelechartModule {
 		super()
 
 		this.$state = new Utils.DataKeeper( {
-			accuracy: null,
 			beginTime: 0,
 			finishTime: 0
 		} )
@@ -73,7 +72,6 @@ class Storage extends TelechartModule {
 
 		Utils.loopCollection( datasetData.series, ( seriesData, seriesId )=>{
 			this.series[ seriesId ] = new Series( seriesId, seriesData, datasetData.time )
-			this.$state.accuracy = this.series[ seriesId ].accuracy
 			this.$state.beginTime = this.series[ seriesId ].beginTime
 			this.$state.finishTime = this.series[ seriesId ].finishTime
 
@@ -85,7 +83,6 @@ class Storage extends TelechartModule {
 		return this.series[ seriesId ].slice(
 			this.$state.beginTime,
 			this.$state.finishTime,
-			this.$state.accuracy
 		)
 	}
 
@@ -97,7 +94,7 @@ class Storage extends TelechartModule {
 				return
 			}
 
- 			let extremum = series.getExtremum( from, to, this.$state.accuracy )
+ 			let extremum = series.getExtremum( from, to )
 			values.push( extremum.min, extremum.max )
 		} )
 
@@ -110,7 +107,7 @@ class Storage extends TelechartModule {
 		let values = {}
 
 		Utils.loopCollection( this.series, ( series, seriesId )=>{
-			values[ seriesId ] = series.getValueAt( time, this.$state.accuracy )
+			values[ seriesId ] = series.getValueAt( time )
 		} )
 
 		return values

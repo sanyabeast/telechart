@@ -1,4 +1,5 @@
 class Float32 {
+	uniformType = "uniform1f"
 	isSimple = true;
 
 	constructor ( value ) {

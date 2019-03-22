@@ -1,4 +1,6 @@
 class Point {
+	uniformType = "uniform2fv"
+
 	x = 0;
 	y = 0;
 

@@ -55,14 +55,14 @@ class Material {
 		let shaderProgram = this.$state.shaderProgram
 
 		Utils.loopCollection( this.$state.uniformsData, ( data, name )=>{
-			this.addUniform( name, gl, shaderProgram, data.type, data.value )
+			this.addUniform( name, gl, shaderProgram, data )
 		} )
 
-		this.addUniform( "position", gl, shaderProgram, "uniform2fv", ChartMath.vec2( 0, 0 ) )
-		this.addUniform( "worldPosition", gl, shaderProgram, "uniform2fv", ChartMath.vec2( 0, 0 ) )
-		this.addUniform( "worldScale", gl, shaderProgram, "uniform2fv", ChartMath.vec2( 0, 0 ) )
-		this.addUniform( "viewportSize", gl, shaderProgram, "uniform2fv", ChartMath.vec2( 0, 0 ) )
-		this.addUniform( "resolution", gl, shaderProgram, "uniform1f", ChartMath.float32( 1 ) )
+		this.addUniform( "position", gl, shaderProgram, ChartMath.vec2( 0, 0 ) )
+		this.addUniform( "worldPosition", gl, shaderProgram, ChartMath.vec2( 0, 0 ) )
+		this.addUniform( "worldScale", gl, shaderProgram, ChartMath.vec2( 0, 0 ) )
+		this.addUniform( "viewportSize", gl, shaderProgram,  ChartMath.vec2( 0, 0 ) )
+		this.addUniform( "resolution", gl, shaderProgram, ChartMath.float32( 1 ) )
 
 	}
 
@@ -70,8 +70,8 @@ class Material {
 		gl.linkProgram( this.$state.shaderProgram )
 	}
 
-	addUniform ( name, gl, shaderProgram, type, value ) {
-		this.uniforms[ name ] = new Uniform( name, gl, shaderProgram, type, value )
+	addUniform ( name, gl, shaderProgram, value ) {
+		this.uniforms[ name ] = new Uniform( name, gl, shaderProgram, value )
 	}
 
 	updateUniforms () {

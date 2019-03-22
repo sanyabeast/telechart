@@ -73,9 +73,9 @@ class Telechart extends TelechartModule {
 	 *
 	 */
 	update ( chartData ) {
-		Utils.loopCollection( chartData[ 4 ].columns[0], ( value, index )=>{
-			chartData[ 4 ].columns[0][index] = index;
-		} )
+		// Utils.loopCollection( chartData[ 4 ].columns[0], ( value, index )=>{
+		// 	chartData[ 4 ].columns[0][index] = index;
+		// } )
 
 		
 		this.$modules.storage.importRawDataset( chartData[ 4 ] )
@@ -86,13 +86,13 @@ class Telechart extends TelechartModule {
 			this.$modules.majorPlot.addSeries( {
 				points: points,
 				series: series,
-				extremum: this.$modules.storage.getExtremum( series.beginTime, series.finishTime, series.accuracy ),
+				extremum: this.$modules.storage.getExtremum( series.beginTime, series.finishTime ),
 			} )
 
 			this.$modules.panoramaPlot.addSeries( {
 				points: points,
 				series: series,
-				extremum: this.$modules.storage.getExtremum( series.beginTime, series.finishTime, series.accuracy ),
+				extremum: this.$modules.storage.getExtremum( series.beginTime, series.finishTime ),
 			} )
 
 		} )
@@ -129,7 +129,7 @@ class Telechart extends TelechartModule {
 		this.$modules.domComponent.addChild( "chart-controls-wrapper", this.$modules.chartControl.domElement )
 		this.$modules.domComponent.addChild( "major-plot-wrapper", this.$modules.majorPlot.domElement )
 		this.$modules.domComponent.addChild( "panorama-plot-wrapper", this.$modules.panoramaPlot.domElement )
-		this.setSkin()
+		this.setSkin( "night" )
 	}
 
 	$setupEvents () {
@@ -158,7 +158,7 @@ class Telechart extends TelechartModule {
 		this.$modules.storage.on( "series.visibility.changed", ( series )=>{
 			let panoramaPlotFrameRect = this.$modules.panoramaPlot.frameViewportRect
 			let majorPlotExtremum = this.$modules.storage.getExtremum( panoramaPlotFrameRect.x, panoramaPlotFrameRect.x + panoramaPlotFrameRect.w )
-			let panoramaPlotExtremum = this.$modules.storage.getExtremum( series.beginTime, series.finishTime, series.accuracy )
+			let panoramaPlotExtremum = this.$modules.storage.getExtremum( series.beginTime, series.finishTime )
 
 			this.$modules.chartControl.setSeriesVisibility( series.id, series.visible )
 			this.$modules.majorPlot.setSeriesVisibility( series.id, series.visible )

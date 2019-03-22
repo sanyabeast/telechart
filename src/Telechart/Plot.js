@@ -46,33 +46,20 @@ class Plot extends TelechartModule {
 	/* CHARTING */
 	addSeries ( seriesData ) {
 
-		console.log( seriesData )
 		this.$state.beginTime = seriesData.series.beginTime
 		this.$state.finishTime = seriesData.series.finishTime
-		this.$state.accuracy = seriesData.series.accuracy
 
 		let seriesLine = new GLEngine.Line({
-			styles: {
-				lineWidth: ( Config.values.plotLineDefaultLineWidth * Config.DPR ),
-				strokeStyle: seriesData.series.color
-			},
 			points: seriesData.points,
 			attributes: {
 				"content-type": "series",
 				"series-type": seriesData.series.type,
 				"series-name": seriesData.series.name,
 				"series-id": seriesData.series.id,
-				"accuracy": seriesData.series.accuracy
 			},
 			uniforms: {
-				thickness: {
-					type: "uniform1f",
-					value: ChartMath.float32( 4 )
-				},
-				diffuse: {
-					type: "uniform3fv",
-					value: ChartMath.color( seriesData.series.color )
-				}
+				thickness: ChartMath.float32( 3 ),
+				diffuse: ChartMath.color( seriesData.series.color )
 			}
 		})
 

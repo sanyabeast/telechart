@@ -148,10 +148,23 @@ class Utils {
 	    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec( hexString );
 
 	    return result ? {
-	        r: parseInt(result[1], 16) / 255,
-	        g: parseInt(result[2], 16) / 255,
-	        b: parseInt(result[3], 16) / 255
+	        r: parseInt( result[1], 16 ) / 255,
+	        g: parseInt( result[2], 16 ) / 255,
+	        b: parseInt( result[3], 16 ) / 255
 	    } : null;
+	}
+
+	static stringTemplate( tpl, tokens ){
+		let result = tpl;
+
+		if ( tokens ){
+			this.loopCollection(tokens, ( v, k )=>{
+				let regexp = new RegExp(`[$]{${k}}`, "gm");
+				regexp.test(result) && (result = result.replace(regexp, v));
+			});
+		}
+		
+		return result;
 	}
 
 }

@@ -2,11 +2,7 @@ import XFrames from "XFrames"
 import Utils from "Telechart/Utils"
 import Telechart from "Telechart/Telechart"
 import Tweener from "Telechart/Tweener"
-import MainLoop from "Telechart/MainLoop"
 import ChartMath from "Telechart/ChartMath"
-
-import GLEngine from "Telechart/GLEngine"
-
 
 import chartData from "chart_data.json"
 
@@ -16,18 +12,6 @@ let padding = 16;
 let rowSize = Math.ceil(Math.sqrt(chartsCount));
 let windowWidth = window.innerWidth - ((rowSize + 1) * padding);
 let windowHeight = window.innerHeight - ((rowSize + 1) * padding);
-
-// if (isMobile){
-//     document.body.addEventListener("click", ()=>{
-//         try {
-//             document.body.webkitRequestFullScreen()
-//         } catch (err) {}
-
-//         try {
-//             document.body.requestFullScreen()
-//         } catch (err) {}
-//     })
-// }
 
 
 class App {
@@ -46,110 +30,6 @@ class App {
         addButton.addEventListener("click", ()=>{
             this.addTelechart( 100, 100, 300, 300 )
         });
-
-        // window.benchmark = new Benchmark(this, unicycle)
-        // window.benchmark.check();
-
-        /**/
-        if ( !isMobile ) {
-            let glengine = window.glengine = new GLEngine();
-            this.xframes.create({
-                id: "glengine",
-                name: "glengine",
-                position: {
-                    x: 500,
-                    y: 500
-                },
-                size: {
-                    x: 400,
-                    y: 400
-                },
-                onCreate: (xframe)=>{
-                    xframe.bodyElement.appendChild( glengine.domElement )
-                    glengine.setSize( 400, 400 )
-                },
-            });
-
-            let boxGroup = new GLEngine.Group()
-            for ( var a = 0; a < 10; a++ ){
-                let geometry = new GLEngine.Geometry( {
-                    attributes: {
-                        coords: [
-                            0, 0,
-                            0, 10,
-                            10, 0,
-                            10, 0,
-                            0, 10,
-                            10, 10,
-                        ]
-                    }
-                } )
-
-                let material = new GLEngine.Material( {
-                    vertexShader: "vert.default",
-                    fragmentShader: "frag.default",
-                    uniforms: {
-                        u_offset: {
-                            type: "uniform2fv",
-                            value: ChartMath.vec2(a / 2, 0)
-                        },
-                        diffuse: {
-                            type: "uniform3fv",
-                            value: ChartMath.color(Math.random(), a, a)
-                        }
-                    }
-                } )
-
-                let mesh = new GLEngine.Mesh( {
-                    geometry: geometry,
-                    material: material
-                } )
-
-                mesh.position.x = a * 10
-                mesh.position.y = 100
-
-                window.mesh = mesh
-
-                boxGroup.addChild( mesh )
-            }
-
-            glengine.addChild(boxGroup)
-
-            let line = new GLEngine.Line( {
-                points: [
-                    { x: 0 * 10,  y:  0 * 10 },
-                    { x: 1 * 10,  y:  1 * 10 },
-                    { x: 2 * 10,  y:  0 * 10 },
-                    { x: 3 * 10,  y:  2 * 10 },
-                    { x: 4 * 10,  y:  0 * 10 },
-                    { x: 5 * 10,  y:  3 * 10 },
-                    { x: 6 * 10,  y:  0 * 10 },
-                    { x: 7 * 10,  y:  5 * 10 },
-                    { x: 8 * 10,  y:  0 * 10 },
-                    { x: 9 * 10,  y:  6 * 10 },
-                    { x: 10 * 10, y:  0 * 10 },
-                    { x: 11 * 10, y:  8 * 10 },
-                ],
-                uniforms: {
-                    diffuse: {
-                        type: "uniform3fv",
-                        value: ChartMath.color(1, 0.7, 0.5, 1)
-                    },
-                    thickness: {
-                        type: "uniform1f",
-                        value: ChartMath.float32( 3 )
-                    }
-                }
-            } )
-
-            window.line = line
-
-            // glengine.setViewport( 0, 0, 400, 400 )
-
-            glengine.addChild( line )
-
-            MainLoop.addTask( glengine.render )
-        } 
 
     }
 

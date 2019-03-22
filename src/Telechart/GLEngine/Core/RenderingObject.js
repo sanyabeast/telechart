@@ -92,19 +92,13 @@ class RenderingObject {
 	}
 
 	render ( engine, gl, px, py, alpha ) {
-		// console.log( this )
-
 		px += this.$state.position.x
 		py += this.$state.position.y
 
 		Utils.loopCollection( this.children, (child, index)=>{
-			child.render( engine, gl, px, py, alpha )
-			
-			// if ( !engine.isCulled( child, px + child.position.x, py + child.position.y )) {
-			// 	child.render( engine, gl, px, py )
-			// } else {
-			// 	engine.incrementCulledObjectsCount()
-			// }
+			if ( child.visible ) {
+				child.render( engine, gl, px, py, alpha )
+			} 
 		} )
 	}
 

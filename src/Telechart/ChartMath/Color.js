@@ -2,6 +2,8 @@ import Point from "Telechart/ChartMath/Point"
 import Utils from "Telechart/Utils"
 
 class Color extends Point {
+	uniformType = "uniform3fv"
+
 	constructor (...args) {
 		super (...args)
 	}

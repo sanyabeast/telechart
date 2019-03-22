@@ -12,33 +12,40 @@ uniform vec2  worldScale;
 uniform vec2  viewportSize;
 
 vec2 scaleNormal ( vec2 normal, vec2 scale ) {
-   normal.x /= scale.y;    
-   normal.y /= scale.x;    
-
-   float hypo = sqrt( pow( normal.x, 2. ) + pow( normal.y, 2. ) );
-   float nsin = normal.y / hypo;
-   float ncos = normal.x / hypo;
-
-   normal.x = ncos;
-   normal.y =nsin;                                                             
-
-   return(normal);
+   normal /= vec2( scale.y, scale.x );    
+   float hypo = length( normal );
+   return( vec2( ( normal.x / hypo ), ( normal.y / hypo ) ) );
 }
 
+
+vec2 translate( vec2 pos ) {
+   pos -= position;
+   pos -= worldPosition;
+   return( pos );
+}
+
+vec2 project( vec2 pos ) {
+   return( pos / worldScale );
+}
+
+
+vec2 projectToScreen( vec2 pos ) {
+   pos /= viewportSize;
+   pos -= 1.;
+   return( pos );
+}
+
+
 void main(void) {
-   	vec2 pos = vec2( coords );
-
-   	pos -= position;
-      pos -= worldPosition;
-
-   	pos /= worldScale;
+   	vec2 pos = translate( coords );
       vec2 n = scaleNormal( normal, worldScale );
 
-   	pos += ( n * ( thickness / 2. * resolution ) );
+   	pos = project( pos );
 
-   	pos /= viewportSize;
-      pos -= 1.;
+   	pos += ( n * ( thickness * resolution ) );
 
-   	gl_Position = vec4( pos.x, pos.y, 0., 1. );
+   	pos = projectToScreen( pos );
+
+   	gl_Position = vec4( pos.xy, 0., 1. );
 
 }
