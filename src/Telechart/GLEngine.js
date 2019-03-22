@@ -9,6 +9,7 @@ import Material from "Telechart/GLEngine/Core/Material"
 import Mesh from "Telechart/GLEngine/Core/Mesh"
 import Uniform from "Telechart/GLEngine/Core/Uniform"
 import RenderingObject from "Telechart/GLEngine/Core/RenderingObject"
+import DOMElement from "Telechart/GLEngine/DOMElement"
 
 import Group from "Telechart/GLEngine/Group"
 import Line from "Telechart/GLEngine/Line"
@@ -19,6 +20,7 @@ class GLEngine extends Utils.aggregation( TelechartModule, RenderingObject ) {
 	static Mesh = Mesh
 	static RenderingObject = RenderingObject
 	static Uniform = Uniform
+   static DOMElement = DOMElement
 
    static Group = Group
    static Line = Line

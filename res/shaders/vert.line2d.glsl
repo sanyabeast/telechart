@@ -10,7 +10,7 @@ uniform vec2  worldScale;
 uniform vec2  viewportSize;
 
 vec2 translate ( vec2 pos ) {
-	pos += position;
+	pos -= position;
 	return( pos );
 }
 
@@ -21,7 +21,8 @@ vec2 project ( vec2 pos ) {
 }
 
 vec2 projectToScreen ( vec2 pos ) {
-	pos /= viewportSize;
+	pos -= viewportSize;
+	pos /= (viewportSize);
 	return( pos );
 }
 
@@ -35,7 +36,7 @@ void main(void) {
    
    pos = translate( pos );
    pos = project( pos );
-   pos = pos + ( normal * thickness );
+   pos = pos + ( normal * thickness / 2. );
 
    pos = projectToScreen( pos );
 

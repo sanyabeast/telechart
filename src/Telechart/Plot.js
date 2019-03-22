@@ -20,12 +20,7 @@ class Plot extends TelechartModule {
 		this.$state.set( {
 			extremum: ChartMath.range( 0, 0 ),
 			series: new Utils.DataKeeper(),
-			accuracyMultiplier: 1
 		} )
-
-		this.$state.set( "accuracy", ()=>{
-			return this.$state.originalAccuracy * this.$state.accuracyMultiplier
-		}, true )
 
 
 		this.$modules.set( {
@@ -46,15 +41,13 @@ class Plot extends TelechartModule {
 		] )
 
 		this.$modules.domComponent.addChild( "canvas-wrapper", this.$modules.renderingEngine.domElement )
-
-		this.$modules.renderingEngine.on( "viewport.updated", this.$onRenderingEngineViewportUpdated.bind(this) )
 	}
 
 	/* CHARTING */
 	addSeries ( seriesData ) {
 		this.$state.beginTime = seriesData.series.beginTime
 		this.$state.finishTime = seriesData.series.finishTime
-		this.$state.originalAccuracy = seriesData.series.accuracy
+		this.$state.accuracy = seriesData.series.accuracy
 
 		let pointsChunks = Utils.splitToChunks( seriesData.points, Config.plotChunkSize )
 		let seriesGroup = new RenderingEngine.Group( {
@@ -77,11 +70,11 @@ class Plot extends TelechartModule {
 				uniforms: {
 					thickness: {
 						type: "uniform1f",
-						value: ChartMath.float32(4)
+						value: ChartMath.float32(6)
 					},
 					diffuse: {
 						type: "uniform3fv",
-						value: ChartMath.color(1, 0, 0, 1)
+						value: ChartMath.color(0, 0, 0)
 					}
 				}
 			})
@@ -222,20 +215,6 @@ class Plot extends TelechartModule {
 
 		} )
 	} 
-
-	$onRenderingEngineViewportUpdated ( viewport ) {
-		let pointsDensity = viewport.w / this.$state.accuracy
-		let accuracyMultiplier = Math.ceil( pointsDensity / 100 )
-
-		this.$setAccuracyMultiplier( accuracyMultiplier )
-	} 
-
-	$setAccuracyMultiplier ( accuracyMultiplier ) {
-		if ( accuracyMultiplier !== this.$state.accuracyMultiplier ) {
-			this.$state.accuracyMultiplier = accuracyMultiplier
-		}
-	} 
-
 }
 
 export default Plot

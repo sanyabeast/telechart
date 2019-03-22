@@ -17,7 +17,6 @@ class Series {
 			beginTime: 0,
 			finishTime: 0,
 			accuracy: 1,
-			originalAccuracy: 1,
 			id: seriesData.id,
 			color: seriesData.color,
 			type: seriesData.type,
@@ -25,7 +24,6 @@ class Series {
 		} )
 
 		Utils.proxyProps( this, this.$state, [
-			"originalAccuracy", 
 			"accuracy", 		
 			"beginTime", 		
 			"finishTime", 		
@@ -43,7 +41,7 @@ class Series {
 	$setSeriesData ( seriesData, timeData ) {
 		let beginTime = this.$state.beginTime = timeData.beginTime
 		let finishTime = this.$state.finishTime = timeData.finishTime
-		let accuracy = this.$state.accuracy = this.$state.originalAccuracy = timeData.accuracy
+		let accuracy = this.$state.accuracy = timeData.accuracy
 
 		let layer = []
 
@@ -52,33 +50,25 @@ class Series {
 		} )
 
 		this.$content[ accuracy ] = layer
-		this.$content[ accuracy * 2 ] = this.downsampleLayer( layer, accuracy * 2 )
-		this.$content[ accuracy * 3 ] = this.downsampleLayer( layer, accuracy * 3 )
-		this.$content[ accuracy * 4 ] = this.downsampleLayer( layer, accuracy * 4 )
 	}
 
-	getLayer ( accuracy ) {
-		accuracy = accuracy || this.$state.originalAccuracy
+	getLayer () {
+		let accuracy = this.$state.accuracy
 		let layer = this.$content[ accuracy ]
-
-		if ( !layer ) {
-			layer = this.$content[ accuracy ] = this.downsampleLayer( this.$content[ this.$state.originalAccuracy ], accuracy )
-		}
-
 		return layer || null
 	}
 
-	slice ( from, to, accuracy ) {
-		accuracy = accuracy || this.$state.originalAccuracy
+	slice ( from, to ) {
+		let accuracy = this.$state.accuracy
 
-		from -= this.$state.accuracy
-		to += this.$state.accuracy
+		from -= accuracy
+		to += accuracy
 
 		if ( from < this.$state.beginTime ) from = this.$state.beginTime
 		if ( to > this.$state.finishTime ) to = this.$state.finishTime
 
 		
-		to = ChartMath.nearestMult( to, this.$state.accuracy, true, true )
+		to = ChartMath.nearestMult( to, accuracy, true, true )
 
 		from =  (from - this.$state.beginTime) / accuracy
 		to =  (to - this.$state.beginTime) / accuracy
@@ -86,14 +76,15 @@ class Series {
 		return this.getLayer( accuracy ).slice( from, to )
 	}
 
-	getExtremum ( from, to, accuracy ) {
-		let piece = this.slice( from, to, accuracy )
+	getExtremum ( from, to ) {
+		let piece = this.slice( from, to )
 		let extremum = ChartMath.getExtremum(piece)
 		return extremum
 	}
 
-	getValueAt ( position, accuracy ) {
-		let layer = this.$content[ accuracy ]
+	getValueAt ( position ) {
+		let accuracy = this.$state.accuracy
+		let layer = this.getLayer()
 
 		if ( position < this.$state.beginTime ) position = this.$state.beginTime
 		if ( position > this.$state.finishTime ) position = this.$state.finishTime
@@ -110,26 +101,8 @@ class Series {
 
 		let intermediateValue = ChartMath.smoothstep( layer[from], layer[to], step )
 
-		// console.log(intermediateValue, position, from)
-
 		return ChartMath.point( position, intermediateValue )
 	}
-
-	downsampleLayer ( sourceLayer, newAccuracy ) {
-
-		let beginTime = this.$state.beginTime
-		let finishTime = this.$state.finishTime
-		let originalAccuracy = this.$state.originalAccuracy
-
-		let layer = []
-
-		Utils.loop( beginTime, finishTime, newAccuracy, false, ( unixTime, iteration )=>{
-			let point = this.getValueAt( unixTime, this.originalAccuracy )
-			layer.push( point )
-		} )
-
-		return layer
-	} 
 }
 
 export default Series

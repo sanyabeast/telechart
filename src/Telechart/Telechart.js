@@ -72,20 +72,23 @@ class Telechart extends TelechartModule {
 	 *
 	 */
 	update ( chartData ) {
-		Utils.loopCollection( chartData[ 0 ].columns[1], ( value, index )=>{
-			chartData[ 0 ].columns[1][index] = ( index % 2 == 0 ) ? 1 : 0
-
-			if ( index % 20 == 0 ) chartData[ 0 ].columns[1][index] = 2
-			if ( index % 40 == 0 ) chartData[ 0 ].columns[1][index] = 4
-
+		Utils.loopCollection( chartData[ 4 ].columns[0], ( value, index )=>{
+			chartData[ 4 ].columns[0][index] = index;
 		} )
 
-		Utils.loopCollection( chartData[ 0 ].columns[2], ( value, index )=>{
-			chartData[ 0 ].columns[2][index] = ( index % 2 == 0 ) ? 1 : 0
+		// Utils.loopCollection( chartData[ 0 ].columns[1], ( value, index )=>{
+		// 	chartData[ 0 ].columns[1][index] = (Math.random() * 10000000) + 10;
 
-			if ( index % 15 == 0 ) chartData[ 0 ].columns[2][index] = 3
-			if ( index % 30 == 0 ) chartData[ 0 ].columns[2][index] = 60
-		} )
+		// } )
+
+		// Utils.loopCollection( chartData[ 0 ].columns[2], ( value, index )=>{
+		// 	chartData[ 0 ].columns[2][index] = ( index % 2 == 0 ) ? 1 : 0
+
+		// 	if ( index % 15 == 0 ) chartData[ 0 ].columns[2][index] = 3
+		// 	if ( index % 30 == 0 ) chartData[ 0 ].columns[2][index] = 5
+		// } )
+
+		console.log( chartData[ 4 ] )
 
 		this.$modules.storage.importRawDataset( chartData[ 4 ] )
 

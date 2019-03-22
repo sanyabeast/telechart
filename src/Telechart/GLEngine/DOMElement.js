@@ -1,4 +1,4 @@
-import RenderingObject from "Telechart/GLEngine/RenderingObject"
+import RenderingObject from "Telechart/GLEngine/Core/RenderingObject"
 import ChartMath from "Telechart/ChartMath"
 import Config from "Telechart/Config"
 import Utils from "Telechart/Utils"
@@ -40,6 +40,7 @@ class DOMElement extends RenderingObject {
 	} 
 
 	render ( engine, gl, px, py ) {		
+
 		if ( !engine ) {
 			if ( this.soloRenderingAvailable ) {
 				engine = this.$temp.prevEngine

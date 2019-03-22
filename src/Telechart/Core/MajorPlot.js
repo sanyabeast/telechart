@@ -1,6 +1,6 @@
 import Plot from "Telechart/Plot"
 import Utils from "Telechart/Utils"
-import RenderingEngine from "Telechart/RenderingEngine"
+import RenderingEngine from "Telechart/GLEngine"
 import DOMComponent from "Telechart/Core/DOM/Component"
 import Config from "Telechart/Config"
 import ChartMath from "Telechart/ChartMath"
