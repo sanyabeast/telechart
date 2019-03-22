@@ -19,6 +19,7 @@ import Storage from "Telechart/Storage"
  */
 class Telechart extends TelechartModule {
 	Config = Config
+	Utils = Utils
 
 	/* static */
 	static processAsset ( context, assetName, extension, processor ) {
