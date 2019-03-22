@@ -14,7 +14,11 @@ class Color extends Point {
 		if ( typeof x == "string" ) {
 			return this.setCSSHex( x )
 		}
- 		
+
+		this.array[0] = x
+		this.array[1] = y
+		this.array[2] = z
+
 		this.x = x
 		this.y = y
 		this.z = z
@@ -25,13 +29,11 @@ class Color extends Point {
 	}
 
 	toArray () {
-		return [ this.x, this.y, this.z ]
+		return this.array
 	}
 
 	fromArray ( array ) {
-		this.x = array[0]
-		this.y = array[1]
-		this.z = array[2]
+		this.set( array[0], array[1], array[2] )
 	}
 
 	setCSSHex ( value ) {

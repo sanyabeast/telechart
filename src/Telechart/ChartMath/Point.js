@@ -3,6 +3,7 @@ class Point {
 	y = 0;
 
 	constructor ( x, y ) {
+		this.array = [0, 0];
 		this.set( x, y )
 	}
 
@@ -11,6 +12,9 @@ class Point {
 			return this.set( x.x, x.y )
 		}
 		
+		this.array[0] = x
+		this.array[1] = y
+
 		this.x = x
 		this.y = y
 	} 
@@ -20,12 +24,11 @@ class Point {
 	}
 
 	toArray () {
-		return [ this.x, this.y ]
+		return this.array
 	}
 
 	fromArray ( array ) {
-		this.x = array[0]
-		this.y = array[1]
+		this.set( array[0], array[1] )
 	}
 }
 

@@ -62,6 +62,7 @@ class Material {
 		this.addUniform( "worldPosition", gl, shaderProgram, "uniform2fv", ChartMath.vec2( 0, 0 ) )
 		this.addUniform( "worldScale", gl, shaderProgram, "uniform2fv", ChartMath.vec2( 0, 0 ) )
 		this.addUniform( "viewportSize", gl, shaderProgram, "uniform2fv", ChartMath.vec2( 0, 0 ) )
+		this.addUniform( "resolution", gl, shaderProgram, "uniform1f", ChartMath.float32( 1 ) )
 
 	}
 

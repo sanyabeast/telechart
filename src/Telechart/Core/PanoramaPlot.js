@@ -1,6 +1,6 @@
 import Plot from "Telechart/Plot"
 import Component from "Telechart/Core/DOM/Component"
-import RenderingEngine from "Telechart/RenderingEngine"
+import GLEngine from "Telechart/GLEngine"
 import ChartMath from "Telechart/ChartMath"
 import Utils from "Telechart/Utils"
 
@@ -21,7 +21,7 @@ class PanoramaPlot extends Plot {
 		frameControlComponent.on( "frame-control.right-plane.drag", this.$onFrameControlRightPlaneDrag.bind(this) )
 		frameControlComponent.on( "frame-control.frame.drag", this.$onFrameControlFrameDrag.bind(this) )
 
-		this.$modules.frameControlsRenderingObject = new RenderingEngine.DOMElement( {
+		this.$modules.frameControlsRenderingObject = new GLEngine.DOMElement( {
 			domElement: frameControlComponent.ref( "frame-control.frame" ),
 			applyPosX: true,
 			applyPosY: false,
@@ -29,7 +29,7 @@ class PanoramaPlot extends Plot {
 			applySizeY: false
 		} )
 
-		this.$modules.frameControlsLeftFillerRenderingObject = new RenderingEngine.DOMElement( {
+		this.$modules.frameControlsLeftFillerRenderingObject = new GLEngine.DOMElement( {
 			domElement: frameControlComponent.ref( "frame-control.filler.left" ),
 			applyPosX: false,
 			applyPosY: false,
@@ -37,7 +37,7 @@ class PanoramaPlot extends Plot {
 			applySizeY: false
 		} )
 
-		this.$modules.frameControlsRightFillerRenderingObject = new RenderingEngine.DOMElement( {
+		this.$modules.frameControlsRightFillerRenderingObject = new GLEngine.DOMElement( {
 			domElement: frameControlComponent.ref( "frame-control.filler.right" ),
 			applyPosX: false,
 			applyPosY: false,

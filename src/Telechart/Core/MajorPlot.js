@@ -1,6 +1,6 @@
 import Plot from "Telechart/Plot"
 import Utils from "Telechart/Utils"
-import RenderingEngine from "Telechart/GLEngine"
+import GLEngine from "Telechart/GLEngine"
 import DOMComponent from "Telechart/Core/DOM/Component"
 import Config from "Telechart/Config"
 import ChartMath from "Telechart/ChartMath"
@@ -21,7 +21,6 @@ class MajorPlot extends Plot {
 
 	$onUserDrag ( eventData ) {
 		let position = this.$modules.renderingEngine.toVirtual( eventData.x, eventData.y )
-		console.log( position )
 		this.emit( "user.position.select", position )
 	}
 
@@ -37,7 +36,6 @@ class MajorPlot extends Plot {
 			this.$modules.renderingEngine.setScale( scale.x * eventData.panDelta, scale.y )
 		}
 
-		// console.log( eventData.panDelta )
 	}
 
 	setSelectedPositionValues ( values ) {
@@ -55,7 +53,7 @@ class MajorPlot extends Plot {
 					template: "selected-position-circle"
 				} )
 
-				circleRenderingObject = new RenderingEngine.DOMElement( {
+				circleRenderingObject = new GLEngine.DOMElement( {
 					domElement: circleComponent.domElement,
 					domComponent: circleComponent,
 					applyScaleY: false,
@@ -79,8 +77,6 @@ class MajorPlot extends Plot {
 			circleRenderingObject.visible = true
 			circleRenderingObject.position.set( seriesValue )
 
-			console.log( seriesValue )
-			
 			if ( circleRenderingObject.soloRenderingAvailable ) {
 				circleRenderingObject.render()
 				this.$modules.renderingEngine.updateProjection()				

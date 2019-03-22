@@ -11,7 +11,7 @@ import GLEngine from "Telechart/GLEngine"
 import chartData from "chart_data.json"
 
 let isMobile = !!('ontouchstart' in window || navigator.msMaxTouchPoints);
-let chartsCount = isMobile ? 1 : 1
+let chartsCount = isMobile ? 1 : 4
 let padding = 16;
 let rowSize = Math.ceil(Math.sqrt(chartsCount));
 let windowWidth = window.innerWidth - ((rowSize + 1) * padding);

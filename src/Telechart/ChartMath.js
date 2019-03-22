@@ -24,6 +24,7 @@ class ChartMath {
 	static range ( min, max ) { return new Range( min, max ) }
 	static rect (x, y, w, h) { return new Rect( x, y, w, h ) }
 
+    /*
 	static translateRect ( targetRect, srcRect, x, y ) {
 		targetRect.x = srcRect.x + x
 		targetRect.y = srcRect.y + y
@@ -44,14 +45,17 @@ class ChartMath {
 	static rectIntersectsRect ( rectA, rectB ) {
 		return !( ( rectB.x > ( rectA.x + rectA.w ) ) || ( ( rectB.x + rectB.w ) < rectA.x ) || ( rectB.y > ( rectA.y + rectB.h ) ) || ( ( rectB.y + rectB.h ) < rectA.y ) )
 	}
+    */
 
 	static getExtremum ( points ) {
 		return this.range( Math.min.apply( Math, points ), Math.max.apply( Math, points ) )
 	}
 
+    /*
 	static getDistance ( pointA, pointB ) {
 		return Math.sqrt( Math.pow( Math.abs( pointA.x - pointB.x ), 2 ) + Math.pow( Math.abs( pointA.y - pointB.y ), 2 ) )
 	}
+    */
 
 	static nearestMult (num, div, greater, include) {
         return (greater ? Math.ceil((num + (include?0:1))/div)*div: Math.floor((num - (include?0:1))/div)*div) || 0;

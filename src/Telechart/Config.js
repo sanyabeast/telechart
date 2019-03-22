@@ -20,11 +20,10 @@ class Config {
 	static isTouchDevice = ( "ontouchstart" in window )
 	static values = {
 		domDoubletapTimeout: 250,
-		plotLineChunkSize: 50,
 		plotLineDefaultLineWidth: 2,
 		plotExtremumTweenDuration: 150,
 		plotSeriesVisibilityTweenDuration: 150,
-		plotExtremumPadding: 0.3,
+		plotExtremumPadding: 0.35,
 		plotSelectedPositionCircleRadius: 10
 	}
 

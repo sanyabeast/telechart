@@ -1,4 +1,4 @@
-import RenderingEngine from "Telechart/GLEngine"
+import GLEngine from "Telechart/GLEngine"
 import Utils from "Telechart/Utils"
 import TelechartModule from "Telechart/Core/TelechartModule"
 import MainLoop from "Telechart/MainLoop"
@@ -24,7 +24,7 @@ class Plot extends TelechartModule {
 
 
 		this.$modules.set( {
-			renderingEngine: new RenderingEngine(),
+			renderingEngine: new GLEngine(),
 			domComponent: new DOMComponent( {
 				template: "plot",
 				...params
@@ -51,38 +51,30 @@ class Plot extends TelechartModule {
 		this.$state.finishTime = seriesData.series.finishTime
 		this.$state.accuracy = seriesData.series.accuracy
 
-		let pointsChunks = Utils.splitToChunks( seriesData.points, Config.plotChunkSize )
-		let seriesGroup = new RenderingEngine.Group( {
+		let seriesLine = new GLEngine.Line({
+			styles: {
+				lineWidth: ( Config.values.plotLineDefaultLineWidth * Config.DPR ),
+				strokeStyle: seriesData.series.color
+			},
+			points: seriesData.points,
 			attributes: {
 				"content-type": "series",
 				"series-type": seriesData.series.type,
 				"series-name": seriesData.series.name,
 				"series-id": seriesData.series.id,
 				"accuracy": seriesData.series.accuracy
-			}
-		} )
-
-		Utils.loopCollection( pointsChunks, ( chunk, chunkIndex )=>{
-			let line = new RenderingEngine.Line({
-				styles: {
-					lineWidth: ( Config.values.plotLineDefaultLineWidth * Config.DPR ),
-					strokeStyle: seriesData.series.color
+			},
+			uniforms: {
+				thickness: {
+					type: "uniform1f",
+					value: ChartMath.float32( 4 )
 				},
-				points: chunk,
-				uniforms: {
-					thickness: {
-						type: "uniform1f",
-						value: ChartMath.float32( 4 )
-					},
-					diffuse: {
-						type: "uniform3fv",
-						value: ChartMath.color( seriesData.series.color )
-					}
+				diffuse: {
+					type: "uniform3fv",
+					value: ChartMath.color( seriesData.series.color )
 				}
-			})
-
-			seriesGroup.addChild( line )
-		} )
+			}
+		})
 
 		this.setViewport( 
 			seriesData.series.beginTime, 
@@ -92,7 +84,7 @@ class Plot extends TelechartModule {
 		)
 
 		this.setPosition( seriesData.series.beginTime )
-		this.$modules.renderingEngine.addChild( seriesGroup )
+		this.$modules.renderingEngine.addChild( seriesLine )
 
 		this.$state.series.set( seriesData.series.id, seriesData )
 

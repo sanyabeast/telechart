@@ -1,5 +1,6 @@
 import RenderingObject from "Telechart/GLEngine/Core/RenderingObject"
 import Utils from "Telechart/Utils"
+import Config from "Telechart/Config"
 
 class Mesh extends RenderingObject {
 	constructor ( params ) {
@@ -35,6 +36,7 @@ class Mesh extends RenderingObject {
 		this.material.uniforms.worldPosition.value.set( engine.worldPosition )
 		this.material.uniforms.worldScale.value.set( engine.worldScale )
 		this.material.uniforms.viewportSize.value.set( engine.size )
+		this.material.uniforms.resolution.value.set( Config.DPR)
 
 		gl.drawElements(gl.TRIANGLES, this.geometry.indicesCount, gl.UNSIGNED_SHORT,0);
 

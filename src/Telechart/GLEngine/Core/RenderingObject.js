@@ -99,8 +99,9 @@ class RenderingObject {
 
 		Utils.loopCollection( this.children, (child, index)=>{
 			child.render( engine, gl, px, py, alpha )
+			
 			// if ( !engine.isCulled( child, px + child.position.x, py + child.position.y )) {
-			// 	child.render( engine, context2d, px, py, multipliedAlpha )
+			// 	child.render( engine, gl, px, py )
 			// } else {
 			// 	engine.incrementCulledObjectsCount()
 			// }

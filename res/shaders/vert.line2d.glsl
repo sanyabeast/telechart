@@ -5,6 +5,8 @@ attribute vec2 normal;
 
 uniform vec2  position;
 uniform float thickness;
+
+uniform float resolution;
 uniform vec2  worldPosition;
 uniform vec2  worldScale;
 uniform vec2  viewportSize;
@@ -32,7 +34,7 @@ void main(void) {
    	pos /= worldScale;
       vec2 n = scaleNormal( normal, worldScale );
 
-   	pos += ( n * ( thickness / 2. ) );
+   	pos += ( n * ( thickness / 2. * resolution ) );
 
    	pos /= viewportSize;
       pos -= 1.;
