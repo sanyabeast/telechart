@@ -41,7 +41,7 @@ class TelechartModule {
 
 	/* logging */
 	clog ( ...args ) {
-		console.log( `%cTelechart:${ this.constructor.name }:`, "font-weight:bold; color:#ff5722;", ...args )
+		console.log( `%cTelechart:${ this.constructor.name }:`, "font-weight:bold; color:#3982c6;", ...args )
 	}
 }
 
