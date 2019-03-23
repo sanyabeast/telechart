@@ -30,6 +30,10 @@ class Config {
 	static skinValues = {
 
 	}
+
+	static glColors = {
+		gridPatternLineColor: ChartMath.color( 1, 1, 1 )
+	}
 }
 
 export default Config

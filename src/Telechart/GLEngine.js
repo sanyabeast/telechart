@@ -57,6 +57,12 @@ class GLEngine extends Utils.aggregation( TelechartModule, RenderingObject ) {
          sizeNeedsUpdate: true
       }
 
+      let gl = this.$state.gl
+
+      gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+      gl.enable(gl.BLEND);
+      gl.disable(gl.DEPTH_TEST);
+
       Utils.proxyProps( this, this.$state, [
          "position",
          "scale",

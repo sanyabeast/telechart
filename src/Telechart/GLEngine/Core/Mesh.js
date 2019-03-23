@@ -12,8 +12,10 @@ class Mesh extends RenderingObject {
 		] )
 	}
 
-	render ( engine, gl, px, py, alpha ) {
-		super.render( engine, gl, px, py, alpha )
+	render ( engine, gl, px, py, opacity ) {
+		super.render( engine, gl, px, py, opacity )
+
+		opacity *= this.opacity
 
 		let uniforms = this.material.uniforms;
 
@@ -39,6 +41,7 @@ class Mesh extends RenderingObject {
 			"worldScale": engine.worldScale, 
 			"viewportSize": engine.size,
 			"resolution": Config.DPR,
+			"opacity": opacity
 		} )
 
 		gl.drawElements(gl.TRIANGLES, this.geometry.indicesCount, gl.UNSIGNED_SHORT,0);

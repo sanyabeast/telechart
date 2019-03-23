@@ -182,6 +182,9 @@ class Telechart extends TelechartModule {
 			this.$modules.domComponent.ref("theme-switcher-caption").textContent = "Switch to Night Mode"
 			this.setSkin( "day" )
 		}
+
+		this.$modules.majorPlot.render( true )
+		this.$modules.panoramaPlot.render( true )
 	}
 }
 

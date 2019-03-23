@@ -82,8 +82,8 @@ class Plot extends TelechartModule {
 		this.stopRendering = MainLoop.addTask( this.$modules.renderingEngine.render )
 	}
 
-	render () {
-		this.$modules.renderingEngine.render()
+	render ( force ) {
+		this.$modules.renderingEngine.render( force )
 	}
 
 	stopRendering () {}
@@ -154,12 +154,12 @@ class Plot extends TelechartModule {
 			if ( isVisible ) object.visible = isVisible
 
 			Tweener.tween( {
-				fromValue: object.alpha,
+				fromValue: object.opacity.value,
 				toValue: ( isVisible ) ? 1 : 0,
 				duration: Config.values.plotSeriesVisibilityTweenDuration,
 				ease: ( isVisible ) ? "easeInQuad" : "easeOutQuad",
 				onUpdate: ( v, completed )=>{
-					object.alpha = v
+					object.opacity.value = v
 					this.$modules.renderingEngine.updateProjection()
 
 					if ( completed && !isVisible ) {

@@ -1,10 +1,11 @@
-precision highp float;
+precision mediump float;
 
 attribute vec2 coords;
 attribute vec2 normal;
 
 uniform vec2  position;
 uniform float thickness;
+uniform float opacity;
 
 uniform float resolution;
 uniform vec2  worldPosition;

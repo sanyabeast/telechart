@@ -18,6 +18,13 @@ class Skin {
 	apply () {
 		Utils.injectCSS( "telechart-skin-vars", this.cssText )
 		console.log( `skin ${this.$name} applied` )
+
+		Utils.loopCollection( Config.glColors, ( color, name )=>{
+			if ( this.$values[ name ] ) {
+				color.setCSSHex( this.$values[ name ] )
+			}
+		} )
+
 	}
 }
 

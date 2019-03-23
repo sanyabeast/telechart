@@ -9,3 +9,4 @@ values:
   frameControlBackgroundColor: "#edf4f8d6"
   frameControlPlaneBackgroundColor: "#0000001f"
   seriesButtonBorderColor: "#0000001f"
+  gridPatternLineColor: "#e2e7e9"

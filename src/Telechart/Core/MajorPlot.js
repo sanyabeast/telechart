@@ -30,7 +30,8 @@ class MajorPlot extends Plot {
 			vertexShader: "vert.plot-grid",
 			fragmentShader: "frag.plot-grid",
 			uniforms: {
-				gridSteps: this.$state.gridState.steps
+				gridSteps: this.$state.gridState.steps,
+				diffuse: Config.glColors.gridPatternLineColor
 			}
 		} )
 		

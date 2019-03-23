@@ -1,5 +1,7 @@
 precision highp float;
 
+uniform vec3 diffuse;
+
 uniform float resolution;
 uniform vec2 worldPosition;
 uniform vec2 worldScale;
@@ -14,7 +16,7 @@ void main( void ) {
 	vec2 steps = ( gridSteps / worldScale );
 
 	if ( int( mod( fragCoord.y, steps.y ) ) == 0 ) {
-		gl_FragColor = vec4(vec3(1., 1., 1.), 1.);
+		gl_FragColor = vec4(diffuse, 1.);
 	} else {
 		gl_FragColor = vec4(vec3(0., 0., 0.), 0.);
 	}

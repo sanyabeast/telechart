@@ -59,6 +59,7 @@ class Material {
 			"worldScale": ChartMath.vec2( 0, 0 ),
 			"viewportSize":  ChartMath.vec2( 0, 0 ),
 			"resolution": ChartMath.float32( 1 ),
+			"opacity": ChartMath.float32( 1 )
 		} )
 		
 	}

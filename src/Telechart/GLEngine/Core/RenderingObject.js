@@ -16,10 +16,11 @@ class RenderingObject {
 
 		this.$state = {
 			position: ChartMath.vec2( 0, 0 ),
-			boundRect: ChartMath.rect(0, 0, 0, 0),
+			boundRect: ChartMath.rect( 0, 0, 0, 0 ),
 			culled: true,
 			projectionCulled: true,
-			visible: true
+			visible: true,
+			opacity: ChartMath.float32( 1 )
 		}
 
 		this.$setupHiddenDOM()
@@ -39,7 +40,8 @@ class RenderingObject {
 			"culled",
 			"projectionCulled",
 			"position",
-			"visible"
+			"visible",
+			"opacity"
 		] )
 
 	}
@@ -87,13 +89,15 @@ class RenderingObject {
 		} )
 	}
 
-	render ( engine, gl, px, py, alpha ) {
+	render ( engine, gl, px, py, opacity ) {
+		opacity *= this.opacity
+
 		px += this.$state.position.x
 		py += this.$state.position.y
 
 		Utils.loopCollection( this.children, (child, index)=>{
 			if ( child.visible ) {
-				child.render( engine, gl, px, py, alpha )
+				child.render( engine, gl, px, py, opacity )
 			} 
 		} )
 	}
