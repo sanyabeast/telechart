@@ -26,7 +26,7 @@ class SelectedValuesBannerController extends TelechartModule {
 			domElement: this.$modules.domComponent.domElement,
 			applyScaleY: false,
 			applyScaleX: false,
-			applyPosY: true,
+			applyPosY: false,
 			applyPosX: true,
 		} )
 	}
