@@ -57,7 +57,7 @@ class App {
     addTelechart ( posX, posY, sizeX, sizeY, index ) {
         let datasetIndex = Math.floor( Math.random() * 5 )
 
-        if ( isMobile ) index = 4
+        if ( isMobile ) index = 1
 
         let telechart = new Telechart();
         telechart.update( chartData[ index ] )

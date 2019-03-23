@@ -90,7 +90,7 @@ class MajorPlot extends Plot {
 
 			if ( data.value !== value ) {
 				data.value = value
-				data.component.ref( "caption" ).textContent = Utils.formatDate( value, "${date} ${monthName}" )
+				data.component.ref( "caption" ).textContent = Utils.formatDate( value, "${monthName} ${date}" )
 			}
 		} )
 	}
@@ -180,18 +180,18 @@ class MajorPlot extends Plot {
 	}
 
 	setExtremum ( extremum, tween ) {
-		super.setExtremum( extremum, tween )
-
-		let order = ChartMath.getOrder( extremum.size )
-		let orderAlignStep = order / Config.values.gridOrderDifder
-		let multiplier = Math.ceil( ( extremum.size / order ) / ( Config.values.gridPatternYCaptionsCount - 1) )
-
-		this.$state.gridState.steps.y = order * multiplier
 		
-		setTimeout( ()=>{
-			this.$updateGridCaptionsY()
-		}, 0 )
+		if ( super.setExtremum( extremum, tween ) ) {
+			let order = ChartMath.getOrder( extremum.size )
+			let orderAlignStep = order / Config.values.gridOrderDifder
+			let multiplier = Math.ceil( ( extremum.size / order ) / ( Config.values.gridPatternYCaptionsCount - 1) )
 
+			this.$state.gridState.steps.y = order * multiplier
+			
+			setTimeout( ()=>{
+				this.$updateGridCaptionsY()
+			}, 0 )
+		}
 	}
 
 	setSeriesVisibility ( seriesId, isVisible ) {

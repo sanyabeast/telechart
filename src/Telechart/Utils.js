@@ -167,13 +167,24 @@ class Utils {
 	}
 
 	/* values format functions */
+
+	/* formatted dates cache. @TODO: dateFormatCache cleaning/trimming */
+	static $dateFormatCache = {}
+
 	static formatDate( unixTime, template ) {
+		let cacheId = `${unixTime}/${template}`
+
+		if ( this.$dateFormatCache[ cacheId ] ) {
+			return this.$dateFormatCache[ cacheId ]
+		}
+
 		let dateObject = new Date( unixTime )
 		let date = dateObject.getUTCDate().toString();
 		let month = (dateObject.getUTCMonth() + 1).toString();
 		let monthName = Config.l18n[ `month_${month}` ]
 
-		return this.stringTemplate( template, { date, month, monthName } )
+		this.$dateFormatCache[ cacheId ] = this.stringTemplate( template, { date, month, monthName } )
+		return this.$dateFormatCache[ cacheId ]
 	}
 
 	static formatValue ( value ) {

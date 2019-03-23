@@ -94,13 +94,13 @@ class Plot extends TelechartModule {
 
 	stopRendering () {}
 
-	setExtremum ( extremum, tween ) {
+	setExtremum ( extremum, tween, onSet ) {
 		if ( !extremum.isFinite ) {
-			return
+			return false
 		}
 
 		if ( extremum.min == this.$state.extremum.min && this.$state.extremum.max == extremum.max ) {
-			return
+			return false
 		}
 
 
@@ -142,7 +142,7 @@ class Plot extends TelechartModule {
 			this.$modules.renderingEngine.setViewport( viewport.x, extremum.min, viewport.w, extremum.size )
 		}
 
-		// this.clog(`Extremum: [${ extremum.min }-${extremum.max}]`)
+		return true	
 	}
 
 	$processExtremum ( extremum ) {
