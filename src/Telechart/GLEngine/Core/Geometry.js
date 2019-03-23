@@ -1,3 +1,8 @@
+/**
+ * @author sanyabeast | github.com/sanyabeast | a.gvrnsk@gmail.com | telegram:sanyabeats
+ */
+
+ 
 import BufferAttribute from "Telechart/GLEngine/Core/BufferAttribute"
 import Utils from "Telechart/Utils"
 

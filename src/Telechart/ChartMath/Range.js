@@ -1,3 +1,8 @@
+/**
+ * @author sanyabeast | github.com/sanyabeast | a.gvrnsk@gmail.com | telegram:sanyabeats
+ */
+
+ 
 class Range {
 	constructor ( min, max ) {
 		this.set( min, max )

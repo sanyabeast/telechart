@@ -1,3 +1,8 @@
+/**
+ * @author sanyabeast | github.com/sanyabeast | a.gvrnsk@gmail.com | telegram:sanyabeats
+ */
+
+ 
 import Utils from "Telechart/Utils"
 
 class DataKeeper {

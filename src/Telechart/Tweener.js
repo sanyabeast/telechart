@@ -1,3 +1,8 @@
+/**
+ * @author sanyabeast | github.com/sanyabeast | a.gvrnsk@gmail.com | telegram:sanyabeats
+ */
+
+ 
 import MainLoop from "Telechart/MainLoop"
 import ChartMath from "Telechart/ChartMath"
 

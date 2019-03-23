@@ -1,3 +1,8 @@
+/**
+ * @author sanyabeast | github.com/sanyabeast | a.gvrnsk@gmail.com | telegram:sanyabeats
+ */
+
+ 
 import GLEngine from "Telechart/GLEngine"
 import Utils from "Telechart/Utils"
 import TelechartModule from "Telechart/Core/TelechartModule"
@@ -133,6 +138,8 @@ class Plot extends TelechartModule {
 		} else {
 			this.$modules.renderingEngine.setViewport( viewport.x, extremum.min, viewport.w, extremum.size )
 		}
+
+		this.clog(`Extremum: [${ extremum.min }-${extremum.max}]`)
 	}
 
 	$processExtremum ( extremum ) {

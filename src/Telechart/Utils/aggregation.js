@@ -1,4 +1,9 @@
 /**
+ * @author sanyabeast | github.com/sanyabeast | a.gvrnsk@gmail.com | telegram:sanyabeats
+ */
+
+ 
+/**
  * Tool that allows to perform multi-extending/mixin-in-ing
  */
 let aggregation = (baseClass, ...mixins) => {

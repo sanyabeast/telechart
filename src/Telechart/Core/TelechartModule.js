@@ -1,3 +1,8 @@
+/**
+ * @author sanyabeast | github.com/sanyabeast | a.gvrnsk@gmail.com | telegram:sanyabeats
+ */
+
+ 
 import EventBus from "Telechart/EventBus"
 import Utils from "Telechart/Utils"
 
@@ -26,12 +31,17 @@ class TelechartModule {
 		this.$temp = new Utils.DataKeeper()
 	}
 
-	on (eventName, callback) {
-		EventBus.on( `${this.UUID}/${eventName}`, callback )
+	on ( eventName, callback ) {
+		EventBus.on( `${ this.UUID }/${ eventName }`, callback )
 	}
 
-	emit (eventName, payload) {
-		EventBus.emit( `${this.UUID}/${eventName}`, payload )
+	emit ( eventName, payload ) {
+		EventBus.emit( `${ this.UUID }/${ eventName }`, payload )
+	}
+
+	/* logging */
+	clog ( ...args ) {
+		console.log( `%cTelechart:${ this.constructor.name }:`, "font-weight:bold; color:#ff5722;", ...args )
 	}
 }
 

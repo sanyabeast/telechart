@@ -1,3 +1,8 @@
+/**
+ * @author sanyabeast | github.com/sanyabeast | a.gvrnsk@gmail.com | telegram:sanyabeats
+ */
+
+ 
 import Plot from "Telechart/Plot"
 import Component from "Telechart/Core/DOM/Component"
 import GLEngine from "Telechart/GLEngine"

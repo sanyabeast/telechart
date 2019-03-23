@@ -1,3 +1,8 @@
+/**
+ * @author sanyabeast | github.com/sanyabeast | a.gvrnsk@gmail.com | telegram:sanyabeats
+ */
+
+ 
 import Point from "Telechart/ChartMath/Point"
 import Utils from "Telechart/Utils"
 

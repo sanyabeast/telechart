@@ -1,3 +1,8 @@
+/**
+ * @author sanyabeast | github.com/sanyabeast | a.gvrnsk@gmail.com | telegram:sanyabeats
+ */
+
+ 
 import TelechartModule from "Telechart/Core/TelechartModule"
 import ChartMath from "Telechart/ChartMath"
 import Utils from "Telechart/Utils"
@@ -214,6 +219,7 @@ class GLEngine extends Utils.aggregation( TelechartModule, RenderingObject ) {
          } 
       } )
 
+      this.clog( `Max shader float precision format: ${ maxShaderPrecision }` )
       this.$state.maxShaderPrecision = maxShaderPrecision
    }
 }

@@ -1,4 +1,7 @@
-/* All code written by @sanyabeast from scratch. */
+/**
+ * @author sanyabeast | github.com/sanyabeast | a.gvrnsk@gmail.com | telegram:sanyabeats
+ */
+
 import Utils from "Telechart/Utils"
 import ChartMath from "Telechart/ChartMath"
 import MainLoop from "Telechart/MainLoop"
@@ -97,6 +100,8 @@ class Telechart extends TelechartModule {
 		skinName = skinName || Config.defaultSkin
 		Config.activeSkin = skinName
 		Config.assets.skins[ skinName ] && Config.assets.skins[ skinName ].apply()
+
+		this.clog(`Skin applied: ${ skinName }`)
 	}
 
 	setParentElement( parentElement ) {

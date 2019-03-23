@@ -1,3 +1,8 @@
+/**
+ * @author sanyabeast | github.com/sanyabeast | a.gvrnsk@gmail.com | telegram:sanyabeats
+ */
+
+ 
 import Utils from "Telechart/Utils"
 import Config from "Telechart/Config"
 
@@ -17,7 +22,6 @@ class Skin {
 
 	apply () {
 		Utils.injectCSS( "telechart-skin-vars", this.cssText )
-		console.log( `skin ${this.$name} applied` )
 
 		Utils.loopCollection( Config.glColors, ( color, name )=>{
 			if ( this.$values[ name ] ) {

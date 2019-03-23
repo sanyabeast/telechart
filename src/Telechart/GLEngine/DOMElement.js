@@ -1,3 +1,8 @@
+/**
+ * @author sanyabeast | github.com/sanyabeast | a.gvrnsk@gmail.com | telegram:sanyabeats
+ */
+
+ 
 import RenderingObject from "Telechart/GLEngine/Core/RenderingObject"
 import ChartMath from "Telechart/ChartMath"
 import Config from "Telechart/Config"

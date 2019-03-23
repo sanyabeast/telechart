@@ -1,3 +1,8 @@
+/**
+ * @author sanyabeast | github.com/sanyabeast | a.gvrnsk@gmail.com | telegram:sanyabeats
+ */
+
+ 
 import aggregation from "Telechart/Utils/aggregation"
 import ChartMath from "Telechart/ChartMath"
 import DataKeeper from "Telechart/Utils/DataKeeper"

@@ -1,3 +1,8 @@
+/**
+ * @author sanyabeast | github.com/sanyabeast | a.gvrnsk@gmail.com | telegram:sanyabeats
+ */
+
+ 
 import Plot from "Telechart/Plot"
 import Utils from "Telechart/Utils"
 import GLEngine from "Telechart/GLEngine"
@@ -53,8 +58,6 @@ class MajorPlot extends Plot {
 
 		let order = ChartMath.getOrder( extremum.size )
 		let orderAlignStep = order / Config.values.gridOrderDivider
-
-		console.log(order, orderAlignStep, extremum.size)
 
 		this.$state.gridState.steps.y = order / 10
 	}
