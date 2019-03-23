@@ -25,7 +25,9 @@ class MajorPlot extends Plot {
 		this.$modules.domComponent.on( "dom.pan", this.$onUserPan.bind(this) )
 
 		this.$modules.renderingEngine.on( "projection.updated", ( viewport )=>{
-			this.$updateGridCaptionsX( viewport )
+			setTimeout( ()=>{
+				this.$updateGridCaptionsX( viewport )
+			}, 0 )
 		} )
 	}
 
@@ -69,7 +71,7 @@ class MajorPlot extends Plot {
 		let accuracy = this.$state.accuracy
 		let order = ChartMath.getOrder( vpw )
 
-		let multiplier = Math.ceil( ( vpw / accuracy ) / ( Config.values.gridPatternXCaptionsCount ) )
+		let multiplier = Math.ceil( ( vpw / accuracy ) / ( Config.values.gridPatternXCaptionsCount + 1 ) )
 		multiplier = ChartMath.nearestPowerOfTwo( multiplier, true )
 
 		let step = ChartMath.nearestMult( accuracy, accuracy * multiplier * 2, true, true )
@@ -87,6 +89,7 @@ class MajorPlot extends Plot {
 			data.object.render()
 
 			if ( data.value !== value ) {
+				data.value = value
 				data.component.ref( "caption" ).textContent = Utils.formatDate( value, "${date} ${monthName}" )
 			}
 		} )
@@ -107,6 +110,7 @@ class MajorPlot extends Plot {
 			data.object.render()
 
 			if ( data.value !== value ) {
+				data.value = value
 				data.component.ref( "caption" ).textContent = Utils.formatValue( value )
 			}
 		} )
@@ -183,7 +187,11 @@ class MajorPlot extends Plot {
 		let multiplier = Math.ceil( ( extremum.size / order ) / ( Config.values.gridPatternYCaptionsCount - 1) )
 
 		this.$state.gridState.steps.y = order * multiplier
-		this.$updateGridCaptionsY()
+		
+		setTimeout( ()=>{
+			this.$updateGridCaptionsY()
+		}, 0 )
+
 	}
 
 	setSeriesVisibility ( seriesId, isVisible ) {

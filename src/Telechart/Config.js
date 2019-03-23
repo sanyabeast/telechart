@@ -32,7 +32,7 @@ class Config {
 		plotSelectedPositionCircleRadius: 10,
 		gridOrderDivider: 2,
 		gridPatternYCaptionsCount: 5,
-		gridPatternXCaptionsCount: 7
+		gridPatternXCaptionsCount: 5
 	}
 
 	static l18n = {
