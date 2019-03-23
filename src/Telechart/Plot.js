@@ -97,52 +97,57 @@ class Plot extends TelechartModule {
 			return
 		}
 
+
+		if ( this.$temp.killExtremumTween ) {
+			this.$temp.killExtremumTween()
+			delete this.$temp.killExtremumTween
+		}
+
 		this.$state.extremum.set( extremum )
 
-		let padding = extremum.size * Config.values.plotExtremumPadding
+		extremum = this.$processExtremum( extremum )
 
-		extremum.min -= padding
-		extremum.max += padding
+		let viewport = this.$modules.renderingEngine.viewport
 
-		let vp = this.$modules.renderingEngine.viewport
-		let position = this.$modules.renderingEngine.position
+		let vpy = viewport.y
+		let vph = viewport.h
 
-		if ( tween ) {
-			this.$temp.killExtremumTweenY && ( this.$temp.killExtremumTweenY() )
-			this.$temp.killExtremumTweenY = Tweener.tween( {
-				fromValue: position.y,
-				toValue: extremum.min,
+		if ( /*false && */tween ) {
+			this.$temp.killExtremumTween = Tweener.tween( {
+				fromValue: 0,
+				toValue: 1,
 				duration: Config.values.plotExtremumTweenDuration,
 				ease: "linear",
-				onUpdate: ( value, completed )=>{
-					position.y = value
+				onUpdate: ( progress, completed )=>{
+					this.$modules.renderingEngine.position.y = ChartMath.smoothstep( vpy, extremum.min, progress )
+					this.$modules.renderingEngine.viewport.h = ChartMath.smoothstep( vph, extremum.size, progress )
 					this.$modules.renderingEngine.updateProjection()
 
+
 					if ( completed ) {
-						delete this.$temp.killExtremumTweenY()
+						delete this.$temp.killExtremumTween()
 					}
 				}
 			} )
-
-			this.$temp.killExtremumTweenH && ( this.$temp.killExtremumTweenH() )
-			this.$temp.killExtremumTweenH = Tweener.tween( {
-				fromValue: vp.h,
-				toValue: ( extremum.size ),
-				duration: Config.values.plotExtremumTweenDuration,
-				ease: "linear",
-				onUpdate: ( value, completed )=>{
-					vp.h = value
-					this.$modules.renderingEngine.updateProjection()
-
-					if ( completed ) {
-						delete this.$temp.killExtremumTweenH()
-					}
-				}
-			} )
+			
 		} else {
-			vp.y = extremum.min
-			vp.h = ( extremum.max - extremum.min )
+			this.$modules.renderingEngine.setViewport( viewport.x, extremum.min, viewport.w, extremum.size )
 		}
+	}
+
+	$processExtremum ( extremum ) {
+		let order = ChartMath.getOrder( extremum.size )
+		let orderAlignStep = order / Config.values.gridOrderDivider
+
+		// let padding = extremum.size * Config.values.plotExtremumPadding
+
+		// extremum.min -= padding
+		// extremum.max += padding
+
+		extremum.min = ChartMath.nearestMult( extremum.min, orderAlignStep, false, true )
+		extremum.max = ChartMath.nearestMult( extremum.max, orderAlignStep, true, true )
+
+		return extremum
 	}
 
 	setSeriesVisibility ( seriesId, isVisible ) {

@@ -1,4 +1,5 @@
 import MainLoop from "Telechart/MainLoop"
+import ChartMath from "Telechart/ChartMath"
 
 /**
  * @class
@@ -27,16 +28,17 @@ class Tweener {
 
 		let removeTask = MainLoop.addTask(( relDelta )=>{
 			let progress = ( (+new Date() ) - startDate) / duration
-			let value = this.$getValue( fromValue, toValue, progress, easingFunction )
-			if ( progress >= 1 ) removeTask()
+			
+			if ( progress >= 1 ) {
+				progress = 1
+				removeTask()
+			}
+
+			let value = ChartMath.smoothstep( fromValue, toValue, easingFunction( progress ) )
 			onUpdate( value, progress >= 1 )
 		})
 
 		return removeTask
-	}
-
-	static $getValue ( fromValue, toValue, progress, easingFunction ) {
-		return fromValue + ( ( toValue - fromValue ) * easingFunction( progress ) )
 	}
 }
 

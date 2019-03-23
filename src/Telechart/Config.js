@@ -21,10 +21,11 @@ class Config {
 	static values = {
 		domDoubletapTimeout: 250,
 		plotLineDefaultLineWidth: 2,
-		plotExtremumTweenDuration: 150,
-		plotSeriesVisibilityTweenDuration: 150,
+		plotExtremumTweenDuration: 200,
+		plotSeriesVisibilityTweenDuration: 200,
 		plotExtremumPadding: 0.35,
-		plotSelectedPositionCircleRadius: 10
+		plotSelectedPositionCircleRadius: 10,
+		gridOrderDivider: 0.5
 	}
 
 	static skinValues = {

@@ -37,11 +37,11 @@ class ChartMath {
     }
 
     static smoothstep ( from, to, transition ) {
-    	return to + ( ( from - to ) * transition )
+    	return to + ( ( from - to ) * ( 1 - transition ) )
     }
 
     static getStep ( from, to, position ) {
-    	return ( to - position ) / ( to - from )
+    	return 1 - ( ( to - position ) / ( to - from ) )
     }
 
     /* geometry */

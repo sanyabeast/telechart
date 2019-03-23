@@ -47,6 +47,18 @@ class MajorPlot extends Plot {
 		this.$modules.renderingEngine.addChild( gridRectMesh )
 	}
 
+
+	setExtremum ( extremum, tween ) {
+		super.setExtremum( extremum, tween )
+
+		let order = ChartMath.getOrder( extremum.size )
+		let orderAlignStep = order / Config.values.gridOrderDivider
+
+		console.log(order, orderAlignStep, extremum.size)
+
+		this.$state.gridState.steps.y = order / 10
+	}
+
 	setSeriesVisibility ( seriesId, isVisible ) {
 		super.setSeriesVisibility( seriesId, isVisible )
 		this.$updateSelectedPositionCirclesVisibility() 

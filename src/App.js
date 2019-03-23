@@ -6,7 +6,8 @@ import ChartMath from "Telechart/ChartMath"
 
 import chartData from "chart_data.json"
 
-let datasetIndex = 4
+let datasetIndex = Math.floor( Math.random() * 5 )
+// datasetIndex = 4
 
 let isMobile = !!('ontouchstart' in window || navigator.msMaxTouchPoints);
 let chartsCount = isMobile ? 1 : 4
@@ -41,9 +42,10 @@ class App {
             setTimeout(()=>{
                 this.addTelechart(
                     ( ( a % rowSize) * ( windowWidth / rowSize ) ) + padding,
-                    ( Math.floor(a / rowSize ) * (windowHeight / rowSize ) ) + padding,
+                    ( Math.floor( a / rowSize) * ( windowHeight / rowSize ) ) + padding,
                     ( windowWidth / rowSize ) - padding,
-                    ( windowHeight / rowSize ) - padding
+                    ( windowHeight / rowSize) - padding,
+                    a + 1
                 );
             }, a * 0)
             
@@ -52,9 +54,11 @@ class App {
     }
 
 
-    addTelechart ( posX, posY, sizeX, sizeY ) {
+    addTelechart ( posX, posY, sizeX, sizeY, index ) {
+        let datasetIndex = Math.floor( Math.random() * 5 )
+
         let telechart = new Telechart();
-        telechart.update( chartData[ datasetIndex ] )
+        telechart.update( chartData[ index ] )
 
         this.telecharts.push( telechart );
         window[`telechart${( this.telecharts.length - 1 )}`] = telechart;

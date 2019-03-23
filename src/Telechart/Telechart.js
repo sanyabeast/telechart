@@ -1,5 +1,6 @@
 /* All code written by @sanyabeast from scratch. */
 import Utils from "Telechart/Utils"
+import ChartMath from "Telechart/ChartMath"
 import MainLoop from "Telechart/MainLoop"
 import TelechartModule from "Telechart/Core/TelechartModule"
 import Config from "Telechart/Config"
@@ -20,6 +21,7 @@ import Storage from "Telechart/Storage"
 class Telechart extends TelechartModule {
 	Config = Config
 	Utils = Utils
+	ChartMath = ChartMath
 
 	/* static */
 	static processAsset ( context, assetName, extension, processor ) {

@@ -16,6 +16,7 @@
 
 	.major-plot-wrapper {
 		max-height: 70%;
+		flex-grow: 10;
 	}
 
 	.panorama-plot-wrapper {
@@ -116,68 +117,74 @@
 	}
 
 	/* chart controls */
-	.chart-controls {
-		min-height: 48px;
-		max-height: 64px;
+	.chart-controls-wrapper {
+		flex-grow: 1;
 
-		.series-buttons {
-			align-items: flex-start;
-
-			.series-button {
-			    padding: 6px;
-				border-radius: 40px;
-				border: 1px solid var(--seriesButtonBorderColor);
-				margin-right: 16px;
-
-				.checkbox-wrapper {
-					width: 20px;
-					height: 20px;
-					margin-right: 8px;
-					border-radius: 50%;
-					border-width: 10px;
-					border-style: solid;
-					transition: border-width 0.15s ease-in;
+		.chart-controls {
+			min-height: 48px;
+			max-height: 64px;
 
 
-					.box {
-						background-color: #fff;
-						height: 2px;
-						width: 6px;
-						border-radius: 4px;
-						transition-property: transform, opacity;
-						transition: 0.25s ease-in;
-						left:50%;
-						top:50%;
-						transform-origin: 0 50%;
+			.series-buttons {
+				align-items: flex-start;
 
-						&.box-a {
-						    transform: rotateZ(225deg) translate(-2px, -3px);
-							
-						}
+				.series-button {
+				    padding: 6px;
+					border-radius: 40px;
+					border: 1px solid var(--seriesButtonBorderColor);
+					margin-right: 16px;
 
-						&.box-b {
-							transform: rotateZ(-45deg) translate(-4px, 2px);
-						    width: 10px;
-						}
-					}
-				}
-
-				p.caption {
-					margin-right: 8px;
-					font-size: 13px;
-				}
-
-				&.disabled {
 					.checkbox-wrapper {
-						border-width: 1px;
+						width: 20px;
+						height: 20px;
+						margin-right: 8px;
+						border-radius: 50%;
+						border-width: 10px;
+						border-style: solid;
+						transition: border-width 0.15s ease-in;
+
 
 						.box {
-							opacity: 0;
-							width: 2px;
+							background-color: #fff;
+							height: 2px;
+							width: 6px;
+							border-radius: 4px;
+							transition-property: transform, opacity;
+							transition: 0.25s ease-in;
+							left:50%;
+							top:50%;
+							transform-origin: 0 50%;
+
+							&.box-a {
+							    transform: rotateZ(225deg) translate(-2px, -3px);
+								
+							}
+
+							&.box-b {
+								transform: rotateZ(-45deg) translate(-4px, 2px);
+							    width: 10px;
+							}
+						}
+					}
+
+					p.caption {
+						margin-right: 8px;
+						font-size: 13px;
+					}
+
+					&.disabled {
+						.checkbox-wrapper {
+							border-width: 1px;
+
+							.box {
+								opacity: 0;
+								width: 2px;
+							}
 						}
 					}
 				}
 			}
 		}
 	}
+
 }
