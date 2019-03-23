@@ -11,6 +11,7 @@ class Geometry {
 			indicesInitialized: false,
 		} )
 
+		this.$temp = new Utils.DataKeeper()
 		this.attributes = new Utils.DataKeeper( )
 
 		if ( params && params.attributes ) {

@@ -26,13 +26,12 @@ class Material {
 		this.$state.fragmentShader = this.$compileShader( engine, gl, "fragment", this.$state.fragmentShaderCode )
 		this.$state.vertexShader = this.$compileShader( engine, gl, "vertex", this.$state.vertexShaderCode )
 
-		this.$state.shaderProgram = gl.createProgram();
+		let shaderProgram = this.$state.shaderProgram = gl.createProgram();
 
-		gl.attachShader(this.$state.shaderProgram, this.$state.vertexShader);
-	    gl.attachShader(this.$state.shaderProgram, this.$state.fragmentShader);
+		gl.attachShader(shaderProgram, this.$state.vertexShader);
+	    gl.attachShader(shaderProgram, this.$state.fragmentShader);
 	    
 	    this.$linkProgram( gl )
-
 	    this.$initUniforms( engine, gl )
 	}
 
@@ -52,29 +51,37 @@ class Material {
 	}
 
 	$initUniforms ( engine, gl ) {
-		let shaderProgram = this.$state.shaderProgram
-
-		Utils.loopCollection( this.$state.uniformsData, ( data, name )=>{
-			this.addUniform( name, gl, shaderProgram, data )
+		this.addMultipleUniforms( gl, this.$state.uniformsData )
+		this.addMultipleUniforms( gl, {
+			"position": ChartMath.vec2( 0, 0 ),
+			"worldPosition": ChartMath.vec2( 0, 0 ),
+			"worldScale": ChartMath.vec2( 0, 0 ),
+			"viewportSize":  ChartMath.vec2( 0, 0 ),
+			"resolution": ChartMath.float32( 1 ),
 		} )
-
-		this.addUniform( "position", gl, shaderProgram, ChartMath.vec2( 0, 0 ) )
-		this.addUniform( "worldPosition", gl, shaderProgram, ChartMath.vec2( 0, 0 ) )
-		this.addUniform( "worldScale", gl, shaderProgram, ChartMath.vec2( 0, 0 ) )
-		this.addUniform( "viewportSize", gl, shaderProgram,  ChartMath.vec2( 0, 0 ) )
-		this.addUniform( "resolution", gl, shaderProgram, ChartMath.float32( 1 ) )
-
 	}
 
 	$linkProgram ( gl ) {
 		gl.linkProgram( this.$state.shaderProgram )
 	}
 
+	addMultipleUniforms ( gl, uniformsData ) {
+		Utils.loopCollection( uniformsData, ( uniformValue, uniformName )=>{
+			this.addUniform( uniformName, gl, this.$state.shaderProgram, uniformValue )
+		} )
+	}
+
 	addUniform ( name, gl, shaderProgram, value ) {
 		this.uniforms[ name ] = new Uniform( name, gl, shaderProgram, value )
 	}
 
-	updateUniforms () {
+	updateUniforms ( uniformsData ) {
+		if ( uniformsData ) {
+			Utils.loopCollection( uniformsData, ( uniformValue, uniformName )=>{
+				this.uniforms[ uniformName ].value.set( uniformValue )
+			} )
+		} 
+
 		Utils.loopCollection( this.uniforms, ( uniform, name )=>{
 			uniform.update()
 		} )

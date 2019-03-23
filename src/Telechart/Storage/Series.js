@@ -2,15 +2,6 @@ import Utils from "Telechart/Utils"
 import ChartMath from "Telechart/ChartMath"
 
 class Series {
-	// get originalAccuracy 						() { return this.$state.originalAccuracy }
-	// get accuracy 						() { return this.$state.accuracy }
-	// get beginTime 						() { return this.$state.beginTime }
-	// get finishTime 						() { return this.$state.finishTime }
-	// get id 						() { return this.$state.id }
-	// get color 						() { return this.$state.color }
-	// get type 						() { return this.$state.type }
-	// get visible 						() { return this.$state.visible }
-
 	constructor ( seriesName, seriesData, timeData ) {
 		this.name = seriesName
 		this.$state = new Utils.DataKeeper( {

@@ -49,7 +49,6 @@ class GLEngine extends Utils.aggregation( TelechartModule, RenderingObject ) {
          viewport: ChartMath.rect( 0, 0, 1, 1 ),
          worldPosition: ChartMath.vec2( 0, 0 ),
          worldScale: ChartMath.vec2( 1, 1 ),
-         culledObjectsCount: 0,
          projectionModified: true,
          sizeNeedsUpdate: true
       }
@@ -98,8 +97,7 @@ class GLEngine extends Utils.aggregation( TelechartModule, RenderingObject ) {
 
    setPosition (x, y ) {
       y = ( typeof y == "number" ) ? y : this.$state.position.y
-      this.$state.position.x = x
-      this.$state.position.y = y
+      this.$state.position.set( x, y )
 
       this.updateProjection()
    }
@@ -107,10 +105,7 @@ class GLEngine extends Utils.aggregation( TelechartModule, RenderingObject ) {
    setViewport ( x, y, w, h ) {
       let viewport = this.$state.viewport
 
-      viewport.x = x
-      viewport.y = y
-      viewport.w = w
-      viewport.h = h
+      viewport.set( x, y, w, h )
 
       this.$state.position.set( viewport.x, viewport.y )
 
@@ -126,40 +121,21 @@ class GLEngine extends Utils.aggregation( TelechartModule, RenderingObject ) {
 		}
 	}
 
-   isCulled ( child, px, py ) {
-      if ( !child.visible ) return true
-
-      if ( !child.culled ) {
-         return false
-      } else {
-         let boundRect = child.getBoundRect()
-         let translatedRect = ChartMath.translateRect( this.$temp.boundRect, boundRect, px, py )
-         child.projectionCulled = !ChartMath.rectIntersectsRect( translatedRect, this.$state.viewport )
-
-         return child.projectionCulled
-      }
-   }
-
    updateProjection () {
       let viewport = this.$state.viewport
       let position = this.$state.position
       let worldPosition = this.$state.worldPosition
       let worldScale = this.$state.worldScale
       let size = this.$state.size
+      let scale = this.$state.scale
 
-      this.$state.scale.set(
-         viewport.w / size.x,
-         viewport.h / size.y
-      )
+      scale.set( viewport.w / size.x, viewport.h / size.y )
 
       viewport.x = position.x
       viewport.y = position.y
 
-      worldPosition.x = viewport.x
-      worldPosition.y = viewport.y
-
-      worldScale.x = this.$state.scale.x / 2.
-      worldScale.y = this.$state.scale.y / 2.
+      worldPosition.set( viewport.x, viewport.y )
+      worldScale.set( scale.x / 2, scale.y / 2 )
 
       this.$state.projectionModified = true
    }
@@ -194,10 +170,8 @@ class GLEngine extends Utils.aggregation( TelechartModule, RenderingObject ) {
    }
 
 	render ( force ) {
-
       this.fitSize()
-
-      if ( true || this.$state.projectionModified || force === true ) {
+      if ( this.$state.projectionModified || force === true ) {
          this.$state.projectionModified = false;
          super.render( this, this.$state.gl, -this.$state.position.x, -this.$state.position.y, 1 )
       }

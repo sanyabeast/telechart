@@ -22,40 +22,11 @@ class ChartMath {
 	 */
 	static point ( x, y ) { return new Point( x, y ) }
 	static range ( min, max ) { return new Range( min, max ) }
-	static rect (x, y, w, h) { return new Rect( x, y, w, h ) }
-
-    /*
-	static translateRect ( targetRect, srcRect, x, y ) {
-		targetRect.x = srcRect.x + x
-		targetRect.y = srcRect.y + y
-		targetRect.w = srcRect.w
-		targetRect.h = srcRect.h
-		
-		return targetRect
-	}
-
-	static pointBelongsToRect ( point, rect ) {
-		return ( point.x >= rect.x ) && ( point.x <= rect.x + rect.w ) && ( point.y >= rect.y ) && (point.y <= rect.y + rect.h)
-	}
-
-	static rectBelongsToRect ( rectA, rectB ) {
-		return ( rectA.x >= rectB.x ) && ( rectA.y >= rectB.y ) && ( rectA.x + rectA.w <= rectB.x + rectB.w ) && ( rectA.y + rectA.h <= rectB.y + rectB.h )
-	}
-
-	static rectIntersectsRect ( rectA, rectB ) {
-		return !( ( rectB.x > ( rectA.x + rectA.w ) ) || ( ( rectB.x + rectB.w ) < rectA.x ) || ( rectB.y > ( rectA.y + rectB.h ) ) || ( ( rectB.y + rectB.h ) < rectA.y ) )
-	}
-    */
+	static rect ( x, y, w, h ) { return new Rect( x, y, w, h ) }
 
 	static getExtremum ( points ) {
 		return this.range( Math.min.apply( Math, points ), Math.max.apply( Math, points ) )
 	}
-
-    /*
-	static getDistance ( pointA, pointB ) {
-		return Math.sqrt( Math.pow( Math.abs( pointA.x - pointB.x ), 2 ) + Math.pow( Math.abs( pointA.y - pointB.y ), 2 ) )
-	}
-    */
 
 	static nearestMult (num, div, greater, include) {
         return (greater ? Math.ceil((num + (include?0:1))/div)*div: Math.floor((num - (include?0:1))/div)*div) || 0;
@@ -81,21 +52,23 @@ class ChartMath {
     }
 
     static vec2normalize ( out, a ) {
-        let x = a.x,
-            y = a.y
+        let x = a.x
+        let y = a.y
         let len = x * x + y * y
+
         if ( len > 0 ) {
-            //TODO: evaluate use of glm_invsqrt here?
             len = 1 / Math.sqrt( len )
             out.x = a.x * len
             out.y = a.y * len
         }
+
         return out
     }
 
     static vec2subtract ( out, a, b ) {
         out.x = a.x - b.x
         out.y = a.y - b.y
+
         return out
     }
 
@@ -110,17 +83,20 @@ class ChartMath {
     static vec2set ( out, x, y ) {
         out.x = x
         out.y = y
+
         return out
     }
 
     static vec2normal ( out, dir, inverted ) {
         inverted ? this.vec2set( out, dir.y, -dir.x ) : this.vec2set( out, -dir.y, dir.x )
+
         return out
     }
 
     static vec2direction ( out, a, b ) {
         this.vec2subtract( out, a, b )
         this.vec2normalize( out, out )
+
         return out
     }
 

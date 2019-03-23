@@ -58,7 +58,7 @@ class Plot extends TelechartModule {
 				"series-id": seriesData.series.id,
 			},
 			uniforms: {
-				thickness: ChartMath.float32( 3 ),
+				thickness: ChartMath.float32( 2 ),
 				diffuse: ChartMath.color( seriesData.series.color )
 			}
 		})

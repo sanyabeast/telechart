@@ -57,11 +57,6 @@ let webpackConfig = {
             template: path.join(__dirname, "static", "index.html"),
             inject: true,
         }),
-        // new BundleAnalyzerPlugin({
-        //     reportFilename: "../misc/bundle-stats.html",
-        //     analyzerMode: "server",
-        //     openAnalyzer: true
-        // })
     ],
 };
 
@@ -96,11 +91,17 @@ if (env == "production") {
         })]
     }
 
-    // webpackConfig.output.libraryTarget = "web"
-
     webpackConfig.plugins.push(new JsDocPlugin({
         conf: path.join(__dirname, 'jsdoc.conf'),
     }));
+} else {
+    webpackConfig.plugins.push( 
+        new BundleAnalyzerPlugin({
+            reportFilename: "../misc/bundle-stats.html",
+            analyzerMode: "server",
+            openAnalyzer: true
+        })
+    )
 }
 
 module.exports = webpackConfig

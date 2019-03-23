@@ -15,6 +15,8 @@ class Mesh extends RenderingObject {
 	render ( engine, gl, px, py, alpha ) {
 		super.render( engine, gl, px, py, alpha )
 
+		let uniforms = this.material.uniforms;
+
 		px += this.position.x
 		py += this.position.y
 
@@ -30,13 +32,14 @@ class Mesh extends RenderingObject {
 
 		this.geometry.bind( engine, gl, this.material.program )
 
-		this.material.updateUniforms()
+		uniforms.position.value.set( px, py )
 
-		this.material.uniforms.position.value.set( px, py )
-		this.material.uniforms.worldPosition.value.set( engine.worldPosition )
-		this.material.uniforms.worldScale.value.set( engine.worldScale )
-		this.material.uniforms.viewportSize.value.set( engine.size )
-		this.material.uniforms.resolution.value.set( Config.DPR)
+		this.material.updateUniforms( {
+			"worldPosition": engine.worldPosition, 
+			"worldScale": engine.worldScale, 
+			"viewportSize": engine.size,
+			"resolution": Config.DPR,
+		} )
 
 		gl.drawElements(gl.TRIANGLES, this.geometry.indicesCount, gl.UNSIGNED_SHORT,0);
 
