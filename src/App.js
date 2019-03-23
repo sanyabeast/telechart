@@ -6,6 +6,8 @@ import ChartMath from "Telechart/ChartMath"
 
 import chartData from "chart_data.json"
 
+let datasetIndex = 4
+
 let isMobile = !!('ontouchstart' in window || navigator.msMaxTouchPoints);
 let chartsCount = isMobile ? 1 : 4
 let padding = 16;
@@ -38,10 +40,10 @@ class App {
 
             setTimeout(()=>{
                 this.addTelechart(
-                    ((a % rowSize) * (windowWidth / rowSize)) + padding,
-                    (Math.floor(a / rowSize) * (windowHeight / rowSize)) + padding,
-                    (windowWidth / rowSize) - padding,
-                    (windowHeight / rowSize) - padding
+                    ( ( a % rowSize) * ( windowWidth / rowSize ) ) + padding,
+                    ( Math.floor(a / rowSize ) * (windowHeight / rowSize ) ) + padding,
+                    ( windowWidth / rowSize ) - padding,
+                    ( windowHeight / rowSize ) - padding
                 );
             }, a * 0)
             
@@ -52,10 +54,10 @@ class App {
 
     addTelechart ( posX, posY, sizeX, sizeY ) {
         let telechart = new Telechart();
-        telechart.update(chartData)
+        telechart.update( chartData[ datasetIndex ] )
 
-        this.telecharts.push(telechart);
-        window[`telechart${(this.telecharts.length - 1)}`] = telechart;
+        this.telecharts.push( telechart );
+        window[`telechart${( this.telecharts.length - 1 )}`] = telechart;
 
         this.xframes.create({
             id: telechart.UUID,
@@ -68,16 +70,16 @@ class App {
                 x: sizeX,
                 y: sizeY
             },
-            onCreate: (xframe)=>{
+            onCreate: ( xframe )=>{
                 telechart.setParentElement( xframe.bodyElement )
-                this.setupCustomControls(xframe, telechart);
+                this.setupCustomControls( xframe, telechart);
             },
             onClose: ()=>{
-                this.xframes.remove(telechart.UUID);
-                this.removeTelechart(telechart.UUID);
+                this.xframes.remove( telechart.UUID );
+                this.removeTelechart( telechart.UUID );
             },
             onFocus: ()=>{
-                this.xframes.setFocus(telechart.UUID);
+                this.xframes.setFocus( telechart.UUID );
             }
         });
     }

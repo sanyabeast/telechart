@@ -73,7 +73,7 @@ class Telechart extends TelechartModule {
 	 *
 	 */
 	update ( chartData ) {
-		this.$modules.storage.importRawDataset( chartData[ 0 ] )
+		this.$modules.storage.importRawDataset( chartData )
 
 		Utils.loopCollection( this.$modules.storage.series, ( series, seriesName )=>{
 			let points = this.$modules.storage.getSeriesPoints( seriesName )
