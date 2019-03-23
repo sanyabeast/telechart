@@ -84,7 +84,7 @@ if (env == "production") {
                 keep_fnames: false,
                 safari10: false,
                 output: {
-                    preamble: "/* @sanyabeast */",
+                    preamble: "/* @sanyabeast | 2019 */",
                     // beautify: true
                 }
             }

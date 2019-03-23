@@ -87,10 +87,6 @@ class RenderingObject {
 		} )
 	}
 
-	cutOff () {
-		this.parentNode && this.parentNode.removeChild( this )
-	}
-
 	render ( engine, gl, px, py, alpha ) {
 		px += this.$state.position.x
 		py += this.$state.position.y

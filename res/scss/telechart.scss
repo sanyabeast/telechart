@@ -36,13 +36,12 @@
 	.button {
 		cursor: pointer;
 		user-select: none;
-		-webkit-touch-callout: none; /* iOS Safari */
-	    -webkit-user-select: none; /* Safari */
-	     -khtml-user-select: none; /* Konqueror HTML */
-	       -moz-user-select: none; /* Firefox */
-	        -ms-user-select: none; /* Internet Explorer/Edge */
-	            user-select: none; /* Non-prefixed version, currently
-	                                  supported by Chrome and Opera */
+		-webkit-touch-callout: none;
+	    -webkit-user-select: none;
+	       -moz-user-select: none;
+	        -ms-user-select: none;
+	            user-select: none;
+	                                
 	}
 
 	.theme-switcher p {
@@ -143,16 +142,16 @@
 						transition: 0.25s ease-in;
 						left:50%;
 						top:50%;
+						transform-origin: 0 50%;
 
 						&.box-a {
 						    transform: rotateZ(225deg) translate(-2px, -3px);
-							transform-origin: 0 50%;
+							
 						}
 
 						&.box-b {
 							transform: rotateZ(-45deg) translate(-4px, 2px);
 						    width: 10px;
-						    transform-origin: 0 50%;
 						}
 					}
 				}

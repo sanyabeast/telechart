@@ -47,6 +47,7 @@ class DOMElementEventHandler extends TelechartModule {
 					eventData.stopPropagation()
 					eventData.preventDefault()
 					eventData = this.$normalizeEventData( "drag", eventData, domElement )
+					
 					dx = eventData.pageX - prevX
 					dy = eventData.pageY - prevY
 
@@ -145,19 +146,22 @@ class DOMElementEventHandler extends TelechartModule {
 
 	$normalizeEventData ( eventName, eventData, target ) {
 		let boundingRect = target.getBoundingClientRect()
-		this.$state.normalizedEventData.isGesture = false
+		let evt = eventData
+		let nEvt = this.$state.normalizedEventData
+
+		nEvt.isGesture = false
 
 		if ( eventData instanceof window.TouchEvent ) {
-			this.$state.normalizedEventData = this.$normalizeTouchEventData( eventName, eventData, target )
+			nEvt = this.$normalizeTouchEventData( eventName, eventData, target )
 		} else {
-			this.$state.normalizedEventData.x = ( eventData.pageX - boundingRect.x ) * window.devicePixelRatio	
-			this.$state.normalizedEventData.y = ( eventData.pageX - boundingRect.y ) * window.devicePixelRatio	
-			this.$state.normalizedEventData.pageX = eventData.pageX * window.devicePixelRatio
-			this.$state.normalizedEventData.pageY = eventData.pageY * window.devicePixelRatio		
+			nEvt.x = ( evt.pageX - boundingRect.x ) * Config.DPR	
+			nEvt.y = ( evt.pageX - boundingRect.y ) * Config.DPR	
+			nEvt.pageX = evt.pageX * Config.DPR
+			nEvt.pageY = evt.pageY * Config.DPR		
 		}
 
-		this.$state.normalizedEventData.type = eventName
-		this.$state.normalizedEventData.target = target
+		nEvt.type = eventName
+		nEvt.target = target
 
 		return this.$state.normalizedEventData
 	}

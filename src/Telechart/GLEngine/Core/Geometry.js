@@ -35,7 +35,6 @@ class Geometry {
         gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array( this.$state.indices ), gl.STATIC_DRAW);
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, null);
 
-
         // this.$bind( engine, gl, shaderProgram )
 	}
 

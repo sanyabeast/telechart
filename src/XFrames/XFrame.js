@@ -1,5 +1,5 @@
-import file_window_html from "txt!html/dev/window.xml";
-import file_custom_controls_button from "txt!html/dev/custom_controls_button.xml";
+import file_window_html from "txt!./window.xml";
+import file_custom_controls_button from "txt!./custom_controls_button.xml";
 
 class XFrame {
 	get bodyElement () {

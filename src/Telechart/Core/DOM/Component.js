@@ -50,19 +50,6 @@ class Component extends TelechartModule {
 
 	$processAttrs ( node, parentNode, params ) {
 		Utils.loopCollection( node.attributes, ( attr, index )=>{
-
-			let computableProp = attr.value && attr.value.match(/{{(.*?)}}/)
-
-			if ( computableProp ) {
-				computableProp = computableProp[1]
-
-				try {
-					attr.value = eval( computableProp )
-				} catch ( err ) {
-					console.warn( `failed to compute prop: ${computableProp}`, err )
-				}
-			}
-
 			switch ( attr.name ) {
 				case "$ref":
 					this.$refs[attr.value] = node
@@ -79,7 +66,6 @@ class Component extends TelechartModule {
 						domElement: node,
 						eventsList: attr.value.split(" ")
 					} )
-
 
 					eventHandler.on( "$event", ( data )=>{
 						let ref = node.$ref || "";

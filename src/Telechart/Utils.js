@@ -98,7 +98,7 @@ class Utils {
 	}
 
 	/* array tools */
-	static splitToChunks ( array, chunkSize ) {
+	/* static splitToChunks ( array, chunkSize ) {
 		let result = []
 
 		this.loop( 0, ( Math.floor( array.length / chunkSize ) ), 1, false, ( index, iteration )=>{
@@ -108,7 +108,7 @@ class Utils {
 
 		return result
 
-	} 
+	} */
 
 	/* object tools */
 	static defineProperty ( target, name, descriptor ) {
@@ -135,13 +135,6 @@ class Utils {
 
 	/* misc */
 	static generateRandomCSSHexColor () { return `#${( Math.floor( Math.random() * 16777215 ) ).toString("16")}` }
-	static measureText ( textContent, font ) {
-		testContext2D.font = font || testContext2D.font
-		let height = Number( testContext2D.font.match( /\d+/ )[0] )
-		let width = testContext2D.measureText( textContent ).width
-
-		return ChartMath.vec2( width, height )
-	}
 
 	static cssHexToRGB( hexString ) {
 		/* source: https://stackoverflow.com/questions/5623838/rgb-to-hex-and-hex-to-rgb */

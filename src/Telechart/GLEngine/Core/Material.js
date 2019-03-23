@@ -51,6 +51,7 @@ class Material {
 	}
 
 	$initUniforms ( engine, gl ) {
+
 		this.addMultipleUniforms( gl, this.$state.uniformsData )
 		this.addMultipleUniforms( gl, {
 			"position": ChartMath.vec2( 0, 0 ),
@@ -59,6 +60,7 @@ class Material {
 			"viewportSize":  ChartMath.vec2( 0, 0 ),
 			"resolution": ChartMath.float32( 1 ),
 		} )
+		
 	}
 
 	$linkProgram ( gl ) {
