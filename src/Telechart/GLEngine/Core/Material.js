@@ -38,8 +38,10 @@ class Material {
 	$compileShader ( engine, gl, type, shaderCode ) {
 		let shader = gl.createShader( type == "vertex" ? gl.VERTEX_SHADER : gl.FRAGMENT_SHADER );
 
-		gl.shaderSource(shader, shaderCode)
-		gl.compileShader(shader)
+		gl.shaderSource( shader, Utils.stringTemplate( shaderCode, {
+			maxShaderPrecision: engine.maxShaderPrecision
+		} ) )
+		gl.compileShader( shader )
 
 		let compileSuccess = gl.getShaderParameter( shader, gl.COMPILE_STATUS );
 		

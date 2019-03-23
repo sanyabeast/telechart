@@ -1,4 +1,4 @@
-precision mediump float;
+precision ${maxShaderPrecision} float;
 
 attribute vec2 coords;
 attribute vec2 normal;

@@ -54,14 +54,17 @@ class GLEngine extends Utils.aggregation( TelechartModule, RenderingObject ) {
          worldPosition: ChartMath.vec2( 0, 0 ),
          worldScale: ChartMath.vec2( 1, 1 ),
          projectionModified: true,
-         sizeNeedsUpdate: true
+         sizeNeedsUpdate: true,
+         maxShaderPrecision: "mediump"
       }
 
-      let gl = this.$state.gl
 
+      let gl = this.$state.gl
       gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
       gl.enable(gl.BLEND);
       gl.disable(gl.DEPTH_TEST);
+
+      this.$detectMaxFloatPrecision()
 
       Utils.proxyProps( this, this.$state, [
          "position",
@@ -69,7 +72,8 @@ class GLEngine extends Utils.aggregation( TelechartModule, RenderingObject ) {
          "viewport",
          "size",
          "worldScale",
-         "worldPosition"
+         "worldPosition",
+         "maxShaderPrecision"
       ] )
 
  
@@ -189,6 +193,28 @@ class GLEngine extends Utils.aggregation( TelechartModule, RenderingObject ) {
 
    updateValue ( value ) {
       this.value = value || this.value
+   }
+
+   $detectMaxFloatPrecision () {
+      let gl = this.$state.gl
+      let maxShaderPrecision = "lowp"
+
+      let formats = {
+         LOW_FLOAT: "lowp",
+         MEDIUM_FLOAT: "mediump",
+         HIGH_FLOAT: "highp"
+      }
+
+      Utils.loopCollection( formats, ( precisionFormat, constName )=>{
+         let fragData = gl.getShaderPrecisionFormat( gl.FRAGMENT_SHADER, gl[constName] )
+         let vertData = gl.getShaderPrecisionFormat( gl.VERTEX_SHADER, gl[constName] )
+
+         if ( fragData && vertData && fragData.precision && vertData.precision ) {
+            maxShaderPrecision = precisionFormat
+         } 
+      } )
+
+      this.$state.maxShaderPrecision = maxShaderPrecision
    }
 }
 

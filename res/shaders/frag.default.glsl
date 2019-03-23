@@ -1,4 +1,4 @@
-precision mediump float;
+precision ${maxShaderPrecision} float;
 
 uniform vec3 diffuse;
 uniform float opacity;

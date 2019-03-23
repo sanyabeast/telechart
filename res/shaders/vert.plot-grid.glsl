@@ -1,4 +1,4 @@
-precision highp float;
+precision ${maxShaderPrecision} float;
 
 attribute vec2 coords;
 uniform vec2 position;
