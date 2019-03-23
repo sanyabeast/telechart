@@ -71,6 +71,7 @@ class PanoramaPlot extends Plot {
 		frameViewport.x = x
 		frameControlsRO.position.x = x
 		frameControlsRO.render()
+		
 		this.$updateFillers()
 		this.emit( "frame.viewport.changed", frameViewport )
 	}

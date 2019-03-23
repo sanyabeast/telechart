@@ -105,6 +105,12 @@ class ChartMath {
         return out
     }
 
+    static nearestPowerOfTwo ( num, greater ) {
+        let degree = Math.log2( num );
+        degree = greater ? Math.ceil(degree): Math.floor( degree );
+        return Math.pow( 2, degree );
+    }
+
 
 }
 

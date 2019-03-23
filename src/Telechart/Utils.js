@@ -6,6 +6,7 @@
 import aggregation from "Telechart/Utils/aggregation"
 import ChartMath from "Telechart/ChartMath"
 import DataKeeper from "Telechart/Utils/DataKeeper"
+import Config from "Telechart/Config"
 
 /**
  * @class
@@ -163,6 +164,30 @@ class Utils {
 		}
 		
 		return result;
+	}
+
+	/* values format functions */
+	static formatDate( unixTime, template ) {
+		let dateObject = new Date( unixTime )
+		let date = dateObject.getUTCDate().toString();
+		let month = (dateObject.getUTCMonth() + 1).toString();
+		let monthName = Config.l18n[ `month_${month}` ]
+
+		return this.stringTemplate( template, { date, month, monthName } )
+	}
+
+	static formatValue ( value ) {
+		let result = value.toString()
+
+		if ( value / 1000 >= 1 ) {
+			result = `${ ( value / 1000 ).toString() }k`
+		}
+
+		if ( value / 1000000 >= 1 ) {
+			result = `${ ( value / 1000000 ).toString() }M`
+		}
+
+		return result
 	}
 
 }

@@ -15,19 +15,24 @@ class MajorPlot extends Plot {
 	constructor ( params ) {
 		super( params )
 
-		this.$temp.circlesRenderingObjects = {}
+		this.$temp.circlesRenderingObjects = []
+		this.$temp.prevScaleX = -1
 			
 		this.$setupGrid() 
 
 		this.$modules.domComponent.on( "dom.drag", this.$onUserDrag.bind(this) )
 		this.$modules.domComponent.on( "dom.click", this.$onUserClick.bind(this) )
 		this.$modules.domComponent.on( "dom.pan", this.$onUserPan.bind(this) )
+
+		this.$modules.renderingEngine.on( "projection.updated", ( viewport )=>{
+			this.$updateGridCaptionsX( viewport )
+		} )
 	}
 
 	$setupGrid () {
 
 		this.$state.gridState = new Utils.DataKeeper( {
-			steps: ChartMath.vec2( 0, 1000000 )
+			steps: ChartMath.vec2( 20, 1000000 )
 		} )
 
 		let gridRectMaterial = new GLEngine.Material( {
@@ -49,17 +54,136 @@ class MajorPlot extends Plot {
 			material: gridRectMaterial
 		} )
 
+		this.$temp.gridRectMesh = gridRectMesh
+
 		this.$modules.renderingEngine.addChild( gridRectMesh )
+
+		this.$setupGridCaptions()
 	}
 
+	$updateGridCaptionsX ( viewport ) {
+		let scale = this.$modules.renderingEngine.scale
+
+		/* updating time-captions */
+		let vpw = viewport.w
+		let accuracy = this.$state.accuracy
+		let order = ChartMath.getOrder( vpw )
+
+		let multiplier = Math.ceil( ( vpw / accuracy ) / ( Config.values.gridPatternXCaptionsCount ) )
+		multiplier = ChartMath.nearestPowerOfTwo( multiplier, true )
+
+		let step = ChartMath.nearestMult( accuracy, accuracy * multiplier * 2, true, true )
+
+		let vpx = viewport.x
+
+		let start = ChartMath.nearestMult( vpx - step, step, false, true )
+
+		this.$temp.prevScaleX = scale.x
+
+		Utils.loopCollection( this.$temp.gridCaptionsX, ( data, index )=>{
+			let value = start + ( index * step )
+
+			data.object.position.x = value
+			data.object.render()
+
+			if ( data.value !== value ) {
+				data.component.ref( "caption" ).textContent = Utils.formatDate( value, "${date} ${monthName}" )
+			}
+		} )
+	}
+
+	$updateGridCaptionsY ( viewport ) {
+
+		/* updating time-captions */
+		let step = this.$state.gridState.steps.y
+		let vpx = this.$modules.renderingEngine.viewport.y
+
+		let start = ChartMath.nearestMult( vpx - step, step, false, true )
+
+		Utils.loopCollection( this.$temp.gridCaptionsY, ( data, index )=>{
+			let value = start + ( index * step )
+
+			data.object.position.y = value
+			data.object.render()
+
+			if ( data.value !== value ) {
+				data.component.ref( "caption" ).textContent = Utils.formatValue( value )
+			}
+		} )
+	}
+
+	$setupGridCaptions () {
+		this.$temp.gridCaptionsX = {}
+		this.$temp.gridCaptionsY = {}
+
+		/* setting up time captions */
+		Utils.loop( 0, Config.values.gridPatternXCaptionsCount, 1, true, ( index )=>{
+
+
+			let gridCaptionComponent = new DOMComponent( {
+				template: "grid-caption",
+				classList: [ "time" ]
+			} )
+
+			let gridCaptionRO = new GLEngine.DOMElement( {
+				domElement: gridCaptionComponent.domElement,
+				domComponent: gridCaptionComponent,
+				applyScaleY: false,
+				applyScaleX: false,
+				applyPosY: false,
+				applyPosX: true,
+			} )
+
+			this.$modules.domComponent.addChild( "dom-layer", gridCaptionComponent.domElement )
+
+			this.$temp.gridCaptionsX[ index ] = {
+				component: gridCaptionComponent,
+				object: gridCaptionRO
+			}
+
+			this.$modules.renderingEngine.addChild( gridCaptionRO )
+
+		} )
+
+		/* setting up value captions */
+		Utils.loop( 0, Config.values.gridPatternYCaptionsCount, 1, true, ( index )=>{
+
+			let gridCaptionComponent = new DOMComponent( {
+				template: "grid-caption",
+				classList: [ "value" ]
+			} )
+
+			let gridCaptionRO = new GLEngine.DOMElement( {
+				domElement: gridCaptionComponent.domElement,
+				domComponent: gridCaptionComponent,
+				applyScaleY: false,
+				applyScaleX: false,
+				applyPosY: true,
+				applyPosX: false,
+			} )
+
+			this.$modules.domComponent.addChild( "dom-layer", gridCaptionComponent.domElement )
+
+			this.$temp.gridCaptionsY[ index ] = {
+				component: gridCaptionComponent,
+				object: gridCaptionRO
+			}
+
+			this.$modules.renderingEngine.addChild( gridCaptionRO )
+
+		} )
+
+	}
 
 	setExtremum ( extremum, tween ) {
 		super.setExtremum( extremum, tween )
 
 		let order = ChartMath.getOrder( extremum.size )
-		let orderAlignStep = order / Config.values.gridOrderDivider
+		let orderAlignStep = order / Config.values.gridOrderDifder
+		let multiplier = Math.ceil( ( extremum.size / order ) / ( Config.values.gridPatternYCaptionsCount - 1) )
 
-		this.$state.gridState.steps.y = order / 10
+		this.$state.gridState.steps.y = order * multiplier
+		this.$updateGridCaptionsY()
 	}
 
 	setSeriesVisibility ( seriesId, isVisible ) {
@@ -113,7 +237,6 @@ class MajorPlot extends Plot {
 					applyScaleX: false,
 					applyPosY: true,
 					applyPosX: true,
-					test: true,
 				} )
 
 				circleRenderingObject.setStyles( {

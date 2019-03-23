@@ -30,7 +30,24 @@ class Config {
 		plotSeriesVisibilityTweenDuration: 200,
 		plotExtremumPadding: 0.35,
 		plotSelectedPositionCircleRadius: 10,
-		gridOrderDivider: 2
+		gridOrderDivider: 2,
+		gridPatternYCaptionsCount: 5,
+		gridPatternXCaptionsCount: 7
+	}
+
+	static l18n = {
+		"month_1": "Jan",
+		"month_2": "Feb",
+		"month_3": "March",
+		"month_4": "Apr",
+		"month_5": "May",
+		"month_6": "Jun",
+		"month_7": "Jul",
+		"month_8": "Aug",
+		"month_9": "Sep",
+		"month_10": "Oct",
+		"month_11": "Nov",
+		"month_12": "Dec",
 	}
 
 	static skinValues = {

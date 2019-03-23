@@ -167,4 +167,16 @@
 		}
 	}
 
+	.grid-caption {
+		p {
+			font-size: 12px;
+			color: var(--gridPatternCaptionColor);
+		}
+
+		&.time {
+			bottom: 0;
+			top: auto;
+		}
+	}
+
 }

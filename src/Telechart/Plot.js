@@ -52,6 +52,7 @@ class Plot extends TelechartModule {
 
 		this.$state.beginTime = seriesData.series.beginTime
 		this.$state.finishTime = seriesData.series.finishTime
+		this.$state.accuracy = seriesData.series.accuracy
 
 		let seriesLine = new GLEngine.Line({
 			points: seriesData.points,
@@ -103,6 +104,8 @@ class Plot extends TelechartModule {
 		}
 
 
+		extremum.min = 0
+
 		if ( this.$temp.killExtremumTween ) {
 			this.$temp.killExtremumTween()
 			delete this.$temp.killExtremumTween
@@ -122,7 +125,7 @@ class Plot extends TelechartModule {
 				fromValue: 0,
 				toValue: 1,
 				duration: Config.values.plotExtremumTweenDuration,
-				ease: "linear",
+				ease: "easeOutQuad",
 				onUpdate: ( progress, completed )=>{
 					this.$modules.renderingEngine.position.y = ChartMath.smoothstep( vpy, extremum.min, progress )
 					this.$modules.renderingEngine.viewport.h = ChartMath.smoothstep( vph, extremum.size, progress )
@@ -139,14 +142,12 @@ class Plot extends TelechartModule {
 			this.$modules.renderingEngine.setViewport( viewport.x, extremum.min, viewport.w, extremum.size )
 		}
 
-		this.clog(`Extremum: [${ extremum.min }-${extremum.max}]`)
+		// this.clog(`Extremum: [${ extremum.min }-${extremum.max}]`)
 	}
 
 	$processExtremum ( extremum ) {
 		let order = ChartMath.getOrder( extremum.size )
 		let orderAlignStep = order / Config.values.gridOrderDivider
-
-		extremum.min = 0
 		extremum.max = ChartMath.nearestMult( extremum.max, orderAlignStep, true, true )
 
 		return extremum

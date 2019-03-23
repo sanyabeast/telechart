@@ -10,3 +10,4 @@ values:
   seriesButtonBorderColor: "#40566bcc"
   # gridPatternLineColor: "#2c3949"
   gridPatternLineColor: "#ffffff"
+  gridPatternCaptionColor: "#536676"

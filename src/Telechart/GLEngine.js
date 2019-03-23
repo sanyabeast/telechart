@@ -157,6 +157,7 @@ class GLEngine extends Utils.aggregation( TelechartModule, RenderingObject ) {
       worldScale.set( scale.x / 2, scale.y / 2 )
 
       this.$state.projectionModified = true
+      this.emit( "projection.updated", viewport )
    }
 
    toReal ( x, y ) {

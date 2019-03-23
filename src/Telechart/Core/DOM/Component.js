@@ -24,9 +24,15 @@ class Component extends TelechartModule {
 			eventHandlers: []
 		}
 		
-		let htmlString = Config.assets.html[params.template]	
+		let htmlString = Config.assets.html[ params.template ]	
 
 		this.$dom.element = this.$buildTemplate ( htmlString, params )	
+
+		if ( params.classList ) {
+			Utils.loopCollection( params.classList, ( className )=>{
+				this.$dom.element.classList.add( className )
+			} )
+		}
 	}
 
 	ref ( name ) { return this.$refs[name] }
