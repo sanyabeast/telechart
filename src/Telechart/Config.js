@@ -48,6 +48,13 @@ class Config {
 		"month_10": "Oct",
 		"month_11": "Nov",
 		"month_12": "Dec",
+		"weekday_0": "Sun",
+		"weekday_1": "Mon",
+		"weekday_2": "Tue",
+		"weekday_3": "Wed",
+		"weekday_4": "Thu",
+		"weekday_5": "Fri",
+		"weekday_6": "Sat",
 	}
 
 	static skinValues = {

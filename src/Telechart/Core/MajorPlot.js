@@ -11,12 +11,18 @@ import Config from "Telechart/Config"
 import ChartMath from "Telechart/ChartMath"
 import Tweener from "Telechart/Tweener"
 
+import SelectedValuesBannerController from "Telechart/Core/MajorPlot/SelectedValuesBannerController"
+
 class MajorPlot extends Plot {
 	constructor ( params ) {
 		super( params )
 
 		this.$temp.circlesRenderingObjects = []
 		this.$temp.prevScaleX = -1
+
+		this.$modules.selectedValuesBannerController = new SelectedValuesBannerController()
+		this.$modules.domComponent.addChild( "dom-layer", this.$modules.selectedValuesBannerController.domElement )
+		this.$modules.renderingEngine.addChild( this.$modules.selectedValuesBannerController.renderingObject )
 			
 		this.$setupGrid() 
 
@@ -29,6 +35,11 @@ class MajorPlot extends Plot {
 				this.$updateGridCaptionsX( viewport )
 			}, 0 )
 		} )
+	}
+
+	addSeries ( seriesData ) {
+		super.addSeries( seriesData )
+		this.$modules.selectedValuesBannerController.setSeries( seriesData )
 	}
 
 	$setupGrid () {
@@ -96,7 +107,6 @@ class MajorPlot extends Plot {
 	}
 
 	$updateGridCaptionsY ( viewport ) {
-
 		/* updating time-captions */
 		let step = this.$state.gridState.steps.y
 		let vpx = this.$modules.renderingEngine.viewport.y
@@ -271,6 +281,9 @@ class MajorPlot extends Plot {
 
 
 		} )
+
+		this.$modules.selectedValuesBannerController.setSeriesValues( values )
+
 	}
 }
 

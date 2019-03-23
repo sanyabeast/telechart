@@ -11,3 +11,4 @@ values:
   # gridPatternLineColor: "#2c3949"
   gridPatternLineColor: "#ffffff"
   gridPatternCaptionColor: "#536676"
+  selectedValuesBannerBackgroundColor: "#253241"

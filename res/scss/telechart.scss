@@ -81,6 +81,7 @@
 
 	.selected-position-circle {
 		transition: opacity 0.2s ease-out;
+		z-index: 2;
 
 		.inner {
 			width: 12px;
@@ -168,6 +169,8 @@
 	}
 
 	.grid-caption {
+		z-index: 1;
+
 		p {
 			font-size: 12px;
 			color: var(--gridPatternCaptionColor);
@@ -176,6 +179,33 @@
 		&.time {
 			bottom: 0;
 			top: auto;
+		}
+	}
+
+	.selected-values-banner {
+		z-index: 4;
+
+		.inner {
+			box-shadow: 0px 0px 8px -4px black;
+		    padding: 8px 16px;
+		    border-radius: 8px;
+			background-color: var(--selectedValuesBannerBackgroundColor);
+
+			.date-value {
+				p.value {
+					font-size: 16px;
+				}
+			}
+
+			.series-value {
+				p.value {
+					font-size: 18px;
+				}
+
+				p.caption {
+					font-size: 13px;
+				}
+			}
 		}
 	}
 

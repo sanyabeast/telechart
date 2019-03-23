@@ -180,10 +180,12 @@ class Utils {
 
 		let dateObject = new Date( unixTime )
 		let date = dateObject.getUTCDate().toString();
+		let weekday = dateObject.getDay().toString();
 		let month = (dateObject.getUTCMonth() + 1).toString();
 		let monthName = Config.l18n[ `month_${month}` ]
+		let weekdayName = Config.l18n[ `weekday_${weekday}` ]
 
-		this.$dateFormatCache[ cacheId ] = this.stringTemplate( template, { date, month, monthName } )
+		this.$dateFormatCache[ cacheId ] = this.stringTemplate( template, { date, month, monthName, weekday, weekdayName } )
 		return this.$dateFormatCache[ cacheId ]
 	}
 

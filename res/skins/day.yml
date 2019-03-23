@@ -11,3 +11,4 @@ values:
   seriesButtonBorderColor: "#0000001f"
   gridPatternLineColor: "#e2e7e9"
   gridPatternCaptionColor: "#96a2aa"
+  selectedValuesBannerBackgroundColor: "#ffffff"
