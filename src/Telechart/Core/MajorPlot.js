@@ -11,13 +11,12 @@ class MajorPlot extends Plot {
 		super( params )
 
 		this.$temp.circlesRenderingObjects = {}
-		
+			
 		this.$setupGrid() 
 
 		this.$modules.domComponent.on( "dom.drag", this.$onUserDrag.bind(this) )
 		this.$modules.domComponent.on( "dom.click", this.$onUserClick.bind(this) )
 		this.$modules.domComponent.on( "dom.pan", this.$onUserPan.bind(this) )
-
 	}
 
 	$setupGrid () {
@@ -48,6 +47,22 @@ class MajorPlot extends Plot {
 		this.$modules.renderingEngine.addChild( gridRectMesh )
 	}
 
+	setSeriesVisibility ( seriesId, isVisible ) {
+		super.setSeriesVisibility( seriesId, isVisible )
+		this.$updateSelectedPositionCirclesVisibility() 
+	}
+
+	$updateSelectedPositionCirclesVisibility () {
+		Utils.loopCollection( this.$temp.circlesRenderingObjects, ( circleRenderingObject, seriesId )=>{
+			if ( this.$state.series && this.$state.series[ seriesId ] && this.$state.series[ seriesId ].visible ) {
+				circleRenderingObject.$params.domComponent.classList.remove( "hidden" )
+			} else {
+				circleRenderingObject.$params.domComponent.classList.add( "hidden" )
+
+			}
+		} )
+	}
+
 	$onUserDrag ( eventData ) {
 		let position = this.$modules.renderingEngine.toVirtual( eventData.x, eventData.y )
 		this.emit( "user.position.select", position )
@@ -68,14 +83,8 @@ class MajorPlot extends Plot {
 	}
 
 	setSelectedPositionValues ( values ) {
-
-		Utils.loopCollection( this.$temp.circlesRenderingObjects, ( circleObject, name )=>{
-			circleObject.visible = false
-		} )
-
-
-		Utils.loopCollection( values, ( seriesValue, seriesName )=>{
-			let circleRenderingObject = this.$temp.circlesRenderingObjects[ seriesName ]
+		Utils.loopCollection( values, ( seriesValue, seriesId )=>{
+			let circleRenderingObject = this.$temp.circlesRenderingObjects[ seriesId ]
 
 			if ( !circleRenderingObject ) {
 				let circleComponent = new DOMComponent( {
@@ -93,17 +102,16 @@ class MajorPlot extends Plot {
 				} )
 
 				circleRenderingObject.setStyles( {
-					borderColor: this.$state.series[ seriesName ].series.color,
+					borderColor: this.$state.series[ seriesId ].series.color,
 					width: `${Config.values.plotSelectedPositionCircleRadius}px`,
 					height: `${Config.values.plotSelectedPositionCircleRadius}px`,
 				}, circleComponent.ref( "inner" ) )
 
 				this.$modules.domComponent.addChild( "dom-layer", circleComponent.domElement )
 				this.$modules.renderingEngine.addChild( circleRenderingObject )
-				this.$temp.circlesRenderingObjects[ seriesName ] = circleRenderingObject
+				this.$temp.circlesRenderingObjects[ seriesId ] = circleRenderingObject
 			} 
 
-			circleRenderingObject.visible = true
 			circleRenderingObject.position.set( seriesValue )
 
 			if ( circleRenderingObject.soloRenderingAvailable ) {
@@ -112,6 +120,8 @@ class MajorPlot extends Plot {
 			} else {
 				this.$modules.renderingEngine.updateProjection()				
 			}
+
+			this.$updateSelectedPositionCirclesVisibility()
 
 
 		} )

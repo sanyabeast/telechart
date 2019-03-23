@@ -144,6 +144,8 @@ class PanoramaPlot extends Plot {
 		this.setFrameSize( ( seriesData.series.finishTime - seriesData.series.beginTime ) / 5 )
 		this.setFramePosition ( seriesData.series.finishTime )
 	}
+
+	
 }
 
 export default PanoramaPlot

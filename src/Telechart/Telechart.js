@@ -82,6 +82,7 @@ class Telechart extends TelechartModule {
 				points: points,
 				series: series,
 				extremum: this.$modules.storage.getExtremum( series.beginTime, series.finishTime ),
+				visible: series.visible
 			}
 
 			this.$modules.majorPlot.addSeries( plotSeriesData )

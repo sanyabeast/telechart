@@ -146,6 +146,8 @@ class Plot extends TelechartModule {
 	}
 
 	setSeriesVisibility ( seriesId, isVisible ) {
+		this.$state.series[ seriesId ].visible = isVisible
+
 		this.$modules.renderingEngine.select( {
 			"content-type": "series",
 			"series-id": seriesId,
