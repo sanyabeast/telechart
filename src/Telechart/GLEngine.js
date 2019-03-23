@@ -14,6 +14,8 @@ import DOMElement from "Telechart/GLEngine/DOMElement"
 import Group from "Telechart/GLEngine/Group"
 import Line from "Telechart/GLEngine/Line"
 
+import RectGeometry from "Telechart/GLEngine/Geometries/RectGeometry"
+
 class GLEngine extends Utils.aggregation( TelechartModule, RenderingObject ) {
 	static Geometry = Geometry
 	static Material = Material
@@ -24,6 +26,8 @@ class GLEngine extends Utils.aggregation( TelechartModule, RenderingObject ) {
 
    static Group = Group
    static Line = Line
+
+   static RectGeometry = RectGeometry
 
    get domElement () { return this.$dom.canvasElement }
 

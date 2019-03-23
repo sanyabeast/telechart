@@ -11,12 +11,40 @@ class MajorPlot extends Plot {
 		super( params )
 
 		this.$temp.circlesRenderingObjects = {}
-		// this.$temp.prevSelectedPosition = ChartMath.point()
+		
+		this.$setupGrid() 
 
 		this.$modules.domComponent.on( "dom.drag", this.$onUserDrag.bind(this) )
 		this.$modules.domComponent.on( "dom.click", this.$onUserClick.bind(this) )
 		this.$modules.domComponent.on( "dom.pan", this.$onUserPan.bind(this) )
 
+	}
+
+	$setupGrid () {
+
+		this.$state.gridState = new Utils.DataKeeper( {
+			steps: ChartMath.vec2( 0, 1000000 )
+		} )
+
+		let gridRectMaterial = new GLEngine.Material( {
+			vertexShader: "vert.plot-grid",
+			fragmentShader: "frag.plot-grid",
+			uniforms: {
+				gridSteps: this.$state.gridState.steps
+			}
+		} )
+		
+		let gridRectGeometry = new GLEngine.RectGeometry( {
+			width: 1,
+			height: 1
+		} )
+
+		let gridRectMesh = new GLEngine.Mesh( {
+			geometry: gridRectGeometry,
+			material: gridRectMaterial
+		} )
+
+		this.$modules.renderingEngine.addChild( gridRectMesh )
 	}
 
 	$onUserDrag ( eventData ) {

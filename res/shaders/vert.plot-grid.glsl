@@ -7,6 +7,15 @@ uniform vec2  worldPosition;
 uniform vec2  worldScale;
 uniform vec2  viewportSize;
 
+varying vec2 vUv;
+
 void main(void) {
-   gl_Position = vec4( coords.xy, 0., 1.);
+    vUv = coords;
+
+    vec2 pos = vec2( coords );
+
+    pos *= 2.;
+    pos -= 1.;
+
+    gl_Position = vec4( pos.xy, 0., 1.);
 }

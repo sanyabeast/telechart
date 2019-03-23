@@ -8,7 +8,6 @@ import DOMComponent from "Telechart/Core/DOM/Component"
 import Config from "Telechart/Config"
 
 /* plot */
-
 class Plot extends TelechartModule {
 	get position () { return this.$modules.renderingEngine.position }
 	get scale () { return this.$modules.renderingEngine.scale }
