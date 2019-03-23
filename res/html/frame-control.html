@@ -3,8 +3,9 @@
 	$ref="frame-control"
 >
 		<div
-			class="filler left-filler fit-height pos-absolute"
+			class="filler left-filler fit-height pos-absolute border-box"
 			$ref="frame-control.filler.left"
+			$events="drag"
 		></div>
 		
 		<div
@@ -12,21 +13,11 @@
 			$ref="frame-control.frame"
 			$events="drag"
 		>
-				<div
-					class="plane left-plane fit-height flex-no-shrink pos-absolute"
-					$ref="frame-control.left-plane"
-					$events="drag"
-				></div>
-		
-				<div
-					class="plane right-plane fit-height flex-no-shrink pos-absolute"
-					$ref="frame-control.right-plane"
-					$events="drag"
-				></div>
 		</div>
 	
 		<div
-			class="filler right-filler fit-height pos-absolute"
+			class="filler right-filler fit-height pos-absolute border-box"
 			$ref="frame-control.filler.right"
+			$events="drag"
 	></div>
 </div>

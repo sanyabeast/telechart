@@ -30,7 +30,7 @@ class Config {
 		plotSeriesVisibilityTweenDuration: 200,
 		plotExtremumPadding: 0.35,
 		plotSelectedPositionCircleRadius: 10,
-		gridOrderDivider: 0.5
+		gridOrderDivider: 2
 	}
 
 	static skinValues = {

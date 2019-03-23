@@ -161,16 +161,16 @@ class GLEngine extends Utils.aggregation( TelechartModule, RenderingObject ) {
 
    toReal ( x, y ) {
       return ChartMath.point(
-         ( (x - this.position.x) / this.scale.x ) | 0, 
-         ( this.size.y - ((y - this.position.y) / this.scale.y) ) | 0
+         Math.round( ( (x - this.position.x) / this.scale.x ) ), 
+         Math.round( ( this.size.y - ((y - this.position.y) / this.scale.y) ) )
       )
 
    }
 
    toRealScale ( x, y ) {
       return ChartMath.point(
-         ( x / this.scale.x ) | 0,
-         ( y / this.scale.y ) | 0,
+         Math.round( ( x / this.scale.x ) ),
+         Math.round( ( y / this.scale.y ) ),
       )
    }
 

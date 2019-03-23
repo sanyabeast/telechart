@@ -56,14 +56,17 @@
 		.filler {
 			background:black;
 			background-color: var(--frameControlBackgroundColor);
+			z-index: 2;
 
 			&.left-filler {
 				left:0;
+				border-right: 8px solid var(--frameControlPlaneBackgroundColor);
 			}
 
 			&.right-filler {
 				right:0;
 				left: auto;
+				border-left: 8px solid var(--frameControlPlaneBackgroundColor);
 			}
 		}
 
@@ -73,29 +76,6 @@
 			border-bottom: 2px solid var(--frameControlPlaneBackgroundColor);
 			z-index: 1;
 			cursor: move;
-		}
-
-
-		.plane {
-		    width: 6px;
-		    cursor: col-resize;
-		    background-color: var(--frameControlPlaneBackgroundColor);
-		    border-right: 8px solid transparent;
-		    border-left: 8px solid transparent;
-		    background-clip: content-box;
-
-			&.left-plane {
-				left: 0;
-				transform: translateX(-48px);
-				border-left: 48px solid transparent;
-			}
-
-			&.right-plane {
-				right: 0;
-				left: auto;
-				transform: translateX(48px);
-				border-right: 48px solid transparent;
-			}
 		}
 	}
 

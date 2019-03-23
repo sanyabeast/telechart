@@ -62,7 +62,7 @@ class Plot extends TelechartModule {
 				"series-id": seriesData.series.id,
 			},
 			uniforms: {
-				thickness: ChartMath.float32( 2 ),
+				thickness: ChartMath.float32( Config.values.plotLineDefaultLineWidth ),
 				diffuse: ChartMath.color( seriesData.series.color )
 			}
 		})
@@ -146,12 +146,7 @@ class Plot extends TelechartModule {
 		let order = ChartMath.getOrder( extremum.size )
 		let orderAlignStep = order / Config.values.gridOrderDivider
 
-		// let padding = extremum.size * Config.values.plotExtremumPadding
-
-		// extremum.min -= padding
-		// extremum.max += padding
-
-		extremum.min = ChartMath.nearestMult( extremum.min, orderAlignStep, false, true )
+		extremum.min = 0
 		extremum.max = ChartMath.nearestMult( extremum.max, orderAlignStep, true, true )
 
 		return extremum

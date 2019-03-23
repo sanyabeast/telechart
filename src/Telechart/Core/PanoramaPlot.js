@@ -22,8 +22,8 @@ class PanoramaPlot extends Plot {
 
 		this.$modules.domComponent.addChild( "dom-layer", this.$modules.frameControlComponent.domElement )
 
-		frameControlComponent.on( "frame-control.left-plane.drag", this.$onFrameControlLeftPlaneDrag.bind(this) )
-		frameControlComponent.on( "frame-control.right-plane.drag", this.$onFrameControlRightPlaneDrag.bind(this) )
+		frameControlComponent.on( "frame-control.filler.left.drag", this.$onFrameControlLeftFillerDrag.bind(this) )
+		frameControlComponent.on( "frame-control.filler.right.drag", this.$onFrameControlRightFillerDrag.bind(this) )
 		frameControlComponent.on( "frame-control.frame.drag", this.$onFrameControlFrameDrag.bind(this) )
 
 		this.$modules.frameControlsRenderingObject = new GLEngine.DOMElement( {
@@ -111,7 +111,7 @@ class PanoramaPlot extends Plot {
 		frameControlsRightFillerRO.render()
 	}
 
-	$onFrameControlLeftPlaneDrag ( data ) {
+	$onFrameControlLeftFillerDrag ( data ) {
 		let delta = this.$modules.renderingEngine.toVirtualScale( data.dragX, 0 )
 		let newPosition = ( this.$state.frameViewportRect.x + delta.x )
 		let newFrameSize = ( this.$state.frameViewportRect.w - delta.x )
@@ -131,7 +131,7 @@ class PanoramaPlot extends Plot {
 		this.setFrameSize( newFrameSize )
 	}
 
-	$onFrameControlRightPlaneDrag ( data ) {
+	$onFrameControlRightFillerDrag ( data ) {
 		let delta = this.$modules.renderingEngine.toVirtualScale( data.dragX, 0 )
 
 		this.setFrameSize( this.$state.frameViewportRect.w + delta.x )
