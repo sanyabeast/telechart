@@ -9,12 +9,14 @@ import GLEngine from "Telechart/GLEngine"
 
 class SelectedValuesBannerController extends TelechartModule {
 	get renderingObject () { return this.$modules.renderingObject }
+	get renderingObjectLine () { return this.$modules.renderingObjectLine }
 
 	constructor () {
 		super()
 
 		this.$state.series = new Utils.DataKeeper()
 		this.$state.seriesValuesContainers = new Utils.DataKeeper()
+		this.$state.position = ChartMath.point( 0, 0 )
 
 		this.$modules.setMultiple( {
 			domComponent: new DOMComponent( {
@@ -29,12 +31,28 @@ class SelectedValuesBannerController extends TelechartModule {
 			applyPosY: false,
 			applyPosX: true,
 		} )
+
+		this.$modules.renderingObjectLine = new GLEngine.Mesh( {
+			geometry: new GLEngine.RectGeometry( {
+				width: 2,
+				height: 1
+			} ),
+			material: new GLEngine.Material( {
+				vertexShader: "vert.grid-line-x",
+				fragmentShader: "frag.default",
+				uniforms: {
+					diffuse: Config.glColors.gridPatternSelectedValueLineColor,
+					selectedPosition: this.$state.position
+				}
+			} )
+		} )
 	}
 
 	setPosition ( x, y ) {
-
 		this.renderingObject.position.x = x
 		this.renderingObject.position.y = y
+
+		this.$state.position.set( x, y )
 	}
 
 	updateSeriesValuesVisibility () {

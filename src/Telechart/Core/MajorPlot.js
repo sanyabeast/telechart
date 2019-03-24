@@ -23,6 +23,7 @@ class MajorPlot extends Plot {
 		this.$modules.selectedValuesBannerController = new SelectedValuesBannerController()
 		this.$modules.domComponent.addChild( "dom-layer", this.$modules.selectedValuesBannerController.domElement )
 		this.$modules.renderingEngine.addChild( this.$modules.selectedValuesBannerController.renderingObject )
+		this.$modules.renderingEngine.addChild( this.$modules.selectedValuesBannerController.renderingObjectLine )
 			
 		this.$setupGrid() 
 

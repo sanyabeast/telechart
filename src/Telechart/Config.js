@@ -62,7 +62,8 @@ class Config {
 	}
 
 	static glColors = {
-		gridPatternLineColor: ChartMath.color( 1, 1, 1 )
+		gridPatternLineColor: ChartMath.color( 1, 1, 1 ),
+		gridPatternSelectedValueLineColor: ChartMath.color( 1, 1, 1 )
 	}
 }
 
