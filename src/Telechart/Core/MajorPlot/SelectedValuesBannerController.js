@@ -56,7 +56,7 @@ class SelectedValuesBannerController extends TelechartModule {
 
 		this.$state.position.set( x, y )
 		
-		Utils.throttle( this.$updateBannerAlign, 150 )
+		Utils.throttle( this.$updateBannerAlign, 50 )
 	}
 
 	updateSeriesValuesVisibility () {
@@ -122,7 +122,9 @@ class SelectedValuesBannerController extends TelechartModule {
 		let parentNodeRect = parentNode.getBoundingClientRect()
 		let bannerNodeRect = bannerNode.getBoundingClientRect()
 
-		if ( bannerNodeRect.x > parentNodeRect.width / 2 ) {
+		console.log( parentNodeRect, bannerNodeRect )
+
+		if ( bannerNodeRect.right > parentNodeRect.right ) {
 			bannerNode.classList.remove( "align-right" )
 			bannerNode.classList.add( "align-left" )
 		} else {
