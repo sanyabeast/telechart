@@ -1,1 +1,18 @@
 # telechart
+[Launch](https://sanyabeast.github.io/telechart/)
+
+## Features
+- Zero-configuration
+- Zero-dependencies
+- Extensible
+
+## Technologies
+- WebGL
+
+## Contribute
+```
+git clone https://github.com/sanyabeast/telechart.git ./telechart
+cd telechart
+npm run install
+npm run start
+```
