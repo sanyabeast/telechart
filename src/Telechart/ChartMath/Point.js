@@ -37,6 +37,10 @@ class Point {
 	fromArray ( array ) {
 		this.set( array[0], array[1] )
 	}
+
+	update () {
+		this.set( this.x, this.y )
+	}
 }
 
 export default Point

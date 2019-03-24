@@ -103,7 +103,6 @@ class Plot extends TelechartModule {
 			return false
 		}
 
-
 		extremum.min = 0
 
 		if ( this.$temp.killExtremumTween ) {
@@ -148,6 +147,7 @@ class Plot extends TelechartModule {
 	$processExtremum ( extremum ) {
 		let order = ChartMath.getOrder( extremum.size )
 		let orderAlignStep = order / Config.values.gridOrderDivider
+
 		extremum.max = ChartMath.nearestMult( extremum.max, orderAlignStep, true, true )
 
 		return extremum

@@ -17,6 +17,12 @@
 	.major-plot-wrapper {
 		max-height: 70%;
 		flex-grow: 10;
+
+		.telechart-plot {
+			.canvas-wrapper, .dom-layer {
+				height: calc( 100% - 24px );
+			}
+		}
 	}
 
 	.panorama-plot-wrapper {
@@ -24,6 +30,7 @@
 		min-height: 48px;
 		background-color: var(--panormaPlotBackground);
 		margin: 16px 0;
+		margin-top: 20px;
 	}
 
 	.telechart-plot {
@@ -32,6 +39,7 @@
 		top: 0;
 		bottom: 0;
 		right: 0;
+		box-sizing: border-box;
 	}
 
 	.button {
@@ -179,6 +187,19 @@
 		&.time {
 			bottom: 0;
 			top: auto;
+			margin-bottom: -1.5em;
+
+			p {
+				transform: translateX( -50% );
+			}
+		}
+
+		&.value {
+			margin-top: -1em;
+		}
+
+		&.hidden {
+			visibility: hidden;
 		}
 	}
 

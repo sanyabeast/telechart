@@ -149,7 +149,7 @@ class DOMElementEventHandler extends TelechartModule {
 
 	}
 
-	$normalizeEventData ( eventName, eventData, target ) {
+	$normalizeEventData ( eventName, eventData, target ) {		
 		let boundingRect = target.getBoundingClientRect()
 		let evt = eventData
 		let nEvt = this.$state.normalizedEventData

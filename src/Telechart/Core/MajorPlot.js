@@ -45,31 +45,38 @@ class MajorPlot extends Plot {
 	$setupGrid () {
 
 		this.$state.gridState = new Utils.DataKeeper( {
-			steps: ChartMath.vec2( 20, 1000000 )
+			steps: ChartMath.vec2( 20, 1000000 ),
 		} )
 
-		let gridRectMaterial = new GLEngine.Material( {
-			vertexShader: "vert.plot-grid",
-			fragmentShader: "frag.plot-grid",
-			uniforms: {
-				gridSteps: this.$state.gridState.steps,
-				diffuse: Config.glColors.gridPatternLineColor
-			}
-		} )
-		
-		let gridRectGeometry = new GLEngine.RectGeometry( {
-			width: 1,
-			height: 1
-		} )
+		this.$temp.gridLineMeshes = []
 
-		let gridRectMesh = new GLEngine.Mesh( {
-			geometry: gridRectGeometry,
-			material: gridRectMaterial
+		Utils.loop( 0, Config.values.gridPatternXCaptionsCount, 1, true, ( index )=>{
+
+			let gridLineMaterial = new GLEngine.Material( {
+				vertexShader: "vert.grid-line-y",
+				fragmentShader: "frag.default",
+				uniforms: {
+					gridSteps: this.$state.gridState.steps,
+					diffuse: Config.glColors.gridPatternLineColor,
+					lineIndex: ChartMath.float32( index ),
+					opacity: ChartMath.float32( 0.5 )
+				}
+			} )
+
+			let gridLineGeometry = new GLEngine.RectGeometry( {
+				width: 1,
+				height: 1
+			} )
+
+			let gridLineMesh = new GLEngine.Mesh( {
+				geometry: gridLineGeometry,
+				material: gridLineMaterial
+			} )
+
+			this.$temp.gridLineMeshes[ index ] = gridLineMesh
+
+			this.$modules.renderingEngine.addChild( gridLineMesh )
 		} )
-
-		this.$temp.gridRectMesh = gridRectMesh
-
-		this.$modules.renderingEngine.addChild( gridRectMesh )
 
 		this.$setupGridCaptions()
 	}
@@ -120,8 +127,14 @@ class MajorPlot extends Plot {
 			data.object.render()
 
 			if ( data.value !== value ) {
-				data.value = value
-				data.component.ref( "caption" ).textContent = Utils.formatValue( value )
+
+				if ( value < 0 ) {
+					data.component.classList.add( "hidden" )
+				} else {
+					data.value = value
+					data.component.ref( "caption" ).textContent = Utils.formatValue( value )					
+				}
+
 			}
 		} )
 	}
@@ -197,6 +210,8 @@ class MajorPlot extends Plot {
 			let multiplier = Math.ceil( ( extremum.size / order ) / ( Config.values.gridPatternYCaptionsCount - 1) )
 
 			this.$state.gridState.steps.y = order * multiplier
+
+			this.$state.gridState.steps.update()
 			
 			setTimeout( ()=>{
 				this.$updateGridCaptionsY()
