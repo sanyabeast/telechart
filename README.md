@@ -4,7 +4,7 @@
 ## Features
 - Zero-configuration
 - Zero-dependencies
-- Extensible
+- Extensibility
 
 ## Technologies
 - WebGL
