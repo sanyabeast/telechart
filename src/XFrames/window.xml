@@ -122,16 +122,16 @@
 	</div>	
 	<div class="resizer"
 		style="
-		       width:8px;
-		       height:8px;
-		       border-radius:50%;
-		       background:rgba(0, 0, 0, 1);
-		       position:absolute;
-		       right:6px;
-		       bottom:6px;
-		       transform:translate(50%, 50%);
-		       cursor:nw-resize;
-		       z-index:1;
+		       width: 8px;
+			   height: 8px;
+			   border-radius: 50%;
+			   background: rgb(255, 255, 255);
+			   position: absolute;
+			   right: -6px;
+			   bottom: -6px;
+			   transform: translate(50%, 50%);
+			   cursor: nw-resize;
+			   z-index: 1;
 		  	"
 	></div>
 </div>

@@ -208,6 +208,7 @@
 		top: 8px;
 
 		.inner {
+			transition: transform 0.2s ease-in-out;
 			box-shadow: 0px 0px 4px 0px #00000061;
 		    padding: 8px 16px;
 		    border-radius: 4px;
@@ -235,6 +236,18 @@
 				p.caption {
 					font-size: 13px;
 				}
+			}
+		}
+
+		&.align-left {
+			.inner {
+				transform: translateX(calc(-100% - 8px));
+			}
+		}
+
+		&.align-right {
+			.inner {
+				transform: translateX(8px);
 			}
 		}
 	}

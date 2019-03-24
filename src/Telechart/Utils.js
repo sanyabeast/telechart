@@ -203,6 +203,16 @@ class Utils {
 		return result
 	}
 
+	static throttle ( func, throttleTimeout ) {
+		if ( func.__throttleTimeoutId ) {
+			clearTimeout( func.__throttleTimeoutId )
+		}
+
+		func.__throttleTimeoutId = setTimeout( ()=>{
+			func()
+		}, throttleTimeout )
+	}
+
 }
 
 export default Utils

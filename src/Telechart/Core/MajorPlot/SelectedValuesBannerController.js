@@ -46,6 +46,8 @@ class SelectedValuesBannerController extends TelechartModule {
 				}
 			} )
 		} )
+
+		this.$updateBannerAlign = this.$updateBannerAlign.bind( this )
 	}
 
 	setPosition ( x, y ) {
@@ -53,6 +55,8 @@ class SelectedValuesBannerController extends TelechartModule {
 		this.renderingObject.position.y = y
 
 		this.$state.position.set( x, y )
+		
+		Utils.throttle( this.$updateBannerAlign, 150 )
 	}
 
 	updateSeriesValuesVisibility () {
@@ -109,6 +113,23 @@ class SelectedValuesBannerController extends TelechartModule {
 		this.$modules.domComponent.addChild( "series-values-wrapper", valueContainer.domElement )
 
 		this.$state.seriesValuesContainers[ seriesData.series.id ] = valueContainer
+	}
+
+	$updateBannerAlign () {
+		let parentNode = this.$modules.domComponent.domElement.parentNode
+		let bannerNode = this.$modules.domComponent.domElement
+
+		let parentNodeRect = parentNode.getBoundingClientRect()
+		let bannerNodeRect = bannerNode.getBoundingClientRect()
+
+		if ( bannerNodeRect.x > parentNodeRect.width / 2 ) {
+			bannerNode.classList.remove( "align-right" )
+			bannerNode.classList.add( "align-left" )
+		} else {
+			bannerNode.classList.add( "align-right" )
+			bannerNode.classList.remove( "align-left" )
+		}
+
 	}
 }
 
