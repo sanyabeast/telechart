@@ -15,4 +15,5 @@ git clone https://github.com/sanyabeast/telechart.git ./telechart
 cd telechart
 npm run install
 npm run start
+open localhost:8000 in browser
 ```
