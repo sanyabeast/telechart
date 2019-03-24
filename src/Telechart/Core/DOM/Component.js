@@ -80,6 +80,7 @@ class Component extends TelechartModule {
 
 					eventHandler.on( "$event", ( data )=>{
 						let ref = node.$ref || "";
+
 						this.emit( `${ref}.${data.type}`, data.payload )
 					} )
 

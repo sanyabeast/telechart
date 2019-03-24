@@ -113,9 +113,20 @@ class PanoramaPlot extends Plot {
 	}
 
 	$onFrameControlLeftFillerDrag ( data ) {
+		let frameRect = this.$state.frameViewportRect
+		let accuracy = this.$state.accuracy
+		let beginTime = this.$state.beginTime
+
 		let delta = this.$modules.renderingEngine.toVirtualScale( data.dragX, 0 )
-		let newPosition = ( this.$state.frameViewportRect.x + delta.x )
-		let newFrameSize = ( this.$state.frameViewportRect.w - delta.x )
+		let newPosition = ( frameRect.x + delta.x )
+		let newFrameSize;
+
+		if ( ( frameRect.x + frameRect.w ) - newPosition <= accuracy || newPosition <= beginTime  ) {
+			return;
+		} else {
+			newFrameSize = ( frameRect.w - delta.x )
+		}
+
 
 		if ( newFrameSize <= this.$state.accuracy ) {
 			newFrameSize = this.$state.accuracy

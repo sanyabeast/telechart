@@ -63,6 +63,7 @@ let webpackConfig = {
 if (env == "production") {
     webpackConfig.entry = {
         "telechart": "Telechart/Telechart",
+        "playground": "main"
     }
 
     webpackConfig.optimization = {

@@ -12,6 +12,7 @@ class DOMElementEventHandler extends TelechartModule {
 	static eventDetectors = {
 		click: function ( domElement, callback ) {
 			domElement.addEventListener( "click", ( eventData )=>{
+				eventData.stopPropagation()
 				callback( this.$normalizeEventData( "click", eventData, domElement ) )
 			} )
 		},
@@ -140,6 +141,7 @@ class DOMElementEventHandler extends TelechartModule {
 		Utils.loopCollection(params.eventsList, ( eventName, index )=>{
 			DOMElementEventHandler.eventDetectors[eventName].call(this,  this.$state.domElement, ( data )=>{
 				this.emit( data.type, data )
+
 				this.emit( "$event", {
 					type: data.type,
 					payload: data
@@ -167,6 +169,8 @@ class DOMElementEventHandler extends TelechartModule {
 
 		nEvt.type = eventName
 		nEvt.target = target
+
+		this.$state.normalizedEventData.originalEvent = eventData
 
 		return this.$state.normalizedEventData
 	}

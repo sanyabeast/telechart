@@ -15,6 +15,7 @@ import MajorPlot from "Telechart/Core/MajorPlot"
 import PanoramaPlot from "Telechart/Core/PanoramaPlot"
 import ChartControl from "Telechart/Core/ChartControl"
 import Storage from "Telechart/Storage"
+import EventBus from "Telechart/EventBus"
 
 /** 
  * @class
@@ -71,6 +72,8 @@ class Telechart extends TelechartModule {
 		this.$setupDOM()
 		this.$setupEvents()
 		this.startRendering()
+
+		this.$temp.unsubGlobalSkinChanged = EventBus.on( "global.skin.changed", this.$onGlobalSkinChanged.bind( this ) )
 	}
 
 	/**
@@ -100,6 +103,13 @@ class Telechart extends TelechartModule {
 		skinName = skinName || Config.defaultSkin
 		Config.activeSkin = skinName
 		Config.assets.skins[ skinName ] && Config.assets.skins[ skinName ].apply()
+
+		this.$modules.majorPlot.render( true )
+		this.$modules.panoramaPlot.render( true )
+
+		this.$modules.domComponent.ref("theme-switcher-caption").textContent = skinName == "day" ? "Switch to Night Mode" : "Switch to Day Mode"
+
+		EventBus.emit( "global.skin.changed", skinName )
 
 		this.clog(`Skin applied: ${ skinName }`)
 	}
@@ -184,19 +194,33 @@ class Telechart extends TelechartModule {
 	/* event callbacks */
 	$onThemeSwitcherClick ( data ) {
 		if ( Config.activeSkin == "day" ) {
-			this.$modules.domComponent.ref("theme-switcher-caption").textContent = "Switch to Day Mode"
 			this.setSkin( "night" )
 		} else {
-			this.$modules.domComponent.ref("theme-switcher-caption").textContent = "Switch to Night Mode"
 			this.setSkin( "day" )
 		}
+	}
 
+	$onGlobalSkinChanged ( skinName ) {
 		this.$modules.majorPlot.render( true )
 		this.$modules.panoramaPlot.render( true )
+	}
+
+	die () {
+		this.$temp.unsubGlobalSkinChanged()
+	}
+
+	static greet () {
+		console.log( "%c The code has been written by @sanyabeast for Telegram Contest.", "color: red;" )
+		console.log( "%c Contact me: telegram:sanyabeats, a.gvrnsk@gmail.com, github.com/sanyabeast", "color: blue;" )
+		console.log( `%c Repo URLs:
+			https://sanyabeast@bitbucket.org/sanyabeast/telechart.git
+			https://github.com/sanyabeast/telechart.git
+		`, "color:green")
 	}
 }
 
 Telechart.loadAssets()
 MainLoop.start()
+Telechart.greet()
 
 export default Telechart

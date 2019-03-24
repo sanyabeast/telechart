@@ -132,6 +132,7 @@
 			   transform: translate(50%, 50%);
 			   cursor: nw-resize;
 			   z-index: 1;
+			   border: 1px solid black;
 		  	"
 	></div>
 </div>

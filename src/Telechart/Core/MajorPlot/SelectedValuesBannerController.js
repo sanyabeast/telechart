@@ -17,6 +17,7 @@ class SelectedValuesBannerController extends TelechartModule {
 		this.$state.series = new Utils.DataKeeper()
 		this.$state.seriesValuesContainers = new Utils.DataKeeper()
 		this.$state.position = ChartMath.point( 0, 0 )
+		this.$state.visible = true
 
 		this.$modules.setMultiple( {
 			domComponent: new DOMComponent( {
@@ -47,7 +48,9 @@ class SelectedValuesBannerController extends TelechartModule {
 			} )
 		} )
 
-		this.$updateBannerAlign = this.$updateBannerAlign.bind( this )
+		this.$modules.domComponent.on( "banner.click", this.$onBannerClick.bind( this ) )
+
+		this.updateBannerAlign = this.updateBannerAlign.bind( this )
 	}
 
 	setPosition ( x, y ) {
@@ -56,10 +59,20 @@ class SelectedValuesBannerController extends TelechartModule {
 
 		this.$state.position.set( x, y )
 		
-		Utils.throttle( this.$updateBannerAlign, 50 )
+		this.setBannerVisibility( true )
+		Utils.throttle( this.updateBannerAlign, 50 )
 	}
 
 	updateSeriesValuesVisibility () {
+		Utils.loopCollection( this.$state.seriesValuesContainers, ( valueContainer, seriesId )=>{
+
+			if ( this.$state.series && this.$state.series[ seriesId ] && this.$state.series[ seriesId ].visible ) {
+				valueContainer.classList.remove( "hidden" )
+			} else {
+				valueContainer.classList.add( "hidden" )
+			}
+
+		} )
 	}
 
 	setSeries ( seriesData ) {
@@ -115,14 +128,12 @@ class SelectedValuesBannerController extends TelechartModule {
 		this.$state.seriesValuesContainers[ seriesData.series.id ] = valueContainer
 	}
 
-	$updateBannerAlign () {
+	updateBannerAlign () {
 		let parentNode = this.$modules.domComponent.domElement.parentNode
 		let bannerNode = this.$modules.domComponent.domElement
 
 		let parentNodeRect = parentNode.getBoundingClientRect()
 		let bannerNodeRect = bannerNode.getBoundingClientRect()
-
-		console.log( parentNodeRect, bannerNodeRect )
 
 		if ( bannerNodeRect.right > parentNodeRect.right ) {
 			bannerNode.classList.remove( "align-right" )
@@ -131,7 +142,21 @@ class SelectedValuesBannerController extends TelechartModule {
 			bannerNode.classList.add( "align-right" )
 			bannerNode.classList.remove( "align-left" )
 		}
+	}
 
+	setBannerVisibility ( isVisible ) {
+		if ( isVisible ) {
+			this.$modules.domComponent.classList.remove( "hidden" )
+		} else {
+			this.$modules.domComponent.classList.add( "hidden" )
+		}
+
+		this.$state.visible = isVisible
+	}
+
+	$onBannerClick ( eventData ) {
+		eventData.originalEvent.stopPropagation()
+		this.setBannerVisibility( !this.$state.visible )
 	}
 }
 

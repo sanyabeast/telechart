@@ -10,7 +10,7 @@ let datasetIndex = Math.floor( Math.random() * 5 )
 // datasetIndex = 4
 
 let isMobile = !!('ontouchstart' in window || navigator.msMaxTouchPoints);
-let chartsCount = isMobile ? 1 : 4
+let chartsCount = isMobile ? 4 : 5
 let padding = 16;
 let rowSize = Math.ceil(Math.sqrt(chartsCount));
 let windowWidth = window.innerWidth - ((rowSize + 1) * padding);
@@ -31,7 +31,7 @@ class App {
 
         let addButton = document.body.querySelector(".button.add-window");
         addButton.addEventListener("click", ()=>{
-            this.addTelechart( 100, 100, 300, 300 )
+            this.addTelechart( 100, 100, 600, 600, prompt( "Enter dataset index [0 - 4]" ) )
         });
 
     }
@@ -39,15 +39,29 @@ class App {
     createCharts (chartsCount) {
         Utils.loop(0, chartsCount, 1, true, (a)=>{
 
-            setTimeout(()=>{
+            let cols = 3
+            let rows = 2
+            let w = ( windowWidth / cols ) - padding
+            let h = ( windowHeight / ( rows ) ) - padding
+
+            let x = ( a % cols ) * w
+            let y = Math.floor( a / cols ) * h + 16
+
+            if ( a == 2 ) {
+                h *= 2;
+            }
+
+            let datasetIndex = isMobile ? a + 1 : a
+
+            setTimeout( ()=>{
                 this.addTelechart(
-                    ( ( a % rowSize) * ( windowWidth / rowSize ) ) + padding,
-                    ( Math.floor( a / rowSize) * ( windowHeight / rowSize ) ) + padding,
-                    ( windowWidth / rowSize ) - padding,
-                    ( windowHeight / rowSize) - padding,
-                    a + 1
+                    x,
+                    y,
+                    w,
+                    h,
+                    datasetIndex
                 );
-            }, a * 0)
+            }, 0)
             
 
         }, this);
@@ -55,9 +69,12 @@ class App {
 
 
     addTelechart ( posX, posY, sizeX, sizeY, index ) {
-        let datasetIndex = Math.floor( Math.random() * 5 )
-
-        if ( isMobile ) index = 4
+        // if ( isMobile ) index = 4
+        console.log(index)
+        index = Number( index ) || 0
+ 
+        if ( index < 0 ) index = 0
+        if ( index > 4 ) index = 4
 
         let telechart = new Telechart();
         telechart.update( chartData[ index ] )
@@ -83,6 +100,7 @@ class App {
             onClose: ()=>{
                 this.xframes.remove( telechart.UUID );
                 this.removeTelechart( telechart.UUID );
+                telechart.die()
             },
             onFocus: ()=>{
                 this.xframes.setFocus( telechart.UUID );
@@ -124,37 +142,37 @@ class App {
     }
 
     setupCustomControls (xframe, telechart) {
-        xframe.addCustomButton( "palette", {
-            onClick: function () {
-                telechart.setSkin( prompt( "Enter skin name (day, night...)" ) )
-            }
-        }, "setting skin");
+        // xframe.addCustomButton( "palette", {
+        //     onClick: function () {
+        //         telechart.setSkin( prompt( "Enter skin name (day, night...)" ) )
+        //     }
+        // }, "setting skin");
 
-        xframe.addCustomButton( "pause_circle_filled", {
-            onClick: function () {
-                if ( telechart.$state.renderingPaused ) {
-                    telechart.startRendering()
-                } else {
-                    telechart.stopRendering()
-                }
-            }
-        }, "start/stop rendering");
+        // xframe.addCustomButton( "pause_circle_filled", {
+        //     onClick: function () {
+        //         if ( telechart.$state.renderingPaused ) {
+        //             telechart.startRendering()
+        //         } else {
+        //             telechart.stopRendering()
+        //         }
+        //     }
+        // }, "start/stop rendering");
 
 
-        xframe.addCustomButton( "skip_next", {
-            onClick: function () {
-                Tweener.tween( {
-                    fromValue: telechart.$modules.majorPlot.$modules.renderingEngine.position.x,
-                    toValue: prompt("Enter position (Number)"),
-                    duration: 2000,
-                    ease: "easeInQuad",
-                    onUpdate: ( value, completed )=>{
-                        telechart.$modules.majorPlot.$modules.renderingEngine.position.x = value
-                        telechart.$modules.majorPlot.$modules.renderingEngine.updateProjection()
-                    }
-                } ) 
-            }
-        }, "move to position");
+        // xframe.addCustomButton( "skip_next", {
+        //     onClick: function () {
+        //         Tweener.tween( {
+        //             fromValue: telechart.$modules.majorPlot.$modules.renderingEngine.position.x,
+        //             toValue: prompt("Enter position (Number)"),
+        //             duration: 2000,
+        //             ease: "easeInQuad",
+        //             onUpdate: ( value, completed )=>{
+        //                 telechart.$modules.majorPlot.$modules.renderingEngine.position.x = value
+        //                 telechart.$modules.majorPlot.$modules.renderingEngine.updateProjection()
+        //             }
+        //         } ) 
+        //     }
+        // }, "move to position");
     }
 }
 

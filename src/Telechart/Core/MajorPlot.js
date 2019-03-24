@@ -17,7 +17,7 @@ class MajorPlot extends Plot {
 	constructor ( params ) {
 		super( params )
 
-		this.$temp.circlesRenderingObjects = []
+		this.$temp.circlesRenderingObjects = {}
 		this.$temp.prevScaleX = -1
 
 		this.$modules.selectedValuesBannerController = new SelectedValuesBannerController()
@@ -31,11 +31,14 @@ class MajorPlot extends Plot {
 		this.$modules.domComponent.on( "dom.click", this.$onUserClick.bind(this) )
 		this.$modules.domComponent.on( "dom.pan", this.$onUserPan.bind(this) )
 
+		this.$updateGridCaptionsX = this.$updateGridCaptionsX.bind( this )
+
 		this.$modules.renderingEngine.on( "projection.updated", ( viewport )=>{
-			setTimeout( ()=>{
-				this.$updateGridCaptionsX( viewport )
-			}, 0 )
+			Utils.throttle( this.$modules.selectedValuesBannerController.updateBannerAlign, 50 )
+			this.$updateGridCaptionsX()
 		} )
+
+		
 	}
 
 	addSeries ( seriesData ) {
@@ -82,7 +85,8 @@ class MajorPlot extends Plot {
 		this.$setupGridCaptions()
 	}
 
-	$updateGridCaptionsX ( viewport ) {
+	$updateGridCaptionsX () {
+		let viewport = this.$modules.renderingEngine.viewport
 		let scale = this.$modules.renderingEngine.scale
 
 		/* updating time-captions */
@@ -226,6 +230,8 @@ class MajorPlot extends Plot {
 	}
 
 	$updateSelectedPositionCirclesVisibility () {
+		this.$modules.selectedValuesBannerController.updateSeriesValuesVisibility()
+
 		Utils.loopCollection( this.$temp.circlesRenderingObjects, ( circleRenderingObject, seriesId )=>{
 			if ( this.$state.series && this.$state.series[ seriesId ] && this.$state.series[ seriesId ].visible ) {
 				circleRenderingObject.$params.domComponent.classList.remove( "hidden" )

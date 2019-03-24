@@ -39,19 +39,20 @@
   transition: opacity 0.2s ease-in;
 }
 
-html, body {
-  overflow: hidden;  
-}
 
 body.mobile {
     display: flex!important;
+    flex-direction: column;
+    overflow-y: scroll!important;
+    overflow-x: hidden;
 }
 
 body.mobile .plot3-window {
     position: static!important;
     transform: none!important;
-    width: 100%!important;
-    height: 100%!important;
+    width: 100vw!important;
+    height: 100vh!important;
+    flex-shrink: 0!important;
 }
 
 body.mobile .button.add-window {

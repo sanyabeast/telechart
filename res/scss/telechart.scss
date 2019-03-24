@@ -98,10 +98,15 @@
 			transform: translate(-50%, -50%);
 			border-radius: 50%;
 			border: 2px solid var(--borderColor);
+			transition: transform 0.2s ease-out;
 		}
 
 		&.hidden {
 			opacity: 0;
+
+			.inner {
+				transform: translate(-50%, -50%) scale(0.00001, 0.00001);
+			}
 		}
 	}
 
@@ -206,9 +211,10 @@
 	.selected-values-banner {
 		z-index: 4;
 		top: 8px;
+		transition: opacity 0.15s ease-in;
 
 		.inner {
-			transition: transform 0.2s ease-in-out;
+			transition: transform 0.25s ease-in;
 			box-shadow: 0px 0px 4px 0px #00000061;
 		    padding: 8px 16px;
 		    border-radius: 4px;
@@ -224,17 +230,24 @@
 			}
 
 			.series-values-wrapper {
-
+				display: grid;
+				grid-template-columns: 1fr 1fr;
+				grid-gap: 8px;
 			}
 
 			.series-value {
 				margin-right: 14px;
+
 				p.value {
 					font-size: 16px;
 				}
 
 				p.caption {
 					font-size: 13px;
+				}
+
+				&.hidden {
+					display: none;
 				}
 			}
 		}
@@ -249,6 +262,10 @@
 			.inner {
 				transform: translateX(8px);
 			}
+		}
+
+		&.hidden {
+			opacity: 0;
 		}
 	}
 
