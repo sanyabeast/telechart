@@ -67,7 +67,7 @@ class Series {
 		to = ChartMath.nearestMult( to, accuracy, true, true )
 
 		from =  (from - this.$state.beginTime) / accuracy
-		to =  (to - this.$state.beginTime) / accuracy
+		to =  (to - this.$state.beginTime + accuracy) / accuracy
 
 		return this.getLayer( accuracy ).slice( from, to )
 	}
@@ -94,6 +94,8 @@ class Series {
 
 		from =  (from - this.$state.beginTime) / accuracy
 		to =  (to - this.$state.beginTime) / accuracy
+
+		if ( typeof layer[to] == "undefined" ) to = from
 
 		let intermediateValue = ChartMath.smoothstep( layer[from], layer[to], step )
 
