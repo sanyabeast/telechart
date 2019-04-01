@@ -109,8 +109,8 @@ class PanoramaPlot extends Plot {
 		frameControlsLeftFillerRO.size.x = frameViewport.x - beginTime
 		frameControlsRightFillerRO.size.x = finishTime - ( frameViewport.x + frameViewport.w )
 
-		frameControlsLeftFillerRO.render()
 		frameControlsRightFillerRO.render()
+		frameControlsLeftFillerRO.render()
 	}
 
 	$onFrameControlLeftFillerDrag ( data ) {
@@ -136,7 +136,7 @@ class PanoramaPlot extends Plot {
 		frameRect.w = newFrameSize
 		frameRect.x = newPosition
 		frameControlsRO.position.x = newPosition
-		frameControlsRO.size.x = newPosition
+		frameControlsRO.size.x = newFrameSize
 		frameControlsRO.render()
 		
 		this.$updateFillers()
