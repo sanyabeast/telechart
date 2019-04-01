@@ -5,6 +5,7 @@
 - Zero-configuration
 - Zero-dependencies
 - Extensibility
+- Size: 102KB
 
 ## Technologies
 - WebGL
