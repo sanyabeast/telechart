@@ -51,7 +51,7 @@ class DOMElementEventHandler extends TelechartModule {
 			window.addEventListener( moveEventName, ( eventData )=>{
 				if ( captured ) {
 					eventData.stopPropagation()
-					eventData.preventDefault()
+					// eventData.preventDefault()
 					eventData = this.$normalizeEventData( "drag", eventData, domElement )
 					
 					dx = eventData.pageX - prevX
@@ -68,63 +68,6 @@ class DOMElementEventHandler extends TelechartModule {
 			}, { passive: false })
 		},
 
-		// pan: function ( domElement, callback ) {
-		// 	if ( Config.isTouchDevice ) {
-
-		// 		let captured = false
-		// 		let prevPanDistance = 0
-
-		// 		domElement.addEventListener( "touchstart", ( eventData )=>{
-		// 			captured = true
-		// 		} )
-
-		// 		window.addEventListener( "touchend", ( eventData )=>{
-		// 			captured = false
-		// 			prevPanDistance = 0
-		// 		} )
-
-		// 		window.addEventListener( "touchmove", ( eventData )=>{
-		// 			let normalizedEventData = this.$normalizeEventData( "pan", eventData, domElement )
-
-		// 			if ( captured && normalizedEventData.isGesture && normalizedEventData.touchesCount == 2 ) {
-		// 				let panDelta = prevPanDistance / normalizedEventData.panDistance
-		// 				prevPanDistance = normalizedEventData.panDistance
-		// 				normalizedEventData.panDelta = panDelta
-
-		// 				callback ( normalizedEventData )					
-		// 			}
-		// 		}, { cancelable: true } )
-		// 	}
-		// },
-
-		// zoom: function ( domElement, callback ) {
-		// 	if ( !Config.isTouchDevice ) {
-		// 		domElement.addEventListener( "mousewheel", ( eventData )=>{
-		// 			eventData.preventDefault()
-		// 			let zoomIn = eventData.wheelDeltaY > 0
-		// 			eventData = this.$normalizeEventData( "zoom", eventData, domElement )
-		// 			eventData.zoomIn = zoomIn
-		// 			callback ( eventData )
-		// 		}, { passive: false } )
-		// 	}
-		// },
-
-		// doubletap: function ( domElement, callback ) {
-		// 	let prevClickTime = 0
-
-		// 	domElement.addEventListener( "click", ( eventData )=>{
-		// 		eventData.preventDefault()
-
-		// 		let now = +new Date()
-
-		// 		if ( ( now - prevClickTime ) < Config.values.domDoubletapTimeout ) {
-		// 			callback( this.$normalizeEventData( "doubletap", eventData, domElement ) )
-		// 		} 
-
-		// 		prevClickTime = now
-
-		// 	} )
-		// }
 	}
 
 	constructor (params) {
