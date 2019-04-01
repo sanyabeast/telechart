@@ -26,13 +26,14 @@ class Config {
 	static values = {
 		domDoubletapTimeout: 250,
 		plotLineDefaultLineWidth: 2,
-		plotExtremumTweenDuration: 200,
-		plotSeriesVisibilityTweenDuration: 200,
+		plotExtremumTweenDuration: 150,
+		plotSeriesVisibilityTweenDuration: 150,
 		plotExtremumPadding: 0.35,
 		plotSelectedPositionCircleRadius: 10,
+		plotMinFrameSize: 10,
 		gridOrderDivider: 2,
 		gridPatternYCaptionsCount: 5,
-		gridPatternXCaptionsCount: 5
+		gridPatternXCaptionsCount: 5,
 	}
 
 	static l18n = {

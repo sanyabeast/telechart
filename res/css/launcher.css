@@ -44,7 +44,8 @@ body.mobile {
     display: flex!important;
     flex-direction: column;
     overflow-y: scroll!important;
-    overflow-x: hidden;
+    overflow-x: hidden!important;
+    overscroll-behavior: none;
 }
 
 body.mobile .plot3-window {

@@ -8,6 +8,7 @@ import Component from "Telechart/Core/DOM/Component"
 import GLEngine from "Telechart/GLEngine"
 import ChartMath from "Telechart/ChartMath"
 import Utils from "Telechart/Utils"
+import Config from "Telechart/Config"
 
 class PanoramaPlot extends Plot {
 	constructor ( params ) {
@@ -116,42 +117,45 @@ class PanoramaPlot extends Plot {
 		let frameRect = this.$state.frameViewportRect
 		let accuracy = this.$state.accuracy
 		let beginTime = this.$state.beginTime
+		let finishTime = this.$state.finishTime
 
 		let delta = this.$modules.renderingEngine.toVirtualScale( data.dragX, 0 )
 		let newPosition = ( frameRect.x + delta.x )
-		let newFrameSize;
+		let newFrameSize = ( frameRect.w - delta.x )
 
-		if ( ( frameRect.x + frameRect.w ) - newPosition <= accuracy || newPosition <= beginTime  ) {
+		let frameControlsRO = this.$modules.frameControlsRenderingObject
+
+		if ( newPosition < beginTime || newFrameSize < ( accuracy * Config.values.plotMinFrameSize ) ) {
 			return;
-		} else {
-			newFrameSize = ( frameRect.w - delta.x )
 		}
 
+		// if ( newPosition + frameRect.w > finishTime ) {
+		// 	newPosition = finishTime - frameRect.w
+		// }
 
-		if ( newFrameSize <= this.$state.accuracy ) {
-			newFrameSize = this.$state.accuracy
-			newPosition -= delta.x
-		}
+		frameRect.w = newFrameSize
+		frameRect.x = newPosition
+		frameControlsRO.position.x = newPosition
+		frameControlsRO.size.x = newPosition
+		frameControlsRO.render()
+		
+		this.$updateFillers()
+		this.emit( "frame.viewport.changed", frameRect )
 
-		if ( newPosition <= this.$state.beginTime ) {
-			newPosition = this.$state.beginTime
-			newFrameSize += delta.x
-		}
-
-
-		this.setFramePosition( newPosition )
-		this.setFrameSize( newFrameSize )
 	}
 
 	$onFrameControlRightFillerDrag ( data ) {
 		let delta = this.$modules.renderingEngine.toVirtualScale( data.dragX, 0 )
+		let accuracy = this.$state.accuracy
 
-		this.setFrameSize( this.$state.frameViewportRect.w + delta.x )
+		if ( this.$state.frameViewportRect.w + delta.x >= ( accuracy * Config.values.plotMinFrameSize ) ) {
+			this.setFrameSize( this.$state.frameViewportRect.w + delta.x )
+		}
+
 	}
 
 	$onFrameControlFrameDrag ( data ) {
 		let delta = this.$modules.renderingEngine.toVirtualScale( data.dragX, 0 )
-
 		this.setFramePosition( this.$state.frameViewportRect.x + delta.x )
 	}
 

@@ -65,6 +65,7 @@
 			background:black;
 			background-color: var(--frameControlBackgroundColor);
 			z-index: 2;
+			cursor: col-resize;
 
 			&.left-filler {
 				left:0;
