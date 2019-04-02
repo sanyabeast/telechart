@@ -41,6 +41,9 @@
 
 
 body.mobile {
+    position: absolute;
+    left: 0;
+    top: 0;
     display: flex!important;
     flex-direction: column;
     overflow-y: scroll!important;

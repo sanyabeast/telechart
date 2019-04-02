@@ -12,6 +12,7 @@ import ChartMath from "Telechart/ChartMath"
  *
  */
 class Config {
+	static isFuckingIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 	static activeSkin = null;
 	static plotChunkSize = 15;
 	static DPR = window.devicePixelRatio

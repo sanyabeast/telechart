@@ -51,7 +51,13 @@ class DOMElementEventHandler extends TelechartModule {
 			window.addEventListener( moveEventName, ( eventData )=>{
 				if ( captured ) {
 					eventData.stopPropagation()
-					// eventData.preventDefault()
+
+
+					if ( Config.isFuckingIOS ) {
+						eventData.preventDefault()
+
+					}
+
 					eventData = this.$normalizeEventData( "drag", eventData, domElement )
 					
 					dx = eventData.pageX - prevX

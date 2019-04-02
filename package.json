@@ -25,7 +25,7 @@
         "opn": "latest",
         "webpack": "latest",
         "webpack-cli": "latest",
-        "webpack-serve": "latest",
+        "webpack-serve": "<3.0.0",
         "webpack-bundle-analyzer": "latest",
         "cross-env": "latest",
         "html-webpack-plugin": "latest",

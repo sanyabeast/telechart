@@ -31,6 +31,9 @@ class Telechart extends TelechartModule {
 	static processAsset ( context, assetName, extension, processor ) {
 		context.keys().forEach( ( path )=>{
 			let data = context( path )
+
+			if ( data.default ) data = data.default
+
 			let name = path.replace( `.${extension}`, "" ).replace( "./", "" )
 			Config.assets[ assetName ][ name ] = ( processor ? processor( data ) : data )
 		})
