@@ -206,6 +206,7 @@ class Telechart extends TelechartModule {
 	$onGlobalSkinChanged ( skinName ) {
 		this.$modules.majorPlot.render( true )
 		this.$modules.panoramaPlot.render( true )
+		this.$modules.domComponent.ref("theme-switcher-caption").textContent = skinName == "day" ? "Switch to Night Mode" : "Switch to Day Mode"
 	}
 
 	die () {
