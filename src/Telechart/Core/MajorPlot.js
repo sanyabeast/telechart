@@ -210,7 +210,7 @@ class MajorPlot extends Plot {
 	setExtremum ( extremum, tween ) {
 		
 		if ( super.setExtremum( extremum, tween ) ) {
-			let order = ChartMath.getOrder( extremum.size )
+			let order = ChartMath.getOrder( extremum.size / 2 )
 			let orderAlignStep = order / Config.values.gridOrderDifder
 			let multiplier = Math.ceil( ( extremum.size / order ) / ( Config.values.gridPatternYCaptionsCount - 1) )
 
@@ -218,9 +218,7 @@ class MajorPlot extends Plot {
 
 			this.$state.gridState.steps.update()
 			
-			setTimeout( ()=>{
-				this.$updateGridCaptionsY()
-			}, 0 )
+			this.$updateGridCaptionsY()
 		}
 	}
 
