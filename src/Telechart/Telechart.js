@@ -44,7 +44,7 @@ class Telechart extends TelechartModule {
 		this.processAsset( require.context("scss"), "css", "scss" )
 		this.processAsset( require.context("txt!shaders"), "shaders", "glsl" )
 		this.processAsset( require.context("skins"), "skins", "yml", ( skinData )=> {
-			if ( skinData.default ) Config.defaultSkin = skinData.name
+			if ( skinData.isDefault ) Config.defaultSkin = skinData.name
 			return new Skin( skinData )
 		}  )
 	}

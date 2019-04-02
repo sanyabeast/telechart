@@ -1,5 +1,5 @@
 name: day
-default: true
+isDefault: true
 values: 
   telechartBackgroundColor: "#ffffff"
   borderColor: "#000000"
