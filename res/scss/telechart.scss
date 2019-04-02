@@ -10,6 +10,11 @@
 		color: var(--majorTextColor);
 	}
 
+	* {
+		user-select: none;
+		-webkit-user-select: none;
+	}
+
 	.header.caption {
 		height: 40px;
 	}
