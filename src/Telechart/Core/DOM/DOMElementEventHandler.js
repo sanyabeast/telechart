@@ -52,16 +52,14 @@ class DOMElementEventHandler extends TelechartModule {
 				if ( captured ) {
 					eventData.stopPropagation()
 
-
-					if ( Config.isFuckingIOS ) {
-						eventData.preventDefault()
-
-					}
-
 					eventData = this.$normalizeEventData( "drag", eventData, domElement )
 					
 					dx = eventData.pageX - prevX
 					dy = eventData.pageY - prevY
+
+					if ( Math.abs( dx ) > Math.abs( dy ) ) {
+						eventData.originalEvent.preventDefault()
+					}
 
 					prevX = eventData.pageX
 					prevY = eventData.pageY

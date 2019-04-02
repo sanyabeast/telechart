@@ -16,6 +16,39 @@ let rowSize = Math.ceil(Math.sqrt(chartsCount));
 let windowWidth = window.innerWidth - ((rowSize + 1) * padding);
 let windowHeight = window.innerHeight - ((rowSize + 1) * padding);
 
+let prevX = 0
+let prevY = 0
+let captured = false
+
+document.body.addEventListener( "touchstart", ( evt )=>{
+    if ( evt && evt.touches && evt.touches[ 0 ] ) {
+        captured = true
+        prevX = touch.pageX
+        prevY = touch.pageY
+    }
+} )
+
+
+document.body.addEventListener( "touchend", ( evt )=>{
+    captured = false
+} )
+
+document.body.addEventListener( "touchmove", ( evt )=>{
+    if ( captured &&  evt && evt.touches && evt.touches[ 0 ] ) {
+        let touch = evt.touches[ 0 ]
+
+        let dx = prevX - touch.pageX
+        let dy = prevY - touch.pageY
+
+        prevX = touch.pageX
+        prevY = touch.pageY
+
+        if ( Math.abs( dx ) > Math.abs( dy ) ) {
+            console.log(1)
+            evt.preventDefault()
+        }
+    }
+}, { passive: false } )
 
 class App {
     constructor () {
