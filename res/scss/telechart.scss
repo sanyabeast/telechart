@@ -58,8 +58,15 @@
 	                                
 	}
 
-	.theme-switcher p {
-		color: var(--themeSwitherCaptionColor);
+	.theme-switcher {
+		height: 32px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		
+		p {
+			color: var(--themeSwitherCaptionColor);
+		}
 	}
 
 	.frame-control {
@@ -147,12 +154,15 @@
 
 			.series-buttons {
 				align-items: flex-start;
+				flex-wrap: wrap;
+
 
 				.series-button {
 				    padding: 6px;
 					border-radius: 40px;
 					border: 1px solid var(--seriesButtonBorderColor);
 					margin-right: 16px;
+					margin-bottom: 16px;
 
 					.checkbox-wrapper {
 						width: 20px;

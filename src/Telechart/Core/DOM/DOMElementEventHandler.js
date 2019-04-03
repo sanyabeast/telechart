@@ -72,6 +72,36 @@ class DOMElementEventHandler extends TelechartModule {
 			}, { passive: false })
 		},
 
+		pointerup: function ( domElement, callback ) {
+
+			let pointerupEventName
+
+			if ( Config.isTouchDevice ) {
+				pointerupEventName = "touchend"
+			} else {
+				pointerupEventName = "mouseup"
+			}
+
+			domElement.addEventListener( pointerupEventName, ( eventData )=>{
+				callback( this.$normalizeEventData( "pointerup", eventData, domElement ) )
+			} )
+		},
+
+		pointerdown: function ( domElement, callback ) {
+
+			let pointerdownEventName
+
+			if ( Config.isTouchDevice ) {
+				pointerdownEventName = "touchstart"
+			} else {
+				pointerdownEventName = "mousedown"
+			}
+
+			domElement.addEventListener( pointerdownEventName, ( eventData )=>{
+				callback( this.$normalizeEventData( "pointerdown", eventData, domElement ) )
+			} )
+		},
+
 	}
 
 	constructor (params) {

@@ -28,8 +28,8 @@ class MajorPlot extends Plot {
 		this.$setupGrid() 
 
 		this.$modules.domComponent.on( "dom.drag", this.$onUserDrag.bind(this) )
-		this.$modules.domComponent.on( "dom.click", this.$onUserClick.bind(this) )
-		this.$modules.domComponent.on( "dom.pan", this.$onUserPan.bind(this) )
+		this.$modules.domComponent.on( "dom.pointerdown", this.$onPointerDown.bind(this) )
+		this.$modules.domComponent.on( "dom.pointerup", this.$onPointerUp.bind(this) )
 
 		this.$updateGridCaptionsX = this.$updateGridCaptionsX.bind( this )
 
@@ -231,7 +231,7 @@ class MajorPlot extends Plot {
 		this.$modules.selectedValuesBannerController.updateSeriesValuesVisibility()
 
 		Utils.loopCollection( this.$temp.circlesRenderingObjects, ( circleRenderingObject, seriesId )=>{
-			if ( this.$state.series && this.$state.series[ seriesId ] && this.$state.series[ seriesId ].visible ) {
+			if ( this.$state.selectedValuesVisibility && this.$state.series && this.$state.series[ seriesId ] && this.$state.series[ seriesId ].visible ) {
 				circleRenderingObject.$params.domComponent.classList.remove( "hidden" )
 			} else {
 				circleRenderingObject.$params.domComponent.classList.add( "hidden" )
@@ -241,22 +241,23 @@ class MajorPlot extends Plot {
 	}
 
 	$onUserDrag ( eventData ) {
+		this.$state.selectedValuesVisibility = true
 		let position = this.$modules.renderingEngine.toVirtual( eventData.x, eventData.y )
 		this.emit( "user.position.select", position )
 	}
 
-	$onUserClick ( eventData ) {
+	$onPointerDown ( eventData ) {
+		this.$state.selectedValuesVisibility = true
+		this.$updateSelectedPositionCirclesVisibility() 
 		let position = this.$modules.renderingEngine.toVirtual( eventData.x, eventData.y )
 		this.emit( "user.position.select", position )
 	}
 
-	$onUserPan ( eventData ) {
-		
-		if ( eventData.panDelta > 0 ) {
-			let scale = this.$modules.renderingEngine.scale
-			this.$modules.renderingEngine.setScale( scale.x * eventData.panDelta, scale.y )
-		}
-
+	$onPointerUp ( eventData ) {
+		this.$modules.selectedValuesBannerController.setBannerVisibility( false )
+		this.$modules.renderingEngine.render( true )
+		this.$state.selectedValuesVisibility = false
+		this.$updateSelectedPositionCirclesVisibility() 
 	}
 
 	setSelectedPositionValues ( values ) {

@@ -147,8 +147,10 @@ class SelectedValuesBannerController extends TelechartModule {
 	setBannerVisibility ( isVisible ) {
 		if ( isVisible ) {
 			this.$modules.domComponent.classList.remove( "hidden" )
+			this.$modules.renderingObjectLine.visible = true
 		} else {
 			this.$modules.domComponent.classList.add( "hidden" )
+			this.$modules.renderingObjectLine.visible = false
 		}
 
 		this.$state.visible = isVisible
