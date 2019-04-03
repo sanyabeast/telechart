@@ -148,7 +148,7 @@ class Plot extends TelechartModule {
 		let order = ChartMath.getOrder( extremum.size )
 		let orderAlignStep = order / Config.values.gridOrderDivider
 
-		extremum.max = ChartMath.nearestMult( extremum.max, orderAlignStep, true, true )
+		extremum.max = ChartMath.nearestMult( extremum.max, orderAlignStep, true, true ) + orderAlignStep / 2
 
 		return extremum
 	}
