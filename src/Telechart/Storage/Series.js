@@ -7,8 +7,10 @@ import Utils from "Telechart/Utils"
 import ChartMath from "Telechart/ChartMath"
 
 class Series {
-	constructor ( seriesName, seriesData, timeData ) {
-		this.name = seriesName
+	constructor ( seriesId, seriesData, timeData ) {
+		this.id = seriesId
+		this.name = seriesData.name
+
 		this.$state = new Utils.DataKeeper( {
 			beginTime: 0,
 			finishTime: 0,
