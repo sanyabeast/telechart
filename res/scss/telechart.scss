@@ -1,3 +1,27 @@
+@keyframes banner-appears {
+	0% {
+		visibility: visible;
+		opacity: 0;
+	}
+
+	100% {
+		opacity: 1;
+	}
+}
+
+
+@keyframes banner-disappears {
+	0% {
+		visibility: visible;
+		opacity: 1;
+	}
+
+	100% {
+		opacity: 0;
+		visibility: hidden;
+	}
+}
+
 .telechart {
 	user-select: none;
 	background-color: var(--telechartBackgroundColor);
@@ -247,15 +271,15 @@
 	.selected-values-banner {
 		z-index: 4;
 		top: 8px;
-		transition: opacity 0.15s ease-in;
+		visibility: visible;
+		animation: banner-appears 0.2s ease-in-out;
 
 		.inner {
-			// transition: transform 0.25s ease-in;
+			// transition: transform 0.05s ease-in;
 			box-shadow: 0px 0px 4px 0px #00000061;
 		    padding: 8px 16px;
 		    border-radius: 4px;
 			background-color: var(--selectedValuesBannerBackgroundColor);
-
 
 			.date-value {
 				margin-bottom: 12px;
@@ -301,8 +325,11 @@
 		}
 
 		&.hidden {
-			opacity: 0;
+			visibility: hidden;
+			animation: banner-disappears 0.2s ease-out;
+			// opacity: 0;
 		}
 	}
 
 }
+
