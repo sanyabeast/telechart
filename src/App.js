@@ -3,6 +3,7 @@ import Utils from "Telechart/Utils"
 import Telechart from "Telechart/Telechart"
 import Tweener from "Telechart/Tweener"
 import ChartMath from "Telechart/ChartMath"
+import Config from "Telechart/Config"
 
 import chartData from "chart_data.json"
 
@@ -10,7 +11,7 @@ let datasetIndex = Math.floor( Math.random() * 5 )
 // datasetIndex = 4
 
 let isMobile = !!('ontouchstart' in window || navigator.msMaxTouchPoints);
-let chartsCount = isMobile ? 4 : 5
+let chartsCount = (isMobile && !Config.isFuckingIOS) ? 4 : 5
 let padding = 16;
 let rowSize = Math.ceil(Math.sqrt(chartsCount));
 let windowWidth = window.innerWidth - ((rowSize + 1) * padding);
