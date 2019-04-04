@@ -124,7 +124,7 @@ class Plot extends TelechartModule {
 				fromValue: 0,
 				toValue: 1,
 				duration: Config.values.plotExtremumTweenDuration,
-				ease: "easeOutQuad",
+				ease: "linear",
 				onUpdate: ( progress, completed )=>{
 					this.$modules.renderingEngine.position.y = ChartMath.smoothstep( vpy, extremum.min, progress )
 					this.$modules.renderingEngine.viewport.h = ChartMath.smoothstep( vph, extremum.size, progress )
@@ -145,10 +145,10 @@ class Plot extends TelechartModule {
 	}
 
 	$processExtremum ( extremum ) {
-		let order = ChartMath.getOrder( extremum.size )
+		let order = ChartMath.getOrder( extremum.size / 2 )
 		let orderAlignStep = order / Config.values.gridOrderDivider
 
-		extremum.max = ChartMath.nearestMult( extremum.max, orderAlignStep, true, true ) + orderAlignStep / 2
+		extremum.max = ChartMath.nearestMult( extremum.max, orderAlignStep, true, true )
 
 		return extremum
 	}

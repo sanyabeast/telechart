@@ -38,7 +38,7 @@ class ChartMath {
     }
 
     static getOrder (num) {
-        return (num < 0) ? Math.pow(10, 1 / Math.floor(1 / Math.log10(num))): Math.pow(10, Math.floor(Math.log10(num)));
+        return (num < 0) ? Math.pow(10, 1 / Math.floor(1 / Math.log10(num))) : Math.pow(10, Math.floor(Math.log10(num)));
     }
 
     static smoothstep ( from, to, transition ) {
