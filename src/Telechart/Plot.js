@@ -124,7 +124,7 @@ class Plot extends TelechartModule {
 				fromValue: 0,
 				toValue: 1,
 				duration: Config.values.plotExtremumTweenDuration,
-				ease: "linear",
+				ease: "easeOutQuad",
 				onUpdate: ( progress, completed )=>{
 					this.$modules.renderingEngine.position.y = ChartMath.smoothstep( vpy, extremum.min, progress )
 					this.$modules.renderingEngine.viewport.h = ChartMath.smoothstep( vph, extremum.size, progress )
