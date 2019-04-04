@@ -33,6 +33,7 @@
         "jsdoc-webpack4-plugin": "latest",
         "minami": "latest",
         "terser": "latest",
-        "terser-webpack-plugin": "latest"
+        "terser-webpack-plugin": "latest",
+        "ip": "latest"
     }
 }
