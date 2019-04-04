@@ -33,8 +33,8 @@ class Config {
 		plotSelectedPositionCircleRadius: 10,
 		plotMinFrameSize: 10,
 		gridOrderDivider: 1,
-		gridPatternYCaptionsCount: 6,
-		gridPatternXCaptionsCount: 6,
+		gridPatternYCaptionsCount: 5,
+		gridPatternXCaptionsCount: 5,
 	}
 
 	static l18n = {

@@ -34,8 +34,8 @@ class MajorPlot extends Plot {
 		this.$updateGridCaptionsX = this.$updateGridCaptionsX.bind( this )
 
 		this.$modules.renderingEngine.on( "projection.updated", ( viewport )=>{
-			// Utils.throttle( this.$modules.selectedValuesBannerController.updateBannerAlign, 20 )
-			this.$modules.selectedValuesBannerController.updateBannerAlign()
+			Utils.throttle( this.$modules.selectedValuesBannerController.updateBannerAlign, 20 )
+			// this.$modules.selectedValuesBannerController.updateBannerAlign()
 			this.$updateGridCaptionsX()
 		} )
 
