@@ -1,4 +1,4 @@
-# telechart
+# Telechart
 [Launch](https://sanyabeast.github.io/telechart/)
 
 ## Features
