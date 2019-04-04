@@ -135,11 +135,11 @@ class DOMElementEventHandler extends TelechartModule {
 
 		nEvt.isGesture = false
 
-		if ( eventData instanceof window.TouchEvent ) {
+		if ( eventData.touches ) {
 			nEvt = this.$normalizeTouchEventData( eventName, eventData, target )
 		} else {
-			nEvt.x = ( evt.pageX - boundingRect.x ) * Config.DPR	
-			nEvt.y = ( evt.pageX - boundingRect.y ) * Config.DPR	
+			nEvt.x = ( evt.pageX - boundingRect.left ) * Config.DPR	
+			nEvt.y = ( evt.pageY - boundingRect.top ) * Config.DPR	
 			nEvt.pageX = evt.pageX * Config.DPR
 			nEvt.pageY = evt.pageY * Config.DPR		
 		}

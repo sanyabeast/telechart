@@ -79,7 +79,7 @@ class DOMElement extends RenderingObject {
 		let applyPosX = this.$params.applyPosX
 		let applyPosY = this.$params.applyPosY
 
-		this.setStyle( "transform", `translate3d(${applyPosX?position.x/DPR:0}px, ${applyPosY?position.y/DPR:0}px, 0) scale(${applyScaleX?scale.x/DPR:1}, ${applyScaleY?scale.y/DPR:1})` )
+		this.setStyle( "transform", `translate(${applyPosX?position.x/DPR:0}px, ${applyPosY?position.y/DPR:0}px) scale(${applyScaleX?scale.x/DPR:1}, ${applyScaleY?scale.y/DPR:1})` )
 
 		applySizeX && ( this.setStyle( "width", `${size.x/DPR}px`  ) )
 		applySizeY && ( this.setStyle( "height", `${size.y/DPR}px` ) )
